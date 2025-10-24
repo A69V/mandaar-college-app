@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umang Mandar - Sports Festival at GEC Banka</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: rgba(0, 0, 0, 0.647);
+            background-image: url("./background.gif");
+            background-blend-mode: multiply;
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+            overflow-x: hidden;
+            transition: all ease-in-out 0.5s;
+        }
+
+        header {
+            width: 100%;
+        }
+
+        nav {
+            max-width: 100%;
+            min-width: 250px;
+            max-height: 200px;
+            height: 100px;
+            margin: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            background: #080808;
+            z-index: 999;
+            background: linear-gradient(180deg, rgba(8, 8, 8, 1) 2%, rgba(9, 9, 9, 0.62) 63%, rgba(10, 10, 10, 0.46) 79%, rgba(0, 0, 0, 0) 100%);
+        }
+nav ul{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+nav ul li{
+    margin: 15px;
+}
+nav ul li a{
+    text-decoration: none;
+    color: white;
+    font-size: 1.1em;
+    font-family: sans-serif;
+}
+        .logo img {
+            height: 50px;
+        }
+
+        .logo {
+            margin: 20px;
+        }
+
+        .menu-btn {
+            margin: 20px;
+            background-color: rgba(0, 0, 0, 0);
+            color: aliceblue;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        .menu-btn img {
+            height: 30px;
+        }
+
+        .lander {
+            width: 100%;
+            height: 100vh;
+            animation: fadein forwards 1s;
+        }
+
+        @keyframes fadein {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+
+        .lander div {
+            display: inline-block;
+        }
+
+        .lander-center {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 99;
+
+
+        }
+
+        .lander-center p {
+            font-size: 2em;
+            text-align: center;
+            color: white;
+            text-shadow: 0px 0px 10px #fbf8f88c;
+        }
+
+        .lander p span {
+            font-size: 3em;
+        }
+
+        .lander-left {
+            float: left;
+            animation: fadeinleft forwards 2s;
+
+        }
+
+        @keyframes fadeinleft {
+            0% {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0px);
+                opacity: 1;
+            }
+        }
+
+        .lander-left img {
+            position: absolute;
+            left: 0;
+        }
+
+        .lander-right {
+            float: right;
+            animation: fadeinright forwards 2s;
+        }
+
+        @keyframes fadeinright {
+            0% {
+                transform: translateX(20px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0px);
+                opacity: 1;
+            }
+        }
+
+        .lander-right img {
+            position: absolute;
+            right: 0;
+        }
+
+        .lander-cta {
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .lander-cta button {
+            background-color: rgba(0, 0, 0, 0.407);
+            color: white;
+            border: solid 1px white;
+            outline: none;
+            cursor: pointer;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 1.2em;
+            margin: 10px;
+            transition: ease-in-out .5s;
+        }
+
+        .lander-cta button:hover {
+            background-color: white;
+            color: black;
+            border: solid 1px black;
+        }
+
+        footer {
+            padding: 40px 0 0;
+            background: #080808;
+            font-family: sans-serif;
+            color: white;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
+        }
+
+        .footer {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 10;
+            justify-content: space-between;
+        }
+
+        .footer div {
+            margin: 0 30px;
+        }
+
+        .footer-left {
+            width: 300px;
+            text-align: center;
+            color: white;
+        }
+
+        .lander-left img+.lander-right img {
+            height: 500px;
+        }
+
+        .footer-right {
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .footer-right p {
+            line-height: 1.5em;
+        }
+
+        .footer-left a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .footer-left ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .footer-left ul li {
+            margin: 10px;
+            display: inline-block;
+        }
+
+        .footer-left ul li a img {
+            height: 20px;
+        }
+
+        .made-by {
+            text-decoration: none;
+            color: white;
+            margin: 10px auto;
+            border-top: dotted 1px white;
+            width: 100%;
+            padding: 15px 0;
+        }
+
+        .footer-contact {
+            text-align: left;
+            width: 300px;
+            margin: 0 20px;
+        }
+
+        .footer-contact ul {
+            list-style: none;
+        }
+
+        .made-by a {
+            color: white;
+        }
+
+        .go-down {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            animation: fadedown forwards 5s;
+        }
+
+        .about-text {
+            text-shadow: 0px 0px 10px #ffffff8d;
+        }
+
+        @keyframes fadedown {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+
+        .about {
+            margin: 30px 0;
+            padding: 50px 0;
+            color: #ffffff;
+            font-family: sans-serif;
+            font-size: 1.5em;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .about-img {
+            width: 30%;
+            border-radius: 20px;
+            animation: fadeinleft forwards 2s;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.675);
+        }
+
+        .about-text {
+            width: 50%;
+            margin: 0 30px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: lighter;
+            animation: fadeinright forwards 2s;
+        }
+
+        .about-text h2 {
+            font-weight: lighter;
+            font-size: 1.5em;
+        }
+
+        .about-text h2 span {
+            font-size: 2.2em;
+        }
+
+        .about-text p {
+            font-weight: 400;
+            line-height: 30px;
+            font-size: 0.8em;
+        }
+
+        @media screen and (max-width: 900px) {
+            .footer {
+                flex-direction: column;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            .footer div {
+                margin: 30px 20px;
+            }
+
+            .lander-left img+.lander-right img {
+                max-width: 300px;
+                height: 300px;
+            }
+
+            .lander {
+                overflow: hidden;
+            }
+
+            .lander-center p {
+                text-shadow: 0px 0px 10px #080808;
+            }
+
+            .about {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .about-img {
+                width: 90%;
+            }
+
+            .about-text {
+                width: 90%;
+            }
+
+        }
+
+        @media screen and (max-width: 500px) {
+            .lander-center p {
+                font-size: 1.5em;
+            }
+
+            .about-text h2 span {
+                font-size: 1.5em;
+            }
+        }
+
+
+
+
+
+
+
+        .t-line {
+            font-family: sans-serif;
+        }
+
+        .t-line h2 {
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0px 0px 10px #fcfcfc;
+            font-size: 2.3em;
+        }
+
+        /* The main timeline container */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 50px auto;
+        }
+
+        /* The central vertical line */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #ececec;
+            /* Blue line */
+            box-shadow: 0px 0px 10px #f9f9fa;
+            top: 15px;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            /* Center the line */
+        }
+
+        /* Each event container */
+        .timeline-container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            box-sizing: border-box;
+            /* Include padding in width */
+        }
+
+        /* The dot on the timeline for each event */
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -13px;
+            /* Position the dot */
+            background-color: white;
+            border: 4px solid #FF9F55;
+            /* Orange dot */
+            box-shadow: 0px 0px 10px #e76c0e;
+            top: 28px;
+            border-radius: 50%;
+            z-index: 1;
+            /* On top of the line */
+        }
+
+        /* --- Alternating Sides --- */
+
+        /* Left-side container */
+        .timeline-container:nth-child(odd) {
+            left: 0;
+        }
+
+        /* Right-side container */
+        .timeline-container:nth-child(even) {
+            left: 50%;
+        }
+
+        /* Position the dot for right-side containers */
+        .timeline-container:nth-child(even)::after {
+            left: -13px;
+            /* (20px width + 4px*2 border) / 2 = 14px? no, (20/2) + 6/2 = 13. */
+        }
+
+        /* The content box */
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: rgba(9, 6, 82, 0.486);
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422);
+            backdrop-filter: blur(2Spx);
+        }
+
+        /* --- Arrows --- */
+
+        /* Arrow for left-side boxes (points right) */
+        .timeline-container:nth-child(odd) .timeline-content::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: -10px;
+            /* Attach to the box */
+            border: medium solid white;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent white;
+        }
+
+        /* Arrow for right-side boxes (points left) */
+        .timeline-container:nth-child(even) .timeline-content::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: -10px;
+            /* Attach to the box */
+            border: medium solid white;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent white transparent transparent;
+        }
+
+        /* Content formatting */
+        .timeline-content h3 {
+            margin-top: 0;
+            color: #f5f6f7;
+        }
+
+        .timeline-content p {
+            margin-bottom: 0;
+            line-height: 1.5;
+            color: white;
+        }
+
+        .timeline-content small {
+            font-weight: bold;
+            color: #FF9F55;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+
+        /* --- Responsive Design (for mobile) --- */
+        @media screen and (max-width: 768px) {
+
+            /* Move the line to the left side */
+            .timeline::after {
+                left: 35px;
+            }
+
+            /* Make all containers full-width */
+            .timeline-container {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            /* Force all containers to the "right" side of the line */
+            .timeline-container:nth-child(odd),
+            .timeline-container:nth-child(even) {
+                left: 0;
+            }
+
+            /* Move all dots to the line */
+            .timeline-container::after {
+                left: 22px;
+            }
+
+            .timeline-container:nth-child(even)::after {
+                left: 22px;
+                /* (20px width + 4px*2 border) / 2 = 14px? no, (20/2) + 6/2 = 13. */
+            }
+
+            /* Make all arrows point left */
+            .timeline-container .timeline-content::before {
+                left: -10px;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent white transparent transparent;
+            }
+        }
+        #gold-glow{
+            box-shadow: 0 0 0 rgb(255, 225, 0);
+            animation: golden-glow 10 2s;
+        }
+        @keyframes golden-glow {
+            0%{
+                box-shadow: 0 0 0 rgba(255, 255, 0);
+            }
+            50%{
+                box-shadow: 0 0 10px rgba(255, 255, 0);
+            }
+            100%{
+                box-shadow: 0 0 0 rgba(255, 255, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo"><img src="./mandar-logo.png" alt="Umang Mandar"></a>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#">Event Timeline</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">Updates</a></li>
+                <li><a href="#">Sports</a></li>
+            </ul>
+<a href="./scoreboard.html" class="live-btn" id="live-btn"><div class="dot-blink"></div> <span>LIVE</span></a>
+
+            <button class="menu-btn" id="menu-btn"><img src="./menu.svg" alt=""></button>
+        </nav>
+    </header>
+    <main>
+        <div class="lander">
+            <div class="lander-left">
+                <img src="./left-lander-img.png" alt="" style="left: -50px;">
+                <!-- <img src="./vollyball-png.png" alt="" style="bottom: 0; height: 400px; margin-left: 20px;"> -->
+                <!-- <img src="./tt-png.png" alt="" style="bottom: 0; margin-left: 200px;"> -->
+            </div>
+            <div class="lander-center">
+                <p><span>UMANG <br> MANDAR</span><br> 2025-26 | GEC Banka</p>
+                <div class="lander-cta">
+                    <button>Brochure</button><button id="gold-glow">Today's Events</button>
+                </div>
+            </div>
+            <div class="lander-right">
+                <img src="./right-lander-img.png" alt="">
+                <!-- <img src="./badminton-png.png" alt="" style="height: 400px; bottom: 0;"> -->
+                <!-- <img src="./atheletics-png.png" alt="" style="bottom: 0; margin-right: 300px; height: 350px;"> -->
+            </div>
+            <img src="./chevron-compact-down.svg" alt="" class="go-down">
+        </div>
+
+        <!-- About Section -->
+        <div class="about" id="about">
+            <img src="./about-img.png" alt="" class="about-img">
+            <div class="about-text">
+                <h2>Welcome to <br><span>Umang Mandar</span></h2>
+                <p>
+
+                    We are thrilled to welcome you to Umang Mandaar, the most anticipated and celebrated annual sports
+                    festival of Government Engineering College (GEC), Banka!
+
+                    This isn't just a competition; it's a vibrant celebration of our campus spirit. Umang Mandaar is
+                    born from a passion for sports, a belief in healthy competition, and a desire to bring our entire
+                    college community together. Organized by the GEC Banka Sports Club, our festival is a platform for
+                    students to showcase their athletic talents, forge new friendships, and learn the invaluable lessons
+                    of teamwork and sportsmanship.
+
+                    Whether you're an athlete ready to give your all, a friend cheering from the sidelines, or a
+                    newcomer eager to see what GEC Banka is all about, you are a vital part of this event. We invite you
+                    to join us, feel the electric atmosphere, and share in the joy and passion that make Umang Mandaar
+                    an unforgettable experience.
+
+                    Let the games begin!</p>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="t-line" id="tline">
+            <h2>Event Timeline</h2>
+
+            <div class="timeline">
+
+                <div class="timeline-container">
+                    <div class="timeline-content">
+                        <small>Day 1: 9:00 AM</small>
+                        <h3>Opening Ceremony</h3>
+                        <p>The festival kicks off with a grand opening ceremony, guest speeches, and a torch relay.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="timeline-content">
+                        <small>Day 1: 11:00 AM</small>
+                        <h3>Football Match: Finals</h3>
+                        <p>The most awaited football final between the top two department teams.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="timeline-content">
+                        <small>Day 1: 2:00 PM</small>
+                        <h3>Volleyball & Badminton</h3>
+                        <p>Simultaneous court-side action as the volleyball and badminton finals get underway.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="timeline-content">
+                        <small>Day 2: 10:00 AM</small>
+                        <h3>Athletics Meet</h3>
+                        <p>Sprint, relay, and long jump events take center stage on the track and field.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="timeline-content">
+                        <small>Day 2: 1:00 PM</small>
+                        <h3>Indoor Championships</h3>
+                        <p>The final matches for Chess, Carrom, and Table Tennis determine the ultimate champions.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="timeline-content">
+                        <small>Day 2: 5:00 PM</small>
+                        <h3>Prize Distribution & Closing</h3>
+                        <p>Honoring the winners and participants, followed by the official closing ceremony.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <style>
+           .live-btn{
+background-color: #080808a5;
+color: white;
+outline: none;
+padding: 10px 20px;
+display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                border-radius: 50px;
+                border: solid 1px white;
+                font-weight: bold;
+                font-size: 1em;
+                margin: 20px;
+           }
+            .dot-blink {
+                height: 10px;
+                width: 10px;
+                background-color: red;
+                border-radius: 50%;
+                animation: blink infinite 2s;
+                
+            }
+
+            @keyframes blink {
+                0% {
+                    opacity: 0;
+                }
+
+                50% {
+                    opacity: 1;
+                }
+
+                100% {
+                    opacity: 0;
+                }
+            }
+        </style>
+        <!--  -->
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer">
+            <div class="footer-left">
+                <img src="./mandar-logo-25.png" alt="Umang Mandar 25 logo">
+                <ul>
+                    <li><a href="#"><img src="./instagram.svg" alt="Social"></a></li>
+                    <li><a href="#"><img src="./facebook.svg" alt="Social"></a></li>
+                    <li><a href="#"><img src="./youtube.svg" alt="Social"></a></li>
+                    <li><a href="#"><img src="./twitter-x.svg" alt="Social"></a></li>
+                </ul>
+                <p class="copyright">© 2025 GEC Banka Sports Club</p>
+            </div>
+            <div class="footer-right">
+                <p>Umang Mandaar, GEC Banka's annual sports festival, champions sportsmanship, fitness, and competitive
+                    spirit. Organized by the Sports Club, it unites athletes and enthusiasts through diverse tournaments
+                    and events. It’s a vibrant celebration of teamwork, dedication, and the passionate sporting culture
+                    that defines our campus.</p>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Details</h3>
+
+                <p>
+                <ul>
+                    <li><b>Address:</b><br> Government Engineering College Banka,
+                        Vill- Lakrikola, Post- Manjira,
+                        Dist- Banka, P.S- Banka, pin-813102</li> <br>
+                    <li><b>Phone:</b><br> Himanshu Kumar - 9334550188 <br> Satyam Kumar - 9006509174</li> <br>
+                </ul>
+                </p>
+            </div>
+        </div>
+        <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a></p>
+    </footer>
+</body>
+
+</html>

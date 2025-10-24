@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Setup New Cricket Match</title>
+    <style>
+        :root{
+         --bg:#0f1724; --card:#0b1220; --muted:#9aa6b2; --accent:#06b6d4; --glass: rgba(255,255,255,0.04);
+         --radius:14px; --pad:16px; --shadow: 0 6px 24px rgba(2,6,23,0.6);
+         font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%;margin:0;background:linear-gradient(180deg,#071026 0%, #071422 100%);color:#e6eef6}
+
+        /* --- NEW LAYOUT & SIDEBAR STYLES --- */
+        body {
+            display: flex;
+            height: 100vh; /* Full viewport height */
+        }
+        .sidebar {
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--card);
+            border-right: 1px solid var(--glass);
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--glass);
+        }
+        .sidebar-header h3 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--accent);
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 15px 0;
+            margin: 0;
+        }
+        .sidebar li a {
+            display: block;
+            padding: 14px 24px;
+            text-decoration: none;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .sidebar li a:hover {
+            background: var(--glass);
+            color: #fff;
+            border-left-color: var(--accent);
+        }
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        /* --- END NEW STYLES --- */
+        
+        .wrap{max-width:700px;margin:40px auto;padding:20px}
+        .card{background:linear-gradient(180deg,var(--card), rgba(10,16,26,0.9));border-radius:var(--radius);padding:var(--pad);box-shadow:var(--shadow); margin-bottom: 20px;}
+        label { font-size: 14px; color: var(--muted); display: block; margin-bottom: 6px; }
+        input[type=text], input[type=number], select {
+            width:100%; padding:12px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);
+            background:rgba(0,0,0,0.2); color:inherit; font-size:16px; margin-bottom: 15px;
+        }
+        .btn{
+         background:var(--glass); border:1px solid rgba(255,255,255,0.06); color:inherit;
+         padding:14px 20px; border-radius:10px; cursor:pointer; font-size:16px; font-weight:600;
+         transition:all 0.2s ease; width: 100%; margin-top: 10px;
+        }
+        .btn:hover{background:rgba(255,255,255,0.1)}
+        .btn.primary{background:linear-gradient(90deg,var(--accent), #7c3aed);border:none}
+        .hidden { display: none; }
+        h2 { margin-top: 0; }
+        .row { display: flex; gap: 15px; }
+        .col { flex: 1; }
+    </style>
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Mandaar Sports</h3>
+        </div>
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="sport.html?sport=cricket">🏏 Cricket</a></li>
+            <li><a href="sport.html?sport=football">⚽ Football</a></li>
+            <li><a href="sport.html?sport=badminton">🏸 Badminton</a></li>
+            <li><a href="sport.html?sport=tabletennis">🏓 Table Tennis</a></li>
+            <li><a href="sport.html?sport=volleyball">🏐 Volleyball</a></li>
+            <li><a href="sport.html?sport=kabaddi">🏃‍♂️ Kabaddi</a></li>
+            <li><a href="sport.html?sport=shotput">🏋️ Shot Put</a></li>
+            <li><a href="sport.html?sport=javelin">🏹 Javelin</a></li>
+            <li><a href="sport.html?sport=chess">♟️ Chess</a></li>
+            <li><a href="sport.html?sport=carrom">🎯 Carrom</a></li>
+            <li><a href="sport.html?sport=athletics">👟 Athletics</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="wrap">
+            <h2>Setup New Cricket Match</h2>
+
+            <div id="step-1" class="card">
+                <h3>Match Details</h3>
+                <label for="match-id">Unique Match ID (e.g., TEAMAvsTEAMB_DATE)</label>
+                <input type="text" id="match-id" value="cse-vs-civil-match-1">
+                <label for="venue">Venue</label>
+                <input type="text" id="venue" value="GEC Banka Playground">
+                <label for="total-overs">Overs per Innings</label>
+                <input type="number" id="total-overs" value="20" min="1">
+                <button class="btn primary" onclick="nextStep(2)">Next: Teams</button>
+            </div>
+
+            <div id="step-2" class="card hidden">
+                <h3>Team Setup</h3>
+                <p style="font-size: 14px; color: var(--muted); margin-top: 0;">
+                    Select teams from the database. (Add teams on the 'sport.html' page)
+                </p>
+                <div class="row">
+                    <div class="col">
+                        <label for="team-a-select">Select Team A</label>
+                        <select id="team-a-select">
+                            <option>Loading teams...</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="team-b-select">Select Team B</label>
+                        <select id="team-b-select">
+                            <option>Loading teams...</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="prevStep(1)">Back</button>
+                <button class="btn primary" onclick="processTeams()">Next: Toss</button>
+            </div>
+
+            <div id="step-3" class="card hidden">
+                <h3>Toss & Opening Players</h3>
+                <label for="toss-winner">Who won the toss?</label>
+                <select id="toss-winner"></select>
+                <label for="elected-to">Elected to?</label>
+                <select id="elected-to">
+                    <option value="bat">Bat</option>
+                    <option value="bowl">Bowl</option>
+                </select>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+                <div id="opening-selection">
+                    <label>Opening Batsman (Striker)</label>
+                    <select id="select-striker"></select>
+                    <label>Opening Batsman (Non-Striker)</label>
+                    <select id="select-nonstriker"></select>
+                    <label>Opening Bowler</label>
+                    <select id="select-bowler"></select>
+                </div>
+                <button class="btn" onclick="prevStep(2)">Back</button>
+                <button class="btn primary" onclick="startMatch()">Start Match</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        // === PASTE YOUR FIREBASE CONFIG HERE ===
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOtc2UrW2hXO4JJK5ZZQcDOfUVbEFmnis",
+            authDomain: "umang-mandar.firebaseapp.com",
+            projectId: "umang-mandar",
+            storageBucket: "umang-mandar.firebasestorage.app",
+            messagingSenderId: "1033556658773",
+            appId: "1:1033556658773:web:ed5c606f77e792136ae2dc",
+            databaseURL: "https://umang-mandar-default-rtdb.asia-southeast1.firebasedatabase.app/" 
+        };
+        // === END OF CONFIG ===
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        // --- (All JavaScript from previous response is unchanged) ---
+        let allTeamsData = {};
+        let currentSport = 'unknown';
+
+        window.saveInitialState = (matchId, state) => {
+            if (!matchId || !state) {
+                console.error("Match ID or state missing for initial save.");
+                alert("Error: Match ID or state missing.");
+                return Promise.reject("Missing data");
+            }
+            console.log("Saving initial state for match:", matchId);
+            state.sport = currentSport;
+            state.status = "live"; 
+            return set(ref(db, 'matches/' + matchId), state);
+        }
+
+        async function loadTeams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentSport = urlParams.get('sport') || 'cricket';
+            
+            const teamsRef = ref(db, `sports/${currentSport}/teams`);
+            const snapshot = await get(teamsRef);
+            
+            if (!snapshot.exists()) {
+                alert(`No teams found for ${currentSport}. Go to sport.html to add them.`);
+                return;
+            }
+            
+            allTeamsData = snapshot.val();
+            const teamASelect = document.getElementById('team-a-select');
+            const teamBSelect = document.getElementById('team-b-select');
+            teamASelect.innerHTML = '';
+            teamBSelect.innerHTML = '';
+            
+            let optionsHTML = '';
+            for (const teamId in allTeamsData) {
+                optionsHTML += `<option value="${teamId}">${allTeamsData[teamId].name}</option>`;
+            }
+            teamASelect.innerHTML = optionsHTML;
+            teamBSelect.innerHTML = optionsHTML;
+            
+            if (teamBSelect.options.length > 1) {
+                teamBSelect.selectedIndex = 1;
+            }
+        }
+        
+        window.addEventListener('DOMContentLoaded', loadTeams);
+        
+        let tempState = { teamA: { players: [] }, teamB: { players: [] } };
+
+        window.nextStep = function(step) {
+            document.querySelectorAll('.card').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+        }
+        window.prevStep = function(step) {
+            document.querySelectorAll('.card').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+        }
+
+        window.processTeams = function() {
+            const teamA_Id = document.getElementById('team-a-select').value;
+            const teamB_Id = document.getElementById('team-b-select').value;
+
+            if (teamA_Id === teamB_Id) {
+                alert("Team A and Team B cannot be the same team.");
+                return;
+            }
+
+            const teamA_Data = allTeamsData[teamA_Id];
+            const teamB_Data = allTeamsData[teamB_Id];
+            
+            tempState.teamA.name = teamA_Data.name;
+            tempState.teamB.name = teamB_Data.name;
+            
+            tempState.teamA.players = teamA_Data.members ? Object.keys(teamA_Data.members).map(id => ({
+                id: id,
+                name: teamA_Data.members[id].name,
+                role: teamA_Data.members[id].role,
+                hasBatted: false
+            })) : [];
+            
+            tempState.teamB.players = teamB_Data.members ? Object.keys(teamB_Data.members).map(id => ({
+                id: id,
+                name: teamB_Data.members[id].name,
+                role: teamB_Data.members[id].role,
+                hasBatted: false
+            })) : [];
+
+
+            if (tempState.teamA.players.length < 2 || tempState.teamB.players.length < 1) {
+                alert("Please ensure Team A has at least 2 players and Team B has at least 1 player in the database.");
+                return;
+            }
+
+            document.getElementById('toss-winner').innerHTML = `
+                <option value="teamA">${tempState.teamA.name}</option>
+                <option value="teamB">${tempState.teamB.name}</option>
+            `;
+
+            populateOpeningPlayerDropdowns();
+            nextStep(3);
+        }
+
+        window.populateOpeningPlayerDropdowns = function() {
+            const tossWinner = document.getElementById('toss-winner').value;
+            const electedTo = document.getElementById('elected-to').value;
+
+            let battingTeamKey, bowlingTeamKey;
+            if ((tossWinner === 'teamA' && electedTo === 'bat') || (tossWinner === 'teamB' && electedTo === 'bowl')) {
+                battingTeamKey = 'teamA';
+                bowlingTeamKey = 'teamB';
+            } else {
+                battingTeamKey = 'teamB';
+                bowlingTeamKey = 'teamA';
+            }
+            
+            tempState.initialBattingTeam = battingTeamKey;
+            tempState.initialBowlingTeam = bowlingTeamKey;
+
+            const battingPlayers = tempState[battingTeamKey].players;
+            const bowlingPlayers = tempState[bowlingTeamKey].players.filter(p => p.role.includes('Bowler') || p.role.includes('All-Rounder'));
+            
+            if (bowlingPlayers.length === 0) {
+                bowlingPlayers.push(...tempState[bowlingTeamKey].players);
+            }
+
+            document.getElementById('select-striker').innerHTML = battingPlayers
+                .map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+            document.getElementById('select-nonstriker').innerHTML = battingPlayers
+                .map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+            document.getElementById('select-bowler').innerHTML = bowlingPlayers
+                .map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+
+             if (battingPlayers.length >= 2) {
+                 document.getElementById('select-striker').selectedIndex = 0;
+                 document.getElementById('select-nonstriker').selectedIndex = 1;
+             }
+             if (bowlingPlayers.length >= 1) {
+                  document.getElementById('select-bowler').selectedIndex = 0;
+             }
+        }
+        
+        document.getElementById('toss-winner').addEventListener('change', populateOpeningPlayerDropdowns);
+        document.getElementById('elected-to').addEventListener('change', populateOpeningPlayerDropdowns);
+
+        window.startMatch = async function() {
+            const matchId = document.getElementById('match-id').value.trim();
+            if (!matchId) {
+                alert("Please enter a unique Match ID.");
+                return;
+            }
+
+            const strikerId = document.getElementById('select-striker').value;
+            const nonStrikerId = document.getElementById('select-nonstriker').value;
+            const bowlerId = document.getElementById('select-bowler').value;
+
+            if (strikerId === nonStrikerId) {
+                alert("Striker and Non-Striker cannot be the same player.");
+                return;
+            }
+             if (!strikerId || !nonStrikerId || !bowlerId) {
+                 alert("Please select opening striker, non-striker, and bowler.");
+                 return;
+             }
+            
+            const battingTeamKey = tempState.initialBattingTeam;
+            const bowlingTeamKey = tempState.initialBowlingTeam;
+
+            const striker = tempState[battingTeamKey].players.find(p => p.id === strikerId);
+            const nonStriker = tempState[battingTeamKey].players.find(p => p.id === nonStrikerId);
+            const bowler = tempState[bowlingTeamKey].players.find(p => p.id === bowlerId);
+
+            if (!striker || !nonStriker || !bowler) {
+                alert("Error finding selected players. Check player lists.");
+                return;
+            }
+            
+            striker.hasBatted = true;
+            nonStriker.hasBatted = true;
+            
+            const initialState = {
+                 matchId: matchId,
+                 venue: document.getElementById('venue').value,
+                 teamA: tempState.teamA,
+                 teamB: tempState.teamB,
+                 totalOvers: parseInt(document.getElementById('total-overs').value) || 20,
+                 toss: {
+                     winner: tempState[document.getElementById('toss-winner').value].name,
+                     elected: document.getElementById('elected-to').value
+                 },
+                 live: {
+                     inning: 1,
+                     battingTeam: battingTeamKey,
+                     bowlingTeam: bowlingTeamKey,
+                     score: 0, wickets: 0, balls: 0, overs: 0,
+                     batsmen: {
+                         striker: { id: striker.id, name: striker.name, runs: 0, balls: 0, fours: 0, sixes: 0 },
+                         nonStriker: { id: nonStriker.id, name: nonStriker.name, runs: 0, balls: 0, fours: 0, sixes: 0 }
+                     },
+                     bowler: { id: bowler.id, name: bowler.name, overs: 0, balls: 0, maidens: 0, runs: 0, wickets: 0 },
+                     extras: { total: 0, wides: 0, noBalls: 0, byes: 0, legByes: 0 },
+                     partnership: { runs: 0, balls: 0 },
+                     runRate: 0.0,
+                     ballHistory: [],
+                     thisOverSummary: [],
+                     fullBallLog: [],
+                     matchStatus: "1st Inning Live",
+                     targetScore: null
+                 },
+                 scorecard: {
+                     teamA: { batting: [], bowling: [] },
+                     teamB: { batting: [], bowling: [] }
+                 },
+                 innings: {},
+                 result: null
+            };
+
+            try {
+                await window.saveInitialState(matchId, initialState);
+                console.log("Initial state saved successfully.");
+                window.location.href = `cricket-scorer.html?matchId=${encodeURIComponent(matchId)}`;
+            } catch (error) {
+                console.error("Error saving initial state:", error);
+                alert("Failed to save initial match state to database. Please check console.");
+            }
+        }
+    </script>
+    <script>
+        // --- NEW: Responsive Navigation Logic ---
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const mainContent = document.querySelector('.main-content'); // Assuming only one
+    const overlay = document.getElementById('overlay');
+    const backLink = document.getElementById('back-link');
+    const bottomNavBack = document.getElementById('bottom-nav-back');
+    const pageTitleEl = document.getElementById('page-main-title'); // Get title element
+
+    // Function to get current sport from URL
+    const getCurrentSport = () => {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('sport') || 'cricket'; // Default if needed
+    };
+    const currentSport = getCurrentSport();
+
+    // Set Back Button links dynamically
+    const sportHubUrl = `sport.html?sport=${currentSport}`;
+    if (backLink) {
+        // Show back button only if NOT on sport.html
+        if (!window.location.pathname.endsWith('sport.html')) {
+             backLink.href = sportHubUrl;
+             backLink.style.display = 'inline-block';
+        }
+    }
+    if(bottomNavBack){
+        bottomNavBack.href = sportHubUrl;
+    }
+
+     // Set Page Title Dynamically for sport.html
+     if (pageTitleEl && window.location.pathname.endsWith('sport.html')) {
+        pageTitleEl.textContent = currentSport.charAt(0).toUpperCase() + currentSport.slice(1) + " Details";
+     } else if (pageTitleEl && window.location.pathname.endsWith('setup-cricket.html')){
+         pageTitleEl.textContent = "Setup Cricket Match";
+     } else if (pageTitleEl && window.location.pathname.endsWith('cricket-scorer.html')){
+         pageTitleEl.textContent = "Cricket Scorer";
+     } else if (pageTitleEl && window.location.pathname.endsWith('results.html')){
+         pageTitleEl.textContent = "Match Results";
+     }
+
+
+    // Sidebar Toggle Logic
+    if (menuToggle && sidebar && mainContent) {
+        menuToggle.addEventListener('click', () => {
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active', sidebar.classList.contains('open')); // Toggle overlay with sidebar
+            } else {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded', sidebar.classList.contains('collapsed'));
+                // Optional: Save state to localStorage
+                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+            }
+        });
+    }
+
+     // Overlay click to close sidebar on mobile
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+        });
+    }
+
+
+    // Optional: Restore sidebar state on desktop load
+    if (window.innerWidth > 768) {
+         const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+         if (sidebarCollapsed) {
+             sidebar?.classList.add('collapsed');
+             mainContent?.classList.add('expanded');
+         }
+    }
+    // --- END Responsive Navigation Logic ---
+    </script>
+<div class="overlay" id="overlay"></div>
+<nav class="bottom-nav">
+    <ul>
+        <li>
+            <a href="index.html">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="./sport.html?sport=cricket" id="bottom-nav-back">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
+
+                Go Back
+            </a>
+        </li>
+        </ul>
+</nav>
+</body>
+</html>

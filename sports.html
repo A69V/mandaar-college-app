@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Sports - Umang Mandar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: rgba(0, 0, 0, 0.647);
+            background-image: url("./background.gif");
+            /* Make sure this background.gif file is in the same folder */
+            background-blend-mode: multiply;
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+            overflow-x: hidden;
+            transition: all ease-in-out 0.5s;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        /* --- 
+          NEW STYLES FOR SPORTS CARD LISTING
+        --- */
+
+        .sports-list-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .sports-card-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px; /* Same as your old sports-container gap */
+            padding: 20px 0;
+        }
+
+        .sport-card {
+            /* Using your .content-box styles as a base */
+            background-color: rgba(9, 6, 82, 0.486);
+            border-radius: 8px;
+            box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422);
+            backdrop-filter: blur(2px);
+            width: 300px;
+            padding: 20px;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .sport-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 0px 20px rgba(255, 159, 85, 0.5); /* Orange glow on hover */
+        }
+
+        .sport-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sport-card h3 {
+            color: #FF9F55; /* Your highlight color */
+            font-size: 1.5em;
+            margin-top: 15px;
+        }
+
+        .sport-card p {
+            font-size: 0.9em;
+            color: #ddd;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+
+        /* --- 
+          EXISTING STYLES FROM YOUR UI
+        --- */
+
+        header {
+            width: 100%;
+        }
+
+        nav {
+            max-width: 100%;
+            min-width: 250px;
+            max-height: 200px;
+            height: 100px;
+            margin: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            background: #080808;
+            z-index: 999;
+            background: linear-gradient(180deg, rgba(8, 8, 8, 1) 2%, rgba(9, 9, 9, 0.62) 63%, rgba(10, 10, 10, 0.46) 79%, rgba(0, 0, 0, 0) 100%);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.1em;
+            font-family: sans-serif;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo {
+            margin: 20px;
+        }
+
+        .menu-btn {
+            margin: 20px;
+            background-color: rgba(0, 0, 0, 0);
+            color: aliceblue;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        .menu-btn img {
+            height: 30px;
+        }
+
+        .live-btn {
+            background-color: #080808a5;
+            color: white;
+            outline: none;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border-radius: 50px;
+            border: solid 1px white;
+            font-weight: bold;
+            font-size: 1em;
+            margin: 20px;
+        }
+
+        .dot-blink {
+            height: 10px;
+            width: 10px;
+            background-color: red;
+            border-radius: 50%;
+            animation: blink infinite 2s;
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* --- Generic Content Box (Used for the page title) --- */
+        .content-box {
+            padding: 20px 30px;
+            background-color: rgba(9, 6, 82, 0.486);
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422);
+            backdrop-filter: blur(2px);
+            margin-bottom: 25px;
+        }
+
+        .content-box h2 {
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0px 0px 10px #fcfcfc;
+            font-size: 1.8em;
+            margin-bottom: 0px; /* Adjusted for card grid */
+            font-weight: lighter;
+            border-bottom: 1px solid #FF9F55;
+            padding-bottom: 10px;
+        }
+
+        /* --- Footer (Copied from your code) --- */
+        footer {
+            padding: 40px 0 0;
+            background: #080808;
+            font-family: sans-serif;
+            color: white;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
+        }
+
+        .footer {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 10;
+            justify-content: space-between;
+        }
+
+        .footer div {
+            margin: 0 30px;
+        }
+
+        .footer-left {
+            width: 300px;
+            text-align: center;
+            color: white;
+        }
+
+        .footer-right {
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .footer-right p {
+            line-height: 1.5em;
+        }
+
+        .footer-left a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .footer-left ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .footer-left ul li {
+            margin: 10px;
+            display: inline-block;
+        }
+
+        .footer-left ul li a img {
+            height: 20px;
+        }
+
+        .made-by {
+            text-decoration: none;
+            color: white;
+            margin: 10px auto;
+            border-top: dotted 1px white;
+            width: 100%;
+            padding: 15px 0;
+        }
+
+        .footer-contact {
+            text-align: left;
+            width: 300px;
+            margin: 0 20px;
+        }
+
+        .footer-contact ul {
+            list-style: none;
+        }
+
+        .made-by a {
+            color: white;
+        }
+
+
+        @media screen and (max-width: 900px) {
+            .footer {
+                flex-direction: column;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            .footer div {
+                margin: 30px 20px;
+            }
+
+            .sports-card-grid {
+                justify-content: center;
+            }
+
+            .sport-card {
+                width: calc(50% - 45px); /* 2 cards per row on tablet */
+            }
+            nav ul{
+                display: none;
+            }
+
+        }
+
+        @media screen and (max-width: 700px) {
+            .sport-card {
+                 width: 100%; /* 1 card per row on mobile */
+                 max-width: 350px; /* Optional: prevent it from being too wide */
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            .content-box {
+                padding: 15px 20px;
+            }
+            .sports-list-container {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo"><img src="./mandar-logo.png" alt="Umang Mandar"></a>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#">Event Timeline</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">Updates</a></li>
+                <li><a href="sports-list.html">Sports</a></li>
+            </ul>
+            <button class="live-btn" id="live-btn">
+                <div class="dot-blink"></div> <span>LIVE</span>
+            </button>
+            <button class="menu-btn" id="menu-btn"><img src="./menu.svg" alt=""></button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="sports-list-container">
+            <div class="content-box">
+                <h2>All Sports</h2>
+                
+                <div class="sports-card-grid">
+
+                    <a href="football.html" class="sport-card">
+                        <img src="https://via.placeholder.com/300x160/FF9F55/090652?text=Football" alt="Football">
+                        <h3>Football</h3>
+                        <p>Team-based sport with 11 players. See schedules, teams, and live scores.</p>
+                    </a>
+
+                    <a href="#" class="sport-card">
+                        <img src="https://via.placeholder.com/300x160/D8D8F6/090652?text=Volleyball" alt="Volleyball">
+                        <h3>Volleyball</h3>
+                        <p>Two teams of six players are separated by a net. Check out the fixtures and results.</p>
+                    </a>
+
+                    <a href="#" class="sport-card">
+                        <img src="https://via.placeholder.com/300x160/FFFFFF/090652?text=Badminton" alt="Badminton">
+                        <h3>Badminton</h3>
+                        <p>A fast-paced racket sport. Follow the singles and doubles tournaments.</p>
+                    </a>
+
+                    <a href="#" class="sport-card">
+                        <img src="https://via.placeholder.com/300x160/4a4a88/FFFFFF?text=Athletics" alt="Athletics">
+                        <h3>Athletics</h3>
+                        <p>Track and field events including sprints, long jump, and more. See top performers.</p>
+                    </a>
+                    
+                    <a href="#" class="sport-card">
+                        <img src="https://via.placeholder.com/300x160/FF9F55/090652?text=Table+Tennis" alt="Table Tennis">
+                        <h3>Table Tennis</h3>
+                        <p>High-speed indoor action. Find out who makes it to the finals.</p>
+                    </a>
+                    
+                    <a href="#" class="sport-card">
+                        <img src="https://via.placeholder.com/300x160/D8D8F6/090652?text=Chess" alt="Chess">
+                        <h3>Chess</h3>
+                        <p>The ultimate game of strategy. Follow the brackets and see who wins.</p>
+                    </a>
+                    
+                    </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer">
+            <div class="footer-left">
+                <img src="./mandar-logo-25.png" alt="Umang Mandar 25 logo">
+                <ul>
+                    <li><a href="#"><img src="./instagram.svg" alt="Social"></a></li>
+                    <li><a href="#"><img src="./facebook.svg" alt="Social"></a></li>
+                    <li><a href="#"><img src="./youtube.svg" alt="Social"></a></li>
+                    <li><a href="#"><img src="./twitter-x.svg" alt="Social"></a></li>
+                </ul>
+                <p class="copyright">© 2025 GEC Banka Sports Club</p>
+            </div>
+            <div class="footer-right">
+                <p>Umang Mandaar, GEC Banka's annual sports festival, champions sportsmanship, fitness, and competitive
+                    spirit. Organized by the Sports Club, it unites athletes and enthusiasts through diverse tournaments
+                    and events. It’s a vibrant celebration of teamwork, dedication, and the passionate sporting culture
+                    that defines our campus.</p>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Details</h3>
+
+                <p>
+                <ul>
+                    <li><b>Address:</b><br> Government Engineering College Banka,
+                        Vill- Lakrikola, Post- Manjira,
+                        Dist- Banka, P.S- Banka, pin-813102</li> <br>
+                    <li><b>Phone:</b><br> Himanshu Kumar - 9334550188 <br> Satyam Kumar - 9006509174</li> <br>
+                </ul>
+                </p>
+            </div>
+        </div>
+        <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a></p>
+    </footer>
+
+    </body>
+</html>

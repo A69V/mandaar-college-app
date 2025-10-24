@@ -1,0 +1,21 @@
+landing page
+gallery
+about
+schedule - all sport events schedule
+sports page - contains details such as rules, teams and their players, schedules, scoreboard, winners, past year stories, photos...
+news/updates
+live scoreboard
+players profile - shows their participations, medals they won.
+
+
+
+Home done
+About done
+Gallery 
+Updates 
+Timeline done
+Sports & Events - Each sport has a separate page where a description, its rules, teams and players participating, its latest updates, winners, point table, previous stories (if any) will be mentioned
+Live Scoreboard
+
+Privacy page
+Contact

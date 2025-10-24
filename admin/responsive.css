@@ -1,0 +1,152 @@
+/* --- NEW Responsive & Toggle Styles --- */
+.header-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background: var(--card); /* Match sidebar */
+    border-bottom: 1px solid var(--glass);
+    position: sticky; /* Make header sticky */
+    top: 0;
+    z-index: 10; /* Above main content */
+}
+
+.menu-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 24px; /* Adjust size */
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 15px;
+}
+.menu-toggle-btn:hover {
+    color: var(--accent);
+}
+
+.page-title { /* Existing h1/h2 can be styled or use this */
+    color: var(--accent);
+    margin: 0;
+    font-size: 1.5em;
+    flex-grow: 1; /* Pushes back button to the right */
+}
+
+.back-button {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted);
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.back-button:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+}
+
+
+/* Sidebar collapsed state */
+.sidebar.collapsed {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+    border-right: none;
+}
+
+/* Main content expanded state */
+.main-content.expanded {
+    margin-left: 0; /* Adjust if sidebar width changes */
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--card);
+    border-top: 1px solid var(--glass);
+    z-index: 100;
+}
+.bottom-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 5px 0;
+    margin: 0;
+}
+.bottom-nav li {
+    flex: 1;
+    text-align: center;
+}
+.bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 5px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.8em;
+    font-weight: 600;
+}
+.bottom-nav a svg { /* Style for icons */
+    width: 24px;
+    height: 24px;
+    margin-bottom: 3px;
+    fill: currentColor; /* Use text color for icon */
+}
+.bottom-nav a:hover, .bottom-nav a.active {
+    color: var(--accent);
+}
+
+
+/* Media Query for Mobile */
+@media screen and (max-width: 768px) {
+    .card{
+    overflow-x: scroll;
+}
+    body {
+        flex-direction: column; /* Stack header and content */
+        height: auto; /* Allow scrolling */
+        padding-bottom: 60px; /* Space for bottom nav */
+    }
+    .sidebar {
+        position: fixed; /* Keep sidebar fixed for overlay effect */
+        left: -250px; /* Start hidden off-screen */
+        z-index: 101; /* Above everything */
+        transition: left 0.3s ease-in-out;
+        height: 100%; /* Full height */
+    }
+    .sidebar.open {
+        left: 0; /* Slide in */
+    }
+    .main-content {
+        margin-left: 0; /* Always full width */
+        height: auto;
+        overflow-y: visible;
+    }
+     .header-bar {
+        /* Header stays sticky */
+     }
+    .bottom-nav {
+        display: block; /* Show bottom nav */
+    }
+     /* Adjust scorer grid on mobile */
+    .board-grid {
+        grid-template-columns: 1fr; /* Stack columns */
+    }
+    /* Add overlay for when sidebar is open */
+     .overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 100;
+        display: none; /* Hidden by default */
+     }
+      .overlay.active {
+        display: block;
+     }
+}

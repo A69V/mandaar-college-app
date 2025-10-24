@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sport Details</title>
+    <style>
+        :root{
+            --bg:#0f1724; --card:#0b1220; --muted:#9aa6b2; --accent:#06b6d4; --glass: rgba(255,255,255,0.04);
+            --radius:14px; --pad:16px; --shadow: 0 6px 24px rgba(2,6,23,0.6);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        }
+        *{box-sizing:border-box}
+        html,body{margin:0;background:linear-gradient(180deg,#071026 0%, #071422 100%);color:#e6eef6; min-height:100%;}
+        
+        /* --- Sidebar Styles (Unchanged) --- */
+        body { display: flex; height: 100vh; }
+        .sidebar {
+            width: 240px; flex-shrink: 0; background: var(--card);
+            border-right: 1px solid var(--glass); height: 100vh;
+            overflow-y: auto; position: sticky; top: 0;
+        }
+        .sidebar-header {
+            padding: 20px; text-align: center;
+            border-bottom: 1px solid var(--glass);
+        }
+        .sidebar-header h3 { margin: 0; font-size: 22px; color: var(--accent); }
+        .sidebar ul { list-style: none; padding: 15px 0; margin: 0; }
+        .sidebar li a {
+            display: block; padding: 14px 24px; text-decoration: none;
+            color: var(--muted); font-weight: 600; font-size: 16px;
+            transition: all 0.2s ease; border-left: 3px solid transparent;
+        }
+        .sidebar li a:hover {
+            background: var(--glass); color: #fff;
+            border-left-color: var(--accent);
+        }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; }
+        /* --- End Sidebar Styles --- */
+
+        .wrap{max-width:900px;margin:40px auto;padding:20px}
+        .card{background:linear-gradient(180deg,var(--card), rgba(10,16,26,0.9));border-radius:var(--radius);padding:var(--pad);box-shadow:var(--shadow); margin-bottom: 20px;}
+        h1, h2 { color: var(--accent); margin-top: 0; text-transform: capitalize; }
+        h3 { margin-top: 0; }
+        .btn{
+            background:var(--glass); border:1px solid rgba(255,255,255,0.06); color:inherit;
+            padding:12px 18px; border-radius:10px; cursor:pointer; font-size:15px; font-weight:600;
+            transition:all 0.2s ease;
+        }
+        .btn:hover{background:rgba(255,255,255,0.1)}
+        .btn.primary{color: white;text-decoration: none; background:linear-gradient(90deg,var(--accent), #7c3aed);border:none}
+        .btn.danger{background:linear-gradient(90deg,#f43f5e, #be123c);border:none; font-size: 12px; padding: 6px 10px;}
+        
+        /* --- CSS FIX & NEW EDIT STYLES --- */
+        
+        /* This rule targets text inputs */
+        input[type=text] {
+            width:100%; padding:12px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);
+            background:rgba(0,0,0,0.2); color:inherit; font-size:16px; margin-bottom: 15px;
+        }
+
+        /* This rule *ONLY* targets selects with the .role-select class */
+        select.role-select {
+            width:100%; padding:12px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);
+            background:rgba(0,0,0,0.2); color:inherit; font-size:16px; margin-bottom: 15px;
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa6b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 1em;
+            padding-right: 2.5em;
+        }
+
+        .row { display: flex; gap: 15px; align-items: flex-start; }
+        .col { flex: 1; }
+        .team-card { background: var(--glass); border-radius: 10px; padding: 16px; margin-bottom: 15px; }
+        .team-header { display: flex; justify-content: space-between; align-items: center; }
+        
+        /* New Edit Mode Styles */
+        .member-list li {
+            padding: 6px 0;
+            border-bottom: 1px solid var(--glass);
+        }
+        .member-list .role { font-size: 13px; color: var(--muted); }
+        .view-mode, .edit-mode {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            width: 100%;
+        }
+        .edit-mode { gap: 10px; }
+        .edit-mode input, .edit-mode select {
+            flex: 1;
+            margin-bottom: 0;
+            font-size: 14px;
+            padding: 8px 10px;
+        }
+        .edit-mode select.role-select { padding-right: 2.5em !important; } 
+        .btn.small { font-size: 12px; padding: 6px 10px; }
+        .btn.edit { background: #334155; border: 1px solid #475569; margin-right: 5px; }
+        .btn.save { background: var(--accent); border: none; margin-right: 5px; }
+        .btn.cancel { background: #334155; border: 1px solid #475569; }
+        /* --- END CSS FIX & NEW EDIT STYLES --- */
+
+
+        .match-list a {
+            display: block; padding: 14px; background: var(--glass); border-radius: 8px;
+            margin-bottom: 10px; text-decoration: none; color: inherit; font-weight: 600;
+        }
+        .match-list a:hover { background: rgba(255,255,255,0.1); }
+        .match-list .status {
+            font-size: 12px; font-weight: 700; color: #fff; border-radius: 999px;
+            padding: 4px 10px; margin-right: 10px;
+        }
+        .status.live { background: #be123c; }
+        .status.upcoming { background: #ca8a04; }
+        .status.completed { background: #166534; }
+    </style>
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Mandaar Sports</h3>
+        </div>
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="sport.html?sport=cricket">🏏 Cricket</a></li>
+            <li><a href="sport.html?sport=football">⚽ Football</a></li>
+            <li><a href="sport.html?sport=badminton">🏸 Badminton</a></li>
+            <li><a href="sport.html?sport=athletics">👟 Athletics</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="wrap">
+<h1 id="sport-title">Loading...</h1>
+            <div class="card">
+                <h2>Matches
+                    <a href="#" id="new-match-btn" class="btn primary" style="float: right;">+ New Match</a>
+                </h2>
+                <div id="match-lists">
+                    <h3>Ongoing</h3>
+                    <div class="match-list" id="ongoing-matches"></div>
+                    <h3>Upcoming</h3>
+                    <div class="match-list" id="upcoming-matches"></div>
+                    <h3>Past</h3>
+                    <div class="match-list" id="past-matches"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Teams & Members</h2>
+                <div id="team-list"></div>
+                
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+                <h3>Add New Team</h3>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" id="new-team-name" placeholder="New Team Name (e.g., CSE Warriors)">
+                    </div>
+                    <button class="btn" id="btn-add-team" style="align-self: flex-start; padding: 12px 18px; height: 45px;">Add Team</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, onValue, get, set, push, remove, update } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        // === PASTE YOUR FIREBASE CONFIG HERE ===
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOtc2UrW2hXO4JJK5ZZQcDOfUVbEFmnis",
+            authDomain: "umang-mandar.firebaseapp.com",
+            projectId: "umang-mandar",
+            storageBucket: "umang-mandar.firebasestorage.app",
+            messagingSenderId: "1033556658773",
+            appId: "1:1033556658773:web:ed5c606f77e792136ae2dc",
+            databaseURL: "https://umang-mandar-default-rtdb.asia-southeast1.firebasedatabase.app/" 
+        };
+        // === END OF CONFIG ===
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Predefined roles for sports
+        const SPORT_ROLES = {
+            "cricket": ["Batsman", "Bowler", "All-Rounder", "WK-Batsman", "Wicketkeeper"],
+            "football": ["Goalkeeper", "Defender", "Midfielder", "Forward", "Substitute"],
+            "volleyball": ["Setter", "Libero", "Hitter", "Blocker"],
+            "kabaddi": ["Raider", "Defender", "All-Rounder"],
+            "badminton": ["Player"],
+            "tabletennis": ["Player"],
+            "shotput": ["Athlete"],
+            "javelin": ["Athlete"],
+            "chess": ["Player"],
+            "carrom": ["Player"],
+            "athletics": ["Athlete"],
+            "default": ["Player", "Captain", "Substitute"]
+        };
+
+        let currentSport = 'unknown';
+        const urlParams = new URLSearchParams(window.location.search);
+        currentSport = urlParams.get('sport') || 'cricket'; 
+
+        document.getElementById('sport-title').textContent = currentSport;
+        
+        let setupPage = `setup-cricket.html`; 
+        if (currentSport === 'football') { setupPage = `setup-football.html`; }
+        document.getElementById('new-match-btn').href = `${setupPage}?sport=${currentSport}`;
+
+        // --- NEW HELPER FUNCTION ---
+        // Generates <option> tags for a role dropdown
+        function generateRoleOptions(selectedRole = "") {
+            const roles = SPORT_ROLES[currentSport] || SPORT_ROLES["default"];
+            return roles.map(role => 
+                `<option value="${role}" ${role === selectedRole ? 'selected' : ''}>${role}</option>`
+            ).join('');
+        }
+
+        // --- TEAM MANAGEMENT ---
+        const teamsRef = ref(db, `sports/${currentSport}/teams`);
+        const teamListEl = document.getElementById('team-list');
+        
+        document.getElementById('btn-add-team').addEventListener('click', () => {
+            const teamName = document.getElementById('new-team-name').value.trim();
+            if (!teamName) return alert('Please enter a team name');
+            
+            const newTeamRef = push(teamsRef); 
+            set(newTeamRef, { name: teamName, members: {} })
+                .then(() => {
+                    document.getElementById('new-team-name').value = '';
+                })
+                .catch(e => console.error(e));
+        });
+
+        onValue(teamsRef, (snapshot) => {
+            teamListEl.innerHTML = '';
+            const teams = snapshot.val();
+            if (!teams) {
+                teamListEl.innerHTML = '<p style="color: var(--muted);">No teams added yet.</p>';
+                return;
+            }
+            
+            for (const teamId in teams) {
+                const team = teams[teamId];
+                teamListEl.innerHTML += createTeamCardHTML(teamId, team);
+            }
+            
+            attachTeamEventListeners(teams);
+        });
+
+        // --- HEAVILY MODIFIED HTML Function ---
+        function createTeamCardHTML(teamId, team) {
+            let membersHTML = '';
+            if (team.members) {
+                for (const memberId in team.members) {
+                    const member = team.members[memberId];
+                    const roleOptions = generateRoleOptions(member.role); // Get options for this member
+
+                    membersHTML += `
+                        <li data-member-id="${memberId}">
+                            <div class="view-mode">
+                                <span>
+                                    ${member.name} <span class="role">(${member.role})</span>
+                                </span>
+                                <div>
+                                    <button class="btn small edit" data-team-id="${teamId}" data-member-id="${memberId}">Edit</button>
+                                    <button class="btn danger small" data-team-id="${teamId}" data-member-id="${memberId}">X</button>
+                                </div>
+                            </div>
+                            
+                            <div class="edit-mode" style="display: none;">
+                                <input type="text" class="edit-name col" value="${member.name}">
+                                <select class="edit-role col role-select">
+                                    ${roleOptions}
+                                </select>
+                                <div>
+                                    <button class="btn small save" data-team-id="${teamId}" data-member-id="${memberId}">Save</button>
+                                    <button class="btn small cancel" data-team-id="${teamId}" data-member-id="${memberId}">Cancel</button>
+                                </div>
+                            </div>
+                        </li>
+                    `;
+                }
+            }
+            
+            const addRoleOptions = generateRoleOptions(); // Get options for the "Add" form
+
+            return `
+                <div class="team-card" id="team-${teamId}">
+                    <div class="team-header">
+                        <h3>${team.name}</h3>
+                        <button class="btn danger" data-team-id="${teamId}">Delete Team</button>
+                    </div>
+                    <ul class="member-list">${membersHTML || '<p style="font-size: 14px; color: var(--muted);">No members added yet.</p>'}</ul>
+                    
+                    <div class="row" style="margin-top: 15px; border-top: 1px solid var(--glass); padding-top: 15px;">
+                        <input type="text" id="name-${teamId}" placeholder="Player Name" class="col">
+                        
+                        <select id="role-${teamId}" class="col role-select">
+                            ${addRoleOptions}
+                        </select>
+                        
+                        <button class="btn" data-team-id="${teamId}" style="align-self: flex-start; padding: 12px 18px; height: 45px;">Add Member</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // --- HEAVILY MODIFIED Event Listener ---
+        function attachTeamEventListeners(teams) {
+            teamListEl.querySelectorAll('button').forEach(btn => {
+                const teamId = btn.dataset.teamId;
+                const memberId = btn.dataset.memberId;
+                const li = btn.closest('li'); // Get the parent <li>
+                
+                if (btn.classList.contains('danger') && memberId) {
+                    // This is a "Delete Member" button
+                    btn.addEventListener('click', () => deleteMember(teamId, memberId));
+                } 
+                else if (btn.classList.contains('edit')) {
+                    // This is an "Edit" button
+                    btn.addEventListener('click', () => {
+                        li.querySelector('.view-mode').style.display = 'none';
+                        li.querySelector('.edit-mode').style.display = 'flex';
+                    });
+                }
+                else if (btn.classList.contains('cancel')) {
+                    // This is a "Cancel" button
+                    btn.addEventListener('click', () => {
+                        li.querySelector('.view-mode').style.display = 'flex';
+                        li.querySelector('.edit-mode').style.display = 'none';
+                    });
+                }
+                else if (btn.classList.contains('save')) {
+                    // This is a "Save" button
+                    btn.addEventListener('click', () => {
+                        const newName = li.querySelector('.edit-name').value.trim();
+                        const newRole = li.querySelector('.edit-role').value;
+                        if (!newName || !newRole) return alert('Name and Role cannot be empty.');
+                        updateMember(teamId, memberId, newName, newRole);
+                    });
+                }
+                else if (btn.textContent === 'Add Member') {
+                    // This is an "Add Member" button
+                    btn.addEventListener('click', () => addMember(teamId));
+                } 
+                else if (btn.classList.contains('danger')) {
+                    // This is a "Delete Team" button
+                    btn.addEventListener('click', () => deleteTeam(teamId));
+                }
+            });
+        }
+        
+        function addMember(teamId) {
+            const name = document.getElementById(`name-${teamId}`).value.trim();
+            const role = document.getElementById(`role-${teamId}`).value.trim();
+            if (!name || !role) return alert('Please enter player name and role');
+            
+            const memberRef = push(ref(db, `sports/${currentSport}/teams/${teamId}/members`));
+            set(memberRef, { name: name, role: role });
+            
+            document.getElementById(`name-${teamId}`).value = '';
+            document.getElementById(`role-${teamId}`).selectedIndex = 0;
+        }
+
+        // --- NEW FUNCTION ---
+        function updateMember(teamId, memberId, newName, newRole) {
+            const memberRef = ref(db, `sports/${currentSport}/teams/${teamId}/members/${memberId}`);
+            update(memberRef, {
+                name: newName,
+                role: newRole
+            }).catch(e => console.error(e));
+            // No need to hide/show UI, the onValue() listener will auto-refresh
+        }
+        
+        function deleteMember(teamId, memberId) {
+            if (!confirm('Are you sure you want to delete this member?')) return;
+            remove(ref(db, `sports/${currentSport}/teams/${teamId}/members/${memberId}`));
+        }
+        
+        function deleteTeam(teamId) {
+            if (!confirm('Are you sure you want to delete this ENTIRE team? This cannot be undone.')) return;
+            remove(ref(db, `sports/${currentSport}/teams/${teamId}`));
+        }
+
+
+        // --- MATCH LIST MANAGEMENT (Unchanged) ---
+        const matchesRef = ref(db, 'matches');
+        const ongoingEl = document.getElementById('ongoing-matches');
+        const upcomingEl = document.getElementById('upcoming-matches');
+        const pastEl = document.getElementById('past-matches');
+
+        get(matchesRef).then((snapshot) => {
+            ongoingEl.innerHTML = '';
+            upcomingEl.innerHTML = '';
+            pastEl.innerHTML = '';
+            
+            let found = { ongoing: 0, upcoming: 0, past: 0 };
+            const matches = snapshot.val();
+            if (!matches) {
+                 ongoingEl.innerHTML = '<p style="font-size: 14px; color: var(--muted);">No live matches.</p>';
+                 upcomingEl.innerHTML = '<p style="font-size: 14px; color: var(--muted);">No upcoming matches.</p>';
+                 pastEl.innerHTML = '<p style="font-size: 14px; color: var(--muted);">No past matches.</p>';
+                 return;
+            }
+            
+            for (const matchId in matches) {
+                const match = matches[matchId];
+                
+                if (match.sport !== currentSport) continue;
+                
+                const matchName = (match.teamA && match.teamA.name) ? `${match.teamA.name} vs ${match.teamB.name}` : (match.matchId || matchId);
+
+                if (match.status === 'live') {
+                    ongoingEl.innerHTML += `<a href="cricket-scorer.html?matchId=${matchId}">
+                        <span class="status live">LIVE</span> ${matchName}
+                    </a>`;
+                    found.ongoing++;
+                } else if (match.status === 'upcoming') {
+                    upcomingEl.innerHTML += `<a href="${setupPage}?sport=${currentSport}&matchId=${matchId}">
+                        <span class="status upcoming">UPCOMING</span> ${matchName} (Click to setup)
+                    </a>`;
+                    found.upcoming++;
+                } else if (match.status === 'completed') {
+                    pastEl.innerHTML += `<a href="results.html?matchId=${matchId}">
+                        <span class="status completed">COMPLETED</span> ${matchName} (View result)
+                    </a>`;
+                    found.past++;
+                }
+            }
+            
+            if (found.ongoing === 0) ongoingEl.innerHTML = '<p style="font-size: 14px; color: var(--muted);">No live matches.</p>';
+            if (found.upcoming === 0) upcomingEl.innerHTML = '<p style="font-size: 14px; color: var(--muted);">No upcoming matches.</p>';
+            if (found.past === 0) pastEl.innerHTML = '<p style="font-size: 14px; color: var(--muted);">No past matches.</p>';
+        });
+
+    </script>
+    <script>
+        // --- NEW: Responsive Navigation Logic ---
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const mainContent = document.querySelector('.main-content'); // Assuming only one
+    const overlay = document.getElementById('overlay');
+    const backLink = document.getElementById('back-link');
+    const bottomNavBack = document.getElementById('bottom-nav-back');
+    const pageTitleEl = document.getElementById('page-main-title'); // Get title element
+
+    // Function to get current sport from URL
+    const getCurrentSport = () => {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('sport') || 'cricket'; // Default if needed
+    };
+    const currentSport = getCurrentSport();
+
+    // Set Back Button links dynamically
+    const sportHubUrl = `sport.html?sport=${currentSport}`;
+    if (backLink) {
+        // Show back button only if NOT on sport.html
+        if (!window.location.pathname.endsWith('sport.html')) {
+             backLink.href = sportHubUrl;
+             backLink.style.display = 'inline-block';
+        }
+    }
+    if(bottomNavBack){
+        bottomNavBack.href = sportHubUrl;
+    }
+
+     // Set Page Title Dynamically for sport.html
+     if (pageTitleEl && window.location.pathname.endsWith('sport.html')) {
+        pageTitleEl.textContent = currentSport.charAt(0).toUpperCase() + currentSport.slice(1) + " Details";
+     } else if (pageTitleEl && window.location.pathname.endsWith('setup-cricket.html')){
+         pageTitleEl.textContent = "Setup Cricket Match";
+     } else if (pageTitleEl && window.location.pathname.endsWith('cricket-scorer.html')){
+         pageTitleEl.textContent = "Cricket Scorer";
+     } else if (pageTitleEl && window.location.pathname.endsWith('results.html')){
+         pageTitleEl.textContent = "Match Results";
+     }
+
+
+    // Sidebar Toggle Logic
+    if (menuToggle && sidebar && mainContent) {
+        menuToggle.addEventListener('click', () => {
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active', sidebar.classList.contains('open')); // Toggle overlay with sidebar
+            } else {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded', sidebar.classList.contains('collapsed'));
+                // Optional: Save state to localStorage
+                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+            }
+        });
+    }
+
+     // Overlay click to close sidebar on mobile
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+        });
+    }
+
+
+    // Optional: Restore sidebar state on desktop load
+    if (window.innerWidth > 768) {
+         const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+         if (sidebarCollapsed) {
+             sidebar?.classList.add('collapsed');
+             mainContent?.classList.add('expanded');
+         }
+    }
+    // --- END Responsive Navigation Logic ---
+    </script>
+<div class="overlay" id="overlay"></div>
+<nav class="bottom-nav">
+    <ul>
+        <li>
+            <a href="index.html">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="./index.html" id="bottom-nav-back">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
+
+                Go Back
+            </a>
+        </li>
+        </ul>
+</nav>
+</body>
+</html>

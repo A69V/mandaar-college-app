@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Match Summary</title>
+  <style>
+    body{font-family:Inter,system-ui;background:#071022;color:#e6eef6;padding:18px}
+    .card{background:#0b1220;padding:16px;border-radius:12px;margin-bottom:12px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px dashed rgba(255,255,255,0.03)}
+    button{padding:8px;border-radius:8px;background:#06b6d4;border:none;color:#012;cursor:pointer}
+    #chart{width:100%;height:200px;background:#071022;border-radius:8px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2 id="title">Match Summary</h2>
+    <div>
+      <label>Match ID</label>
+      <input id="matchId" />
+      <button id="load">Load Summary</button>
+      <button id="exportJson">Export JSON</button>
+    </div>
+  </div>
+
+  <div id="summaryArea"></div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    const FIREBASE_CONFIG = null; // paste config here
+    if(FIREBASE_CONFIG){ firebase.initializeApp(FIREBASE_CONFIG); window.db = firebase.database(); }
+    const qs = id => document.getElementById(id);
+
+    function param(name){ return new URLSearchParams(location.search).get(name); }
+    qs('matchId').value = param('matchId') || '';
+
+    async function loadMatch(mid){
+      if(!window.db){
+        alert('Firebase not configured — summary requires DB. For demo use, export JSON from live page.');
+        return;
+      }
+      const matchSnap = await db.ref('sports/cricket/matches/' + mid).once('value');
+      const match = matchSnap.val();
+      if(!match){ alert('match not found'); return; }
+      qs('title').textContent = match.title || mid;
+
+      // fetch innings list and balls
+      const innSnap = await db.ref('sports/cricket/matches/' + mid + '/innings').once('value');
+      const inningsObj = innSnap.val() || {};
+
+      // aggregate
+      const summaryDiv = document.getElementById('summaryArea');
+      summaryDiv.innerHTML = '';
+      Object.keys(inningsObj).forEach(k=>{
+        const inn = inningsObj[k];
+        const container = document.createElement('div'); container.className='card';
+        container.innerHTML = `<h3>Innings ${inn.inningNo} — ${inn.battingTeamId}</h3>
+          <p>Score: ${inn.runs || 0}/${inn.wickets || 0} (${inn.overs || '0.0'})</p>
+          <div id="balls_${k}">Loading balls...</div>
+        `;
+        summaryDiv.appendChild(container);
+
+        // load balls
+        db.ref(`sports/cricket/matches/${mid}/innings/${k}/balls`).once('value', snap=>{
+          const balls = snap.val() || {};
+          const list = Object.entries(balls).map(([id,b])=> ({ id, ...b }));
+          const tbl = document.createElement('table');
+          tbl.innerHTML = `<thead><tr><th>#</th><th>Over.Ball</th><th>Summary</th></tr></thead><tbody></tbody>`;
+          const tbody = tbl.querySelector('tbody');
+          list.forEach((b,i)=> {
+            const tr = document.createElement('tr');
+            const label = (b.overNo || '') + '.' + (b.ballNo || (i+1));
+            tr.innerHTML = `<td>${i+1}</td><td>${label}</td><td>${b.ballSummary || JSON.stringify(b)}</td>`;
+            tbody.appendChild(tr);
+          });
+          document.getElementById('balls_'+k).innerHTML = '';
+          document.getElementById('balls_'+k).appendChild(tbl);
+        });
+      });
+
+      // simple MoM heuristic
+      // gather batsman runs and bowler wickets
+      const playersScore = {};
+      for(const k of Object.keys(inningsObj)){
+        const ballsSnap = await db.ref(`sports/cricket/matches/${mid}/innings/${k}/balls`).once('value');
+        const balls = ballsSnap.val() || {};
+        Object.values(balls).forEach(b=>{
+          if(b.batsmanId){
+            playersScore[b.batsmanId] = playersScore[b.batsmanId] || { runs:0, wickets:0 };
+            playersScore[b.batsmanId].runs += (b.runsOffBat || 0);
+          }
+          if(b.bowlerId){
+            playersScore[b.bowlerId] = playersScore[b.bowlerId] || { runs:0, wickets:0 };
+            playersScore[b.bowlerId].wickets += (b.isWicket?1:0);
+          }
+        });
+      }
+      const momList = Object.entries(playersScore).map(([pid,st])=> ({ pid, score: (st.runs || 0) + (st.wickets || 0)*25, runs:st.runs||0, wickets:st.wickets||0 }));
+      momList.sort((a,b)=>b.score - a.score);
+      if(momList.length){
+        const mom = momList[0];
+        const momDiv = document.createElement('div'); momDiv.className='card';
+        momDiv.innerHTML = `<h3>Man of the Match Candidate</h3><p>Player ID: ${mom.pid} — runs ${mom.runs}, wickets ${mom.wickets}</p>`;
+        summaryDiv.prepend(momDiv);
+      }
+
+    }
+
+    qs('load').addEventListener('click', ()=> loadMatch(qs('matchId').value.trim()));
+    qs('exportJson').addEventListener('click', async ()=>{
+      const mid = qs('matchId').value.trim(); if(!mid) return alert('matchId required');
+      // fetch match full snapshot
+      if(!window.db) return alert('Firebase not configured');
+      const snap = await db.ref('sports/cricket/matches/' + mid).once('value');
+      const obj = snap.val();
+      const data = JSON.stringify(obj, null, 2);
+      const blob = new Blob([data], {type:'application/json'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = mid + '.json'; a.click();
+    });
+
+    // auto-load if matchId in query
+    (function(){
+      const q = param('matchId') || null;
+      if(q){ qs('matchId').value = q; loadMatch(q); }
+      function param(name){ return new URLSearchParams(location.search).get(name); }
+    })();
+  </script>
+</body>
+</html>

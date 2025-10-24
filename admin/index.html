@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Mandaar Sports Festival</title>
+    <style>
+        :root{
+            --bg:#0f1724; --card:#0b1220; --muted:#9aa6b2; --accent:#06b6d4; --glass: rgba(255,255,255,0.04);
+            --radius:14px; --pad:16px; --shadow: 0 6px 24px rgba(2,6,23,0.6);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%;margin:0;background:linear-gradient(180deg,#071026 0%, #071422 100%);color:#e6eef6}
+        
+        /* --- NEW LAYOUT & SIDEBAR STYLES --- */
+        body {
+            display: flex;
+            height: 100vh; /* Full viewport height */
+        }
+        .sidebar {
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--card);
+            border-right: 1px solid var(--glass);
+            height: 100vh;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+        }
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--glass);
+        }
+        .sidebar-header h3 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--accent);
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 15px 0;
+            margin: 0;
+        }
+        .sidebar li a {
+            display: block;
+            padding: 14px 24px;
+            text-decoration: none;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .sidebar li a:hover {
+            background: var(--glass);
+            color: #fff;
+            border-left-color: var(--accent);
+        }
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        /* --- END NEW STYLES --- */
+
+        .wrap{max-width:1000px;margin:40px auto;padding:20px}
+        h1 { text-align: center; color: var(--accent); }
+        .sport-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .sport-card {
+            background:linear-gradient(180deg,var(--card), rgba(10,16,26,0.9));
+            border-radius:var(--radius);
+            padding: var(--pad);
+            box-shadow:var(--shadow);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 40px 20px;
+        }
+        .sport-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(2,6,23,0.8);
+            border: 1px solid var(--accent);
+        }
+    </style>
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+    
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Mandaar Sports</h3>
+        </div>
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="sport.html?sport=cricket">🏏 Cricket</a></li>
+            <li><a href="sport.html?sport=football">⚽ Football</a></li>
+            <li><a href="sport.html?sport=badminton">🏸 Badminton</a></li>
+            <li><a href="sport.html?sport=tabletennis">🏓 Table Tennis</a></li>
+            <li><a href="sport.html?sport=volleyball">🏐 Volleyball</a></li>
+            <li><a href="sport.html?sport=kabaddi">🏃‍♂️ Kabaddi</a></li>
+            <li><a href="sport.html?sport=shotput">🏋️ Shot Put</a></li>
+            <li><a href="sport.html?sport=javelin">🏹 Javelin</a></li>
+            <li><a href="sport.html?sport=chess">♟️ Chess</a></li>
+            <li><a href="sport.html?sport=carrom">🎯 Carrom</a></li>
+            <li><a href="sport.html?sport=athletics">👟 Athletics</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="wrap">
+            <h1>Mandaar Sports Festival</h1>
+            
+            <div class="sport-grid">
+                <a href="sport.html?sport=cricket" class="sport-card">Cricket 🏏</a>
+                <a href="sport.html?sport=football" class="sport-card">Football ⚽</a>
+                <a href="sport.html?sport=badminton" class="sport-card">Badminton 🏸</a>
+                <a href="sport.html?sport=tabletennis" class="sport-card">Table Tennis 🏓</a>
+                <a href="sport.html?sport=volleyball" class="sport-card">Volleyball 🏐</a>
+                <a href="sport.html?sport=kabaddi" class="sport-card">Kabaddi 🏃‍♂️</a>
+                <a href="sport.html?sport=shotput" class="sport-card">Shot Put 🏋️</a>
+                <a href="sport.html?sport=javelin" class="sport-card">Javelin Throw 🏹</a>
+                <a href="sport.html?sport=chess" class="sport-card">Chess ♟️</a>
+                <a href="sport.html?sport=carrom" class="sport-card">Carrom 🎯</a>
+                <a href="sport.html?sport=athletics" class="sport-card">Athletics 👟</a>
+            </div>
+        </div>
+    </div>
+<div class="overlay" id="overlay"></div>
+<nav class="bottom-nav">
+    <ul>
+        <li>
+            <a href="index.html">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="#" id="bottom-nav-back">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
+
+                Sport Hub
+            </a>
+        </li>
+        </ul>
+</nav>
+</body>
+</html>
