@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports - Umang Mandar</title>
+    <link rel="stylesheet" href="public-style.css"> <style>
+        /* Additional styles specific to sports grid */
+        .sports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+            gap: 20px;
+            padding: 20px 0; /* Add padding around grid */
+        }
+        .sport-card {
+            background-color: var(--card-bg, rgba(9, 6, 82, 0.55));
+            border-radius: var(--radius, 8px);
+            padding: 30px 20px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-light, white);
+            font-size: 1.3em;
+            font-weight: 600;
+            border: var(--card-border, 1px solid rgba(217, 216, 246, 0.2));
+            box-shadow: var(--card-shadow, 0px 0px 12px rgba(217, 216, 246, 0.422));
+            backdrop-filter: blur(4px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .sport-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 5px 15px rgba(217, 216, 246, 0.6);
+            color: var(--accent-orange, #FF9F55);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="top-nav">
+            <a href="index.html" class="logo"><img src="../mandar-logo.png" alt="Umang Mandar"></a>
+            <ul id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="sports.html" class="active">Sports</a></li> <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <a href="#" class="live-btn" id="live-btn" style="display: none;">
+                <div class="dot-blink"></div> <span id="live-btn-text">LIVE</span>
+            </a>
+            <button class="menu-toggle-btn" id="menu-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="content-box">
+            <h2>Explore the Sports</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: var(--text-muted);">Click on a sport to see details, teams, schedule, and points.</p>
+
+            <div class="sports-grid">
+                <a href="sport-details.html?sport=cricket" class="sport-card">🏏 Cricket</a>
+                <a href="sport-details.html?sport=football" class="sport-card">⚽ Football</a>
+                <a href="sport-details.html?sport=badminton" class="sport-card">🏸 Badminton</a>
+                <a href="sport-details.html?sport=tabletennis" class="sport-card">🏓 Table Tennis</a>
+                <a href="sport-details.html?sport=volleyball" class="sport-card">🏐 Volleyball</a>
+                <a href="sport-details.html?sport=kabaddi" class="sport-card">🏃‍♂️ Kabaddi</a>
+                <a href="sport-details.html?sport=shotput" class="sport-card">🏋️ Shot Put</a>
+                <a href="sport-details.html?sport=javelin" class="sport-card">🏹 Javelin</a>
+                <a href="sport-details.html?sport=chess" class="sport-card">♟️ Chess</a>
+                <a href="sport-details.html?sport=carrom" class="sport-card">🎯 Carrom</a>
+                <a href="sport-details.html?sport=athletics" class="sport-card">👟 Athletics</a>
+                </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="footer"> </div>
+        <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a></p>
+    </footer>
+
+    <nav class="bottom-nav">
+    <ul>
+        <li>
+            <a href="index.html">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="sports.html" class="active">
+                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12.64 3.08c-.23-.48-.77-.78-1.34-.78s-1.11.3-1.34.78l-1.8 3.86-4.09.62c-.54.08-.98.54-1.05 1.11s.21 1.11.7 1.39l2.97 3.03-.7 4.25c-.09.54.16 1.08.64 1.36s1.07.3 1.48.02l3.65-2 3.65 2c.41.28.99.26 1.48-.02s.73-.82.64-1.36l-.7-4.25 2.97-3.03c.49-.28.84-.81.7-1.39s-.51-1.03-1.05-1.11l-4.09-.62-1.8-3.86zm-1.19 8.2l-1.6 1.63.38 2.3-2-.98-2 .98.38-2.3-1.6-1.63 2.22-.34.99-2.11.99 2.11 2.22.34z"/></svg> Sports
+            </a>
+        </li>
+        <li>
+             <a href="timeline.html">
+                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                Timeline
+            </a>
+        </li>
+        <li>
+             <a href="gallery.html">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                Gallery
+            </a>
+        </li>
+    </ul>
+</nav>
+
+     <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        // === PASTE FIREBASE CONFIG HERE ===
+        const firebaseConfig = { /* ... */ };
+        // === END CONFIG ===
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- DOM Elements ---
+        const liveBtn = document.getElementById('live-btn');
+        const liveBtnText = document.getElementById('live-btn-text');
+        const menuBtn = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+         // --- Live Button Logic ---
+         const allMatchesRef = ref(db, 'matches');
+         let liveSubscription = onValue(allMatchesRef, (snapshot) => {
+             let liveMatchFound = false; let firstLiveMatchId = null;
+             if (snapshot.exists()) {
+                 const matches = snapshot.val();
+                 for (const matchId in matches) {
+                     const match = matches[matchId];
+                     if (match.status === 'live' || match.live?.matchStatus === "Innings Break") {
+                         liveMatchFound = true; firstLiveMatchId = matchId; break;
+                     }
+                 }
+             }
+             if (liveMatchFound) {
+                 liveBtn.href = `live-scorecard.html?matchId=${firstLiveMatchId}`;
+                 liveBtnText.textContent = 'LIVE SCORE';
+                 liveBtn.style.display = 'flex';
+             } else {
+                 liveBtn.style.display = 'none';
+             }
+         }, (error) => { console.error("Error checking live matches:", error); liveBtn.style.display = 'none'; });
+
+         // --- Mobile Menu Toggle ---
+         if(menuBtn && navLinks) { /* ... Same toggle logic as index.html ... */ }
+    </script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Scorecard - Umang Mandar</title>
+    <style>
+        /* --- Basic Styles from your UI --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: rgba(0, 0, 0, 0.647);
+            background-image: url("../background.gif"); /* Adjust path if needed */
+            background-blend-mode: multiply;
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+            overflow-x: hidden;
+            color: #e6eef6;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header { width: 100%; }
+        nav {
+            max-width: 100%; min-width: 250px; max-height: 200px; height: 100px;
+            margin: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+            background: linear-gradient(180deg, rgba(8, 8, 8, 1) 2%, rgba(9, 9, 9, 0.62) 63%, rgba(10, 10, 10, 0.46) 79%, rgba(0, 0, 0, 0) 100%);
+            position: sticky; /* Make nav sticky */
+            top: 0;
+            z-index: 1000; /* Ensure it's above content */
+        }
+        nav ul { list-style: none; display: flex; }
+        nav ul li { margin: 15px; }
+        nav ul li a { text-decoration: none; color: white; font-size: 1.1em; font-family: sans-serif; }
+        .logo { margin: 20px; }
+        .logo img { height: 50px; }
+        .live-btn { /* Style from your UI */
+            background-color: #080808a5; color: white; outline: none; padding: 10px 20px;
+            display: flex; flex-direction: row; align-items: center; justify-content: center;
+            gap: 10px; border-radius: 50px; border: solid 1px white;
+            font-weight: bold; font-size: 1em; margin: 20px; cursor: pointer; text-decoration: none; /* Added */
+        }
+        .dot-blink { /* Style from your UI */
+            height: 10px; width: 10px; background-color: red; border-radius: 50%;
+            animation: blink infinite 2s;
+        }
+        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        main { flex-grow: 1; padding: 20px; margin-top: -100px; /* Pull content up under transparent part of nav */ padding-top: 120px; /* Add padding to account for nav height */}
+        footer {
+             padding: 40px 0 0; background: linear-gradient(180deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
+             font-family: sans-serif; color: white; text-align: center;
+             /* Simple footer layout */
+             border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .made-by { padding: 15px 0; font-size: 0.9em; }
+        .made-by a { color: white; }
+
+        /* --- Scorecard Specific Styles (Adapted from scorer) --- */
+        :root { /* Define scorer variables for consistency */
+            --card: #0b1220; --muted: #9aa6b2; --accent: #06b6d4; --glass: rgba(255,255,255,0.04);
+            --radius: 14px; --pad: 16px; --shadow: 0 6px 24px rgba(2,6,23,0.6);
+        }
+        .scorecard-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: rgba(8, 8, 8, 0.8); /* Slightly darker, more opaque */
+            border-radius: var(--radius);
+            padding: var(--pad);
+            backdrop-filter: blur(8px); /* Stronger blur */
+            border: 1px solid var(--glass);
+            box-shadow: var(--shadow); /* Add shadow */
+            position: relative; /* Needed for absolute positioning of notifications if container-relative */
+        }
+        .score-header { text-align: center; margin-bottom: 20px; color: var(--accent); font-size: 1.8em; }
+        .match-status { text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 1.1em; color: #FF9F55; /* Orange accent */}
+         .target-info { text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 1.2em; color: #f97316; }
+
+        .score-main{
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px; gap: 16px;
+            background: var(--glass); border-radius: 10px; margin-bottom: 15px;
+        }
+        .score-main .team-name{font-size: 1.5em; font-weight: 700;}
+        .score-main .score{font-size: 2.5em; font-weight: 800; line-height: 1;}
+        .score-main .overs{font-size: 1.3em; color: var(--muted); font-weight: 600;}
+
+        .batsman-bowler-card {
+             background: var(--glass); border-radius: 10px; margin-bottom: 15px; padding: var(--pad);
+        }
+        table.live-stats{width:100%; border-collapse:collapse; font-size: 0.95em;}
+        table.live-stats th, table.live-stats td{padding: 10px; text-align:left; border-bottom:1px solid var(--glass)}
+        table.live-stats th{font-size: 0.8em; color: var(--muted); text-transform:uppercase; letter-spacing:0.5px}
+        table.live-stats td{font-weight: 600;}
+        table.live-stats .stat-num{text-align:right; font-family:monospace; font-size: 1.1em; width: 40px;}
+        table.live-stats .striker-dot{display:inline-block; width:8px; height:8px; background:var(--accent); border-radius:50%; margin-right:8px}
+
+         .info-pills{display:flex; gap:10px; justify-content:center; flex-wrap: wrap; margin-bottom: 15px;}
+        .pill{background:var(--glass);padding: 8px 14px; border-radius:999px; font-weight:600; font-size: 0.9em;}
+        .pill .label{color:var(--muted); margin-right:6px}
+
+        .over-summary-card { background: var(--glass); border-radius: 10px; padding: var(--pad); margin-bottom: 15px;}
+        .over-summary-card label { font-size: 0.8em; color: var(--muted); display: block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .over-summary { display: flex; flex-wrap: wrap; gap: 6px; }
+        .ball-icon {
+            width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.08);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9em; font-weight: 700; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .ball-icon.wicket { background: #f43f5e; color: #fff; border: none; }
+        .ball-icon.six { background: var(--accent); color: #000; border: none; }
+        .ball-icon.four { background: #7c3aed; color: #fff; border: none; }
+        .ball-icon.extra { font-size: 0.75em; background: #eab308; color: #000; border: none; }
+
+        /* --- Notification Styles --- */
+        #notification-area {
+            position: fixed; /* Position relative to viewport */
+            top: 20px; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000; /* Above everything */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px; /* Spacing between multiple notifications */
+            width: 90%; /* Max width */
+            max-width: 500px; /* Limit width on larger screens */
+            pointer-events: none; /* Allow clicks through the container */
+        }
+
+        .notification-message {
+            background-color: rgba(6, 182, 212, 0.9); /* Accent color, semi-transparent */
+            color: #080808; /* Dark text for contrast */
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            opacity: 0; /* Start hidden */
+            transform: translateY(20px); /* Start slightly lower */
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Smooth fade/slide */
+            pointer-events: all; /* Allow interaction with message if needed */
+            max-width: 100%; /* Ensure it fits */
+        }
+
+        .notification-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Different style for wickets */
+         .notification-message.wicket {
+             background-color: rgba(244, 63, 94, 0.9); /* Red */
+             color: white;
+         }
+         /* Different style for match end */
+         .notification-message.milestone {
+             background-color: rgba(255, 159, 85, 0.9); /* Orange */
+              color: #080808;
+         }
+        .notification-message.match-end {
+             background-color: rgba(34, 197, 94, 0.9); /* Green */
+             color: #080808;
+        }
+
+
+        @media screen and (max-width: 768px) {
+            nav ul { display: none; } /* Basic responsive nav */
+             main { padding-top: 110px; } /* Adjust padding for smaller nav */
+            .score-main .team-name{font-size: 1.2em;}
+            .score-main .score{font-size: 2em;}
+            .score-main .overs{font-size: 1.1em;}
+            table.live-stats{font-size: 0.9em;}
+             table.live-stats th, table.live-stats td{padding: 8px;}
+             table.live-stats .stat-num{width: 35px;}
+             .ball-icon { width: 28px; height: 28px; font-size: 0.8em;}
+             .score-header { font-size: 1.5em; }
+             .match-status, .target-info { font-size: 1em; }
+            #notification-area {
+                
+                 top: -20px; /* Adjust for mobile */
+                 width: 95%;
+            }
+             .notification-message {
+                font-size: 0.85em;
+                padding: 10px 15px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo"><img src="../mandar-logo.png" alt="Umang Mandar"></a> <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#tline">Events</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">Updates</a></li>
+                <li><a href="sport.html?sport=cricket">Sports</a></li>
+            </ul>
+             <a href="" class="live-btn" id="live-btn" style="display: none;"><div class="dot-blink"></div> <span>Live</span></a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="scorecard-container">
+            <h1 class="score-header">Live Scorecard</h1>
+            <p class="match-status" id="match-status">Loading match status...</p>
+            <p class="target-info" id="target-info" style="display: none;"></p>
+<div id="notification-area"></div>
+            <div class="score-main">
+              <div>
+                <div class="team-name" id="batting-team-name">--</div>
+                <div class="muted">Batting</div>
+              </div>
+              <div style="text-align:right">
+                <div class="score" id="main-score">0-0</div>
+                <div class="overs" id="main-overs">(0.0)</div>
+              </div>
+            </div>
+
+            <div class="batsman-bowler-card">
+              <h3 style="color: var(--muted); font-size:0.9em; margin-bottom: 10px;">Current Players</h3>
+              <table class="live-stats">
+                <thead>
+                  <tr>
+                    <th>Batsman</th>
+                    <th class="stat-num">R</th> <th class="stat-num">B</th>
+                    <th class="stat-num">4s</th> <th class="stat-num">6s</th>
+                    <th class="stat-num">SR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr id="striker-row">
+                    <td><span class="striker-dot"></span><span id="striker-name">...</span></td>
+                    <td class="stat-num" id="striker-runs">0</td> <td class="stat-num" id="striker-balls">0</td>
+                    <td class="stat-num" id="striker-fours">0</td> <td class="stat-num" id="striker-sixes">0</td>
+                    <td class="stat-num" id="striker-sr">0.00</td>
+                  </tr>
+                  <tr id="nonstriker-row">
+                    <td><span style="opacity:0" class="striker-dot"></span><span id="nonstriker-name">...</span></td>
+                    <td class="stat-num" id="nonstriker-runs">0</td> <td class="stat-num" id="nonstriker-balls">0</td>
+                    <td class="stat-num" id="nonstriker-fours">0</td> <td class="stat-num" id="nonstriker-sixes">0</td>
+                    <td class="stat-num" id="nonstriker-sr">0.00</td>
+                  </tr>
+                </tbody>
+              </table>
+              <hr style="border-color: var(--glass); margin: 15px 0;">
+              <table class="live-stats">
+                 <thead>
+                  <tr>
+                    <th>Bowler</th>
+                    <th class="stat-num">O</th> <th class="stat-num">M</th>
+                    <th class="stat-num">R</th> <th class="stat-num">W</th>
+                    <th class="stat-num">Econ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id="bowler-name">...</td>
+                    <td class="stat-num" id="bowler-overs">0.0</td> <td class="stat-num" id="bowler-maidens">0</td>
+                    <td class="stat-num" id="bowler-runs">0</td> <td class="stat-num" id="bowler-wickets">0</td>
+                    <td class="stat-num" id="bowler-econ">0.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="info-pills">
+              <div class="pill"><span class="label">CRR:</span> <span id="crr">0.00</span></div>
+              <div class="pill"><span class="label">Partnership:</span> <span id="partnership">0 (0)</span></div>
+              <div class="pill"><span class="label">Extras:</span> <span id="extras">0</span></div>
+            </div>
+
+            <div class="over-summary-card">
+                <label>This Over</label>
+                <div class="over-summary" id="over-summary" style="flex-direction: row-reverse; justify-content: flex-end;">
+                  </div>
+            </div>
+
+             <p style="text-align: center; font-size: 0.8em; color: var(--muted); margin-top: 20px;">
+                 Match data updates in real-time.
+             </p>
+
+            
+                </div>
+        </div> </main>
+
+    <footer>
+        <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a> | © 2025 GEC Banka Sports Club</p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        // === PASTE YOUR FIREBASE CONFIG HERE ===
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOtc2UrW2hXO4JJK5ZZQcDOfUVbEFmnis",
+            authDomain: "umang-mandar.firebaseapp.com",
+            projectId: "umang-mandar",
+            storageBucket: "umang-mandar.firebasestorage.app",
+            messagingSenderId: "1033556658773",
+            appId: "1:1033556658773:web:ed5c606f77e792136ae2dc",
+            databaseURL: "https://umang-mandar-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
+        // === END OF CONFIG ===
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- DOM Elements (Add notification area) ---
+        const el = {
+            matchStatus: document.getElementById('match-status'),
+            targetInfo: document.getElementById('target-info'),
+            battingTeamName: document.getElementById('batting-team-name'),
+            mainScore: document.getElementById('main-score'),
+            mainOvers: document.getElementById('main-overs'),
+            strikerName: document.getElementById('striker-name'),
+            strikerRuns: document.getElementById('striker-runs'),
+            strikerBalls: document.getElementById('striker-balls'),
+            strikerFours: document.getElementById('striker-fours'),
+            strikerSixes: document.getElementById('striker-sixes'),
+            strikerSR: document.getElementById('striker-sr'),
+            nonStrikerName: document.getElementById('nonstriker-name'),
+            nonStrikerRuns: document.getElementById('nonstriker-runs'),
+            nonStrikerBalls: document.getElementById('nonstriker-balls'),
+            nonStrikerFours: document.getElementById('nonstriker-fours'),
+            nonStrikerSixes: document.getElementById('nonstriker-sixes'),
+            nonStrikerSR: document.getElementById('nonstriker-sr'),
+            bowlerName: document.getElementById('bowler-name'),
+            bowlerOvers: document.getElementById('bowler-overs'),
+            bowlerMaidens: document.getElementById('bowler-maidens'),
+            bowlerRuns: document.getElementById('bowler-runs'),
+            bowlerWickets: document.getElementById('bowler-wickets'),
+            bowlerEcon: document.getElementById('bowler-econ'),
+            crr: document.getElementById('crr'),
+            partnership: document.getElementById('partnership'),
+            extras: document.getElementById('extras'),
+            overSummary: document.getElementById('over-summary'),
+            liveBtn: document.getElementById('live-btn'),
+            notificationArea: document.getElementById('notification-area') // New
+        };
+
+        // --- State Variables ---
+        let previousState = null; // Store the last state for comparisons
+
+        // --- Notification Function ---
+        function showNotification(message, type = 'info', duration = 10000) { // Default 10 seconds
+            if (!el.notificationArea) return;
+
+            const notification = document.createElement('div');
+            notification.classList.add('notification-message');
+            if (type) {
+                notification.classList.add(type); // Add type class (e.g., 'wicket', 'milestone')
+            }
+            // Use innerHTML to allow simple bolding if needed, but be careful with complex HTML
+            notification.innerHTML = message; // Changed to innerHTML
+
+            el.notificationArea.appendChild(notification);
+
+            // Trigger reflow to apply initial styles before transition
+            void notification.offsetWidth;
+
+            // Add 'visible' class to trigger transition
+            notification.classList.add('visible');
+
+            // Remove notification after duration
+            setTimeout(() => {
+                notification.classList.remove('visible');
+                // Remove element after transition finishes
+                notification.addEventListener('transitionend', () => {
+                    // Check if the element is still a child before removing
+                    if (notification.parentNode === el.notificationArea) {
+                       try {
+                           el.notificationArea.removeChild(notification);
+                       } catch (e) {
+                           // Ignore errors if the element was already removed somehow
+                       }
+                    }
+                }, { once: true }); // Ensure listener runs only once
+            }, duration);
+        }
+
+
+        // --- Render Function (Display Only) ---
+        function renderScorecard(state) {
+            // ... (Your complete renderScorecard function as provided before) ...
+             if (!state || !state.live) {
+                el.matchStatus.textContent = "Waiting for match data...";
+                el.liveBtn.style.display = 'none'; // Hide live button if no data
+                return;
+            }
+             const live = state.live;
+             const striker = live.batsmen?.striker || { name: '--', runs: 0, balls: 0, fours: 0, sixes: 0 };
+             const nonStriker = live.batsmen?.nonStriker || { name: '--', runs: 0, balls: 0, fours: 0, sixes: 0 };
+             const bowler = live.bowler || { name: '--', overs: 0, balls: 0, maidens: 0, runs: 0, wickets: 0 };
+
+            // Status & Target
+            let currentStatus = live.matchStatus || "Status Unknown";
+             if (state.status === "completed" && state.result) {
+                 currentStatus = `Finished: ${state.result}`;
+                 el.liveBtn.style.display = 'none'; // Hide live button if match finished
+             } else if (live.matchStatus === "Innings Break") {
+                 currentStatus = "Innings Break";
+                 el.liveBtn.style.display = 'flex'; // Show live button during break
+             } else if (currentStatus.includes("Live")) { // Check if status contains Live
+                 el.liveBtn.style.display = 'flex'; // Show live button if live
+             } else {
+                 el.liveBtn.style.display = 'none'; // Hide otherwise
+             }
+            el.matchStatus.textContent = currentStatus;
+
+
+            if (live.inning === 2 && live.targetScore) {
+                 el.targetInfo.textContent = `Target: ${live.targetScore}`;
+                 el.targetInfo.style.display = 'block';
+            } else {
+                 el.targetInfo.style.display = 'none';
+            }
+
+
+            // Main Score
+            el.battingTeamName.textContent = state[live.battingTeam]?.name || 'Batting Team';
+            el.mainScore.textContent = `${live.score}-${live.wickets}`;
+            el.mainOvers.textContent = `(${live.overs}.${live.balls})`;
+
+            // Batsmen
+            const strikerSR = (striker.balls > 0) ? (striker.runs / striker.balls * 100).toFixed(2) : '0.00';
+            el.strikerName.textContent = striker.name;
+            el.strikerRuns.textContent = striker.runs;
+            el.strikerBalls.textContent = striker.balls;
+            el.strikerFours.textContent = striker.fours;
+            el.strikerSixes.textContent = striker.sixes;
+            el.strikerSR.textContent = strikerSR;
+
+            const nonStrikerSR = (nonStriker.balls > 0) ? (nonStriker.runs / nonStriker.balls * 100).toFixed(2) : '0.00';
+            el.nonStrikerName.textContent = nonStriker.name;
+            el.nonStrikerRuns.textContent = nonStriker.runs;
+            el.nonStrikerBalls.textContent = nonStriker.balls;
+            el.nonStrikerFours.textContent = nonStriker.fours;
+            el.nonStrikerSixes.textContent = nonStriker.sixes;
+            el.nonStrikerSR.textContent = nonStrikerSR;
+
+            // Bowler
+            const bowlerTotalBalls = (bowler.overs || 0) * 6 + (bowler.balls || 0);
+            const bowlerEcon = (bowlerTotalBalls > 0) ? (bowler.runs / bowlerTotalBalls * 6).toFixed(2) : '0.00';
+            el.bowlerName.textContent = bowler.name;
+            el.bowlerOvers.textContent = `${bowler.overs || 0}.${bowler.balls || 0}`;
+            el.bowlerMaidens.textContent = bowler.maidens || 0;
+            el.bowlerRuns.textContent = bowler.runs || 0;
+            el.bowlerWickets.textContent = bowler.wickets || 0;
+            el.bowlerEcon.textContent = bowlerEcon;
+
+            // Pills
+            el.crr.textContent = live.runRate || '0.00';
+            el.partnership.textContent = `${live.partnership?.runs || 0} (${live.partnership?.balls || 0})`;
+            el.extras.textContent = live.extras?.total || 0;
+
+            // This Over Summary
+            el.overSummary.innerHTML = ''; // Clear it
+            if (live.thisOverSummary && Array.isArray(live.thisOverSummary)) {
+                // Display in reverse order (most recent ball first)
+                [...live.thisOverSummary].reverse().forEach(ballEvent => {
+                  const ballEl = document.createElement('div');
+                  ballEl.classList.add('ball-icon');
+                  let text = ballEvent;
+                  if (ballEvent === 'W') { ballEl.classList.add('wicket'); }
+                  else if (ballEvent === '6') { ballEl.classList.add('six'); }
+                  else if (ballEvent === '4') { ballEl.classList.add('four'); }
+                  else if (ballEvent === '.') { text = '•'; }
+                  else if (String(ballEvent).includes('wd') || String(ballEvent).includes('nb') || String(ballEvent).includes('b') || String(ballEvent).includes('lb')) {
+                    ballEl.classList.add('extra');
+                  }
+                  ballEl.textContent = text;
+                  el.overSummary.appendChild(ballEl); // Add to the container
+                });
+            }
+        }
+
+        // --- Function to Check for Events ---
+        function checkForEvents(currentState, prevState) {
+            if (!currentState?.live || !prevState?.live) return; // Need both states
+
+            const currentLive = currentState.live;
+            const prevLive = prevState.live;
+
+            // Simple check: Don't show event if total balls haven't increased (e.g., just loading)
+            const currentTotalBalls = (currentLive.overs || 0) * 6 + (currentLive.balls || 0);
+            const prevTotalBalls = (prevLive.overs || 0) * 6 + (prevLive.balls || 0);
+            const scoreChanged = currentLive.score !== prevLive.score;
+            const wicketsChanged = currentLive.wickets !== prevLive.wickets;
+            const overChanged = currentLive.overs !== prevLive.overs;
+            const statusChanged = currentLive.matchStatus !== prevLive.matchStatus;
+            const bowlerChanged = currentLive.bowler?.id !== prevLive.bowler?.id;
+
+            // --- Event Detection Logic ---
+
+            // 1. Boundary (Six/Four) - Only if score increased and it was the last event
+            const lastBallEvent = currentLive.thisOverSummary?.[currentLive.thisOverSummary.length - 1];
+            const prevOverSummaryLength = prevLive.thisOverSummary?.length || 0;
+            const currentOverSummaryLength = currentLive.thisOverSummary?.length || 0;
+            const newBallBowled = currentOverSummaryLength > prevOverSummaryLength || overChanged; // Check if a new ball was actually added or over changed
+
+            if (newBallBowled && scoreChanged) {
+                 const strikerName = currentLive.batsmen?.striker?.name || 'Batsman'; // Get name safely
+                 if (lastBallEvent === '6') {
+                    showNotification(`<strong>SIX!</strong> by ${strikerName}!`, 'milestone');
+                 } else if (lastBallEvent === '4') {
+                    showNotification(`<strong>FOUR!</strong> by ${strikerName}!`, 'milestone');
+                 }
+            }
+
+            // 2. Wicket
+            if (wicketsChanged && currentLive.wickets > prevLive.wickets) {
+                // Find who got out (last batsman added to scorecard for the batting team)
+                const battingTeamKey = prevLive.battingTeam; // Team that was batting before wicket
+                const battingScorecard = currentState.scorecard?.[battingTeamKey]?.batting;
+                 let outBatsmanName = "Batsman";
+                 let dismissalReason = "OUT";
+
+                if (Array.isArray(battingScorecard) && battingScorecard.length > 0) {
+                    const outBatsmanData = battingScorecard[battingScorecard.length - 1];
+                    // Check if this wicket corresponds to the one just fallen
+                     if (outBatsmanData && (outBatsmanData.id === prevLive.batsmen?.striker?.id || outBatsmanData.id === prevLive.batsmen?.nonStriker?.id)) {
+                          outBatsmanName = outBatsmanData.name || "Batsman";
+                          dismissalReason = outBatsmanData.dismissal || 'OUT';
+                     }
+                }
+                showNotification(`<strong>WICKET!</strong> ${outBatsmanName} ${dismissalReason}`, 'wicket');
+
+                // Announce next batsman (check current state's batsmen vs prev state)
+                 const newStrikerId = currentLive.batsmen?.striker?.id;
+                 const newNonStrikerId = currentLive.batsmen?.nonStriker?.id;
+                 const prevStrikerId = prevLive.batsmen?.striker?.id;
+                 const prevNonStrikerId = prevLive.batsmen?.nonStriker?.id;
+
+                 let nextBatsman = null;
+                 let position = "";
+                  if(newStrikerId && newStrikerId !== prevStrikerId && newStrikerId !== prevNonStrikerId) {
+                      nextBatsman = currentLive.batsmen.striker;
+                      position = "(Striker)";
+                  } else if(newNonStrikerId && newNonStrikerId !== prevStrikerId && newNonStrikerId !== prevNonStrikerId) {
+                      nextBatsman = currentLive.batsmen.nonStriker;
+                      position = "(Non-Striker)";
+                  }
+
+                  if(nextBatsman) {
+                      // Use setTimeout to show this after the wicket message
+                      setTimeout(() => showNotification(`${nextBatsman.name} comes to the crease ${position}.`, 'info'), 1500); // Delay
+                  }
+            }
+
+            // 3. Milestone (Half-Century/Century)
+            const checkMilestone = (currentRuns, prevRuns, name) => {
+                 if (!name || name === '--') return; // Don't announce for placeholders
+                if (prevRuns < 50 && currentRuns >= 50) showNotification(`<strong>FIFTY!</strong> for ${name}!`, 'milestone');
+                if (prevRuns < 100 && currentRuns >= 100) showNotification(`<strong>CENTURY!</strong> for ${name}!`, 'milestone');
+                // Add more milestones if needed (150, 200...)
+            };
+             // Check striker only if their score actually changed on this ball
+             if (currentLive.batsmen?.striker && prevLive.batsmen?.striker && currentLive.batsmen.striker.id === prevLive.batsmen.striker.id && currentLive.batsmen.striker.runs !== prevLive.batsmen.striker.runs) {
+                checkMilestone(currentLive.batsmen.striker.runs, prevLive.batsmen.striker.runs, currentLive.batsmen.striker.name);
+             }
+             // Check non-striker only if their score changed (less likely but possible with overthrows etc.)
+             if (currentLive.batsmen?.nonStriker && prevLive.batsmen?.nonStriker && currentLive.batsmen.nonStriker.id === prevLive.batsmen.nonStriker.id && currentLive.batsmen.nonStriker.runs !== prevLive.batsmen.nonStriker.runs) {
+                 checkMilestone(currentLive.batsmen.nonStriker.runs, prevLive.batsmen.nonStriker.runs, currentLive.batsmen.nonStriker.name);
+            }
+
+
+            // 4. End of Over / New Bowler
+            const overJustEnded = legalDelivery && prevLive.balls === 5 && currentLive.balls === 0 && currentLive.overs === prevLive.overs + 1; // More precise check
+
+            if (overJustEnded && bowlerChanged && currentLive.bowler) {
+                showNotification(`Over ${currentLive.overs} complete. New bowler: <strong>${currentLive.bowler.name}</strong>`, 'info');
+            } else if (overJustEnded) {
+                 showNotification(`Over ${currentLive.overs} complete.`, 'info'); // Bowler might not have changed yet if modal is involved
+            } else if (bowlerChanged && currentLive.bowler && currentLive.bowler.id !== null && currentLive.matchStatus?.includes("Live")) {
+                 // Handles bowler being confirmed *after* the over number ticked, or mid-over change
+                 showNotification(`New bowler: <strong>${currentLive.bowler.name}</strong>`, 'info');
+            }
+
+            // 5. Innings Break
+            if (currentLive.matchStatus === "Innings Break" && prevLive.matchStatus !== "Innings Break") {
+                const innings1 = currentState.innings?.inning1;
+                let msg = `<strong>End of Innings ${prevLive.inning}.</strong>`;
+                if(innings1 && state[innings1.battingTeam]){
+                    msg += ` ${state[innings1.battingTeam].name} scored ${innings1.score}/${innings1.wickets}. Target: <strong>${currentLive.targetScore}</strong>`;
+                }
+                showNotification(msg, 'milestone', 15000); // Show longer
+            }
+
+            // 6. Match End
+            if (currentState.status === "completed" && prevState.status !== "completed") {
+                showNotification(`<strong>Match Finished!</strong> ${currentState.result}`, 'match-end', 20000); // Show even longer
+            }
+        }
+
+
+        // --- Load Data ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const matchId = urlParams.get('matchId');
+
+            if (!matchId) {
+                el.matchStatus.textContent = "Error: No Match ID specified in URL (append ?matchId=your-match-id).";
+                el.liveBtn.style.display = 'none';
+                console.error("No matchId found in URL parameters.");
+                return;
+            }
+
+            el.liveBtn.href = `live-scorecard.html?matchId=${matchId}`;
+            console.log("Fetching live data for match:", matchId);
+            const matchRef = ref(db, 'matches/' + matchId);
+
+            onValue(matchRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const newState = snapshot.val();
+                    // Basic check for essential data
+                    if (newState.live && newState.teamA && newState.teamB) {
+                        // Convert arrays if needed
+                        const convertToArray = (obj) => obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.values(obj) : obj;
+                        if(newState.live.thisOverSummary) newState.live.thisOverSummary = convertToArray(newState.live.thisOverSummary);
+                         if(newState.scorecard?.teamA?.batting) newState.scorecard.teamA.batting = convertToArray(newState.scorecard.teamA.batting);
+                         if(newState.scorecard?.teamB?.batting) newState.scorecard.teamB.batting = convertToArray(newState.scorecard.teamB.batting);
+                         // Add other array conversions if needed
+
+
+                        renderScorecard(newState); // Render the latest data
+
+                        // Check for events by comparing with previous state
+                        if (previousState) {
+                             checkForEvents(newState, previousState);
+                        }
+                        // Store a deep copy for next comparison, handle potential circular references
+                        try {
+                            previousState = JSON.parse(JSON.stringify(newState));
+                        } catch (e) {
+                             console.error("Error creating deep copy of state:", e);
+                             // Fallback: shallow copy (less reliable for nested changes)
+                             previousState = {...newState, live: {...newState.live}, scorecard: {...newState.scorecard}};
+                        }
+
+
+                    } else {
+                        console.error("Incomplete match data received:", newState);
+                        el.matchStatus.textContent = "Error: Incomplete match data.";
+                        el.liveBtn.style.display = 'none';
+                        previousState = null;
+                    }
+                } else {
+                    console.error("Error: Match data not found for ID:", matchId);
+                    el.matchStatus.textContent = `Error: Match '${matchId}' not found.`;
+                    el.liveBtn.style.display = 'none';
+                    previousState = null; // Reset previous state if match disappears
+                }
+            }, (error) => {
+                 console.error("Firebase read failed:", error);
+                 el.matchStatus.textContent = "Error connecting to live scores.";
+                 el.liveBtn.style.display = 'none';
+                 previousState = null; // Reset previous state on connection error
+            });
+        });
+    </script>
+
+</body>
+</html>

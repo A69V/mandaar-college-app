@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umang Mandar - Sports Festival at GEC Banka</title>
+    <link rel="stylesheet" href="public-style.css">
+    <style>
+        /* --- USER'S ORIGINAL CSS CODE (with footer gap fix & necessary additions) --- */
+        * {
+            margin: 0;
+            padding: 0;
+             box-sizing: border-box; /* Added */
+        }
+
+       
+        a{
+            text-decoration: none;
+        }
+header {
+            width: 100%;
+             position: sticky; top: 0; z-index: 1000; /* Added */
+             border: none;
+             background: linear-gradient(180deg, rgba(8, 8, 8, 1) 40%, rgba(9, 9, 9, 0.7) 80%, rgba(0, 0, 0, 0) 100%); /* Added */
+        }
+
+        nav {
+            max-width: 1200px; /* Adjusted */
+            margin: 0 auto; /* Adjusted */
+            padding: 0 20px; /* Adjusted */
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* background moved to header */
+            background: linear-gradient(180deg, rgba(8, 8, 8, 1) 40%, rgba(9, 9, 9, 0.7) 80%, rgba(0, 0, 0, 0) 100%); /* Added */
+        }
+        nav ul{
+            list-style: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+        nav ul li{
+            margin: 15px;
+        }
+        nav ul li a{
+            text-decoration: none;
+            color: white;
+            font-size: 1.1em;
+            font-family: sans-serif;
+             transition: color 0.2s ease; /* Added */
+        }
+         nav ul li a:hover { color: #FF9F55; } /* Added */
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo {
+            margin: 20px 0; /* Adjusted */
+        }
+
+        .menu-btn {
+            margin: 20px; background-color: rgba(0, 0, 0, 0); color: aliceblue;
+            border: none; outline: none; cursor: pointer; display: none;
+        }
+
+        .menu-btn img { height: 25px; } /* Corrected height */
+        .menu-btn svg { height: 30px; width: 30px; fill: white;} /* Added SVG style */
+
+
+        .lander {
+            width: 100%; height: 100vh; animation: fadein forwards 1s;
+            position: relative; overflow: hidden; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        
+        /* --- Live Score Widget Styles --- */
+        #live-match-widget-container { margin-top: 25px; max-width: 380px; margin-left: auto; margin-right: auto; min-height: 100px; }
+        .live-score-widget { font-family: Inter, sans-serif; color: #e6eef6; background: linear-gradient(180deg, rgba(11, 18, 32, 0.8), rgba(10, 16, 26, 0.7)); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px 12px; box-shadow: 0 4px 15px rgba(2, 6, 23, 0.5); backdrop-filter: blur(4px); overflow: hidden; min-width: 200px; max-width: 100%; box-sizing: border-box; container-type: inline-size; font-size: clamp(0.7rem, 3cqw, 1rem); }
+        .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.8em; color: #9aa6b2; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 5px; }
+        .widget-status { font-weight: bold; color: #FF9F55; text-transform: uppercase; white-space: nowrap; }
+        .widget-live-dot { display: inline-block; width: 0.6em; height: 0.6em; background-color: red; border-radius: 50%; margin-right: 5px; animation: blink infinite 1.5s; }
+        .widget-score { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .widget-team-name { font-weight: 600; font-size: 1.1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; margin-right: 10px; }
+        .widget-score-details { text-align: right; white-space: nowrap; font-weight: 700; font-size: 1.2em; }
+        .widget-score-details .overs { font-size: 0.8em; color: #9aa6b2; font-weight: 500; margin-left: 5px; }
+        .widget-players { font-size: 0.9em; line-height: 1.4; color: #cdd3da; margin-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 5px; }
+        .widget-players span { color: #9aa6b2; margin-right: 5px; }
+        .widget-players .batsman-score { font-family: monospace; }
+        .widget-players .striker-star { color: #06b6d4; }
+        .widget-footer { font-size: 0.75em; color: #9aa6b2; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .widget-target { font-weight: bold; color: #f97316; }
+
+        /* --- About Section --- */
+        .about { /* ... (user's existing styles) ... */ margin: 30px auto; padding: 50px 20px; max-width: 1100px; gap: 30px; display: flex; flex-direction: row; align-items: center; justify-content: center; flex-wrap: wrap;}
+        .about-img { /* ... */ width: 100%; max-width: 400px; border-radius: 20px; animation: fadeinleft forwards 2s; box-shadow: 0 0 10px rgba(255, 255, 255, 0.675); object-fit: cover; flex-shrink: 0;}
+        .about-text { /* ... */ flex: 1; min-width: 300px; font-family: Arial, Helvetica, sans-serif; font-weight: lighter; animation: fadeinright forwards 2s; text-shadow: 0px 0px 10px rgba(0,0,0,0.5);}
+        .about-text h2 { font-weight: 300; font-size: clamp(1.8em, 4vw, 2.2em); color: white; line-height: 1.2; margin-bottom: 15px;}
+        .about-text h2 span { font-size: 1.5em; font-weight: 600; display: block; color: #FF9F55;}
+        .about-text p { font-weight: 400; line-height: 1.7; font-size: clamp(0.9em, 2vw, 1em); color: #e0e0e0; }
+
+         /* --- Base Section Styles (for new sections) --- */
+         .content-section { padding: 30px 20px; margin: 30px auto; max-width: 1100px; }
+         .content-box-style { padding: 20px 30px; background-color: rgba(9, 6, 82, 0.55); position: relative; border-radius: 8px; box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422); backdrop-filter: blur(4px); border: 1px solid rgba(217, 216, 246, 0.2); color: white; margin-bottom: 30px;}
+         .content-box-style h2 { text-align: center; color: #ffffff; text-shadow: 0px 0px 10px #fcfcfc; font-size: 2em; margin-bottom: 25px; font-weight: lighter; border-bottom: 1px solid #FF9F55; padding-bottom: 10px;}
+         .content-box-style h3 { color: #FF9F55; margin-top: 15px; margin-bottom: 10px; padding-bottom: 5px; font-size: 1.3em; font-weight: normal; border-bottom: 1px solid rgba(255, 159, 85, 0.3); }
+         .content-box-style p { line-height: 1.6; font-size: 1em; color: #f0f0f0; margin-bottom: 10px;}
+         .content-box-style ul { list-style-position: inside; margin-left: 10px; padding-left: 0;}
+         .content-box-style ul li { margin-bottom: 8px; line-height: 1.6; color: #e0e0e0;}
+         /* Table Styles within content box */
+         .content-box-style table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 15px; }
+         .content-box-style th, .content-box-style td { padding: 10px 8px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.2); white-space: normal; }
+         .content-box-style thead { background-color: rgba(255, 255, 255, 0.1); }
+         .content-box-style th { font-weight: bold; color: #FF9F55; }
+         .content-box-style td:first-child { font-weight: bold; }
+         .table-wrapper { overflow-x: auto; }
+         /* Match List Items (used in Schedule) */
+          .schedule-item { background-color: rgba(0, 0, 0, 0.2); padding: 10px 15px; border-radius: 5px; margin-bottom: 10px; border-left: 4px solid #06b6d4; display: block; text-decoration: none; color: #cbd5e1; transition: background-color 0.2s ease;}
+          .schedule-item:hover { background-color: rgba(255, 255, 255, 0.05); }
+          .schedule-item p { margin: 0; font-size: 1em; color: #fff; font-weight: 500;}
+          .schedule-item small { font-size: 0.85em; color: #9aa6b2; display: block; margin-top: 4px;}
+          .schedule-item.live { border-left-color: #f43f5e; animation: blink-border 1.5s infinite alternate; }
+          .schedule-item.upcoming { border-left-color: #eab308; }
+          .schedule-item.completed { border-left-color: #22c55e; }
+          .schedule-item.live p strong { color: #FF9F55; }
+          @keyframes blink-border { from { box-shadow: 0 0 5px rgba(244, 63, 94, 0.7); } to { box-shadow: 0 0 5px rgba(244, 63, 94, 0); } }
+         /* Gallery Grid */
+         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
+         .gallery-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 6px; border: 2px solid rgba(255, 255, 255, 0.1); transition: transform 0.2s ease; cursor: pointer; }
+         .gallery-grid img:hover { transform: scale(1.05); }
+
+
+        /* Timeline Section */
+        .t-line { font-family: sans-serif; padding: 50px 0; }
+        .t-line h2 { text-align: center; color: #ffffff; text-shadow: 0px 0px 10px #fcfcfc; font-size: 2.3em; }
+        .timeline { position: relative; max-width: 900px; margin: 50px auto; }
+        .timeline::after { content: ''; position: absolute; width: 6px; background-color: #ececec; box-shadow: 0px 0px 10px #f9f9fa; top: 15px; bottom: 0; left: 50%; margin-left: -3px; }
+        .timeline-container { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; box-sizing: border-box; }
+        .timeline-container::after { content: ''; position: absolute; width: 20px; height: 20px; right: -13px; background-color: white; border: 4px solid #FF9F55; box-shadow: 0px 0px 10px #e76c0e; top: 28px; border-radius: 50%; z-index: 1; }
+        .timeline-container:nth-child(odd) { left: 0; }
+        .timeline-container:nth-child(even) { left: 50%; }
+        .timeline-container:nth-child(even)::after { left: -13px; }
+        .timeline-content { padding: 20px 30px; background-color: rgba(9, 6, 82, 0.486); position: relative; border-radius: 8px; box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422); backdrop-filter: blur(2px); color: white; }
+        .timeline-container:nth-child(odd) .timeline-content::before { content: " "; height: 0; position: absolute; top: 22px; width: 0; z-index: 1; right: -10px; border: medium solid white; border-width: 10px 0 10px 10px; border-color: transparent transparent transparent white; }
+        .timeline-container:nth-child(even) .timeline-content::before { content: " "; height: 0; position: absolute; top: 22px; width: 0; z-index: 1; left: -10px; border: medium solid white; border-width: 10px 10px 10px 0; border-color: transparent white transparent transparent; }
+        .timeline-content h3 { margin-top: 0; color: #f5f6f7; }
+        .timeline-content p { margin-bottom: 0; line-height: 1.5; color: white; }
+        .timeline-content small { font-weight: bold; color: #FF9F55; display: block; margin-bottom: 8px; }
+        /* Timeline Responsive */
+        @media screen and (max-width: 768px) { .timeline::after { left: 35px; } .timeline-container { width: 100%; padding-left: 70px; padding-right: 25px; } .timeline-container:nth-child(odd), .timeline-container:nth-child(even) { left: 0; } .timeline-container::after, .timeline-container:nth-child(even)::after { left: 22px; } .timeline-container .timeline-content::before { left: -10px; border-width: 10px 10px 10px 0; border-color: transparent white transparent transparent; } }
+
+
+        /* Footer */
+        footer {
+            padding: 20px 0 0; /* Reduced padding */
+            background: linear-gradient(180deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 90%);
+            font-family: sans-serif; color: #aaa; text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto; /* Push to bottom */
+        }
+        /* Remove original .footer styles */
+        .made-by {
+            color: #aaa; margin: 0 auto; border-top: none; width: auto;
+            display: inline-block; padding: 20px 0; font-size: 0.9em;
+        }
+        .made-by a { color: #ccc; text-decoration: none; transition: color 0.2s ease; }
+        .made-by a:hover { color: white; }
+
+        /* Go Down Arrow */
+        .go-down { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); width: 40px; animation: fadedown 1.5s infinite alternate ease-in-out; }
+        @keyframes fadedown { 0% { transform: translate(-50%, 0px); opacity: 0.7; } 100% { transform: translate(-50%, 10px); opacity: 0.3; } }
+
+
+        #gold-glow{ box-shadow: 0 0 0 rgb(255, 225, 0); animation: golden-glow 10 2s; }
+        @keyframes golden-glow { /* ... user keyframe ... */ 0%{ box-shadow: 0 0 0 rgba(255, 255, 0); } 50%{ box-shadow: 0 0 10px rgba(255, 255, 0); } 100%{ box-shadow: 0 0 0 rgba(255, 255, 0); } }
+
+
+        /* Media Queries */
+        @media screen and (max-width: 900px) {
+             nav ul#nav-links { display: none; }
+             .menu-btn { display: block; }
+             main { padding-top: 20px; }
+             header { background: linear-gradient(180deg, rgba(8, 8, 8, 1) 40%, rgba(9, 9, 9, 0.7) 80%, rgba(0, 0, 0, 0) 100%); /* Added */}
+
+             .lander-left, .lander-right { display: none; }
+             .lander-center p.festival-title { font-size: clamp(1.5em, 5vw, 1.8em); }
+             .lander p span { font-size: clamp(2.2em, 8vw, 2.7em); }
+
+             .about { padding: 30px 15px; flex-direction: column; }
+             .about-img { max-width: 80%; margin-bottom: 20px;}
+             .about-text { width: 90%; margin: 20px 0 0 0; }
+
+             /* Remove footer flex styles */
+
+             /* Simple Mobile Nav Reveal */
+             nav ul#nav-links.mobile-nav-active {
+                 display: flex; flex-direction: column; position: absolute;
+                 top: 80px; left: 0; width: 100%;
+                 background: rgba(8, 8, 8, 0.98);
+                 padding: 10px 0; box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+                 border-top: 1px solid rgba(255,255,255,0.1);
+             }
+             nav ul#nav-links.mobile-nav-active li { margin: 10px 0; text-align: center; width: 100%;}
+              nav ul#nav-links.mobile-nav-active li a { padding: 10px 0; display: block; width: 100%; font-size: 1.2em;}
+
+             .go-down { bottom: 10%; width: 35px;}
+             .content-section { padding: 20px 15px; }
+             .content-box-style { padding: 15px 20px; }
+             .content-box-style h2 { font-size: 1.6em; }
+             .content-box-style h3 { font-size: 1.15em; }
+        }
+
+        @media screen and (max-width: 500px) {
+            .lander-center p.festival-title { font-size: 1.5em; }
+            .lander p span { font-size: 2.2em; }
+            .lander-cta button { font-size: 1em; padding: 8px 15px;}
+            .about-text { font-size: 0.9em; }
+            .about-text h2 span{ font-size: 1.5em; }
+            .live-btn { font-size: 0.8em; padding: 6px 12px; margin-right: 10px;}
+            .dot-blink { height: 8px; width: 8px;}
+            .content-box-style h2 { font-size: 1.4em; }
+            .content-box-style h3 { font-size: 1.1em; }
+            .content-box-style table { font-size: 0.8em; }
+            .content-box-style th, .content-box-style td { padding: 8px 5px; }
+        }
+         /* --- END USER CSS --- */
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo"><img src="../mandar-logo.png" alt="Umang Mandar"></a>
+            <ul id="nav-links"> <li><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#tline">Timeline</a></li>
+                <li><a href="#gallery">Gallery</a></li> <li><a href="#schedule">Schedule</a></li> <li><a href="sports.html">Sports</a></li> </ul>
+            <a href="#" class="live-btn" id="live-btn">
+                <div class="dot-blink"></div> <span id="live-btn-text">LIVE</span>
+            </a>
+           
+        </nav>
+    </header>
+
+    <main>
+<section class="content-section">
+    <h1 style="text-align: center;" id="greeting-heading"></h1>
+</section>
+        
+         <section class="content-section" id="schedule">
+              <div class="content-box-style">
+                 <h2>Today's Schedule (<span id="today-date">Date</span>)</h2>
+                    <div class="match-list-section" id="schedule-ongoing-matches-section" style="display: none;">
+                        <h3><span class="dot-blink" style="background-color: red;"></span> Now Playing</h3>
+                        <div id="schedule-ongoing-matches-list"> <p style="color: #9aa6b2; font-size: 0.9em;">Loading...</p> </div>
+                    </div>
+                     <div class="match-list-section" id="schedule-upcoming-matches-section" style="display: none;">
+                        <h3>Upcoming Today</h3>
+                        <div id="schedule-upcoming-matches-list"> <p style="color: #9aa6b2; font-size: 0.9em;">Loading...</p> </div>
+                    </div>
+                     <div class="match-list-section" id="schedule-completed-matches-section" style="display: none;">
+                         <h3>Completed Today</h3>
+                         <div id="schedule-completed-matches-list"> <p style="color: #9aa6b2; font-size: 0.9em;">Loading...</p> </div>
+                     </div>
+                    <p id="schedule-no-matches-message" style="color: #9aa6b2; font-size: 0.9em; text-align: center; display: none;">No matches scheduled for today.</p>
+                     <p style="text-align:center; margin-top: 15px;"><a href="timeline.html" style="color: #FF9F55; font-weight: bold;">View Full Timeline</a></p>
+              </div>
+         </section>
+
+          <section class="content-section" id="results">
+              <div class="content-box-style">
+                 <h2>Recent Results</h2>
+                  <ul id="recent-results-list">
+                      <li style="color: #9aa6b2;">Loading recent results...</li>
+                  </ul>
+                  <p style="text-align:center; margin-top: 15px;"><a href="#" style="color: #FF9F55; font-weight: bold;">View All Results</a></p>
+              </div>
+         </section>
+
+         <section class="content-section" id="standings">
+              <div class="content-box-style">
+                 <h2>Overall Standings</h2>
+                 <div class="table-wrapper">
+                     <table class="points-table"> <thead><tr><th>Rank</th><th>Department</th><th>Points</th></tr></thead>
+                         <tbody id="overall-points-table-body">
+                             <tr><td colspan="3" style="text-align: center; color: #9aa6b2;">Loading standings...</td></tr>
+                         </tbody>
+                     </table>
+                 </div>
+                 <p style="font-size: 0.8em; color: #aaa; text-align: center; margin-top: 10px;">*Points calculated based on event rankings.</p>
+              </div>
+         </section>
+
+
+        <div class="t-line" id="tline">
+            <h2>Event Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 1: 9:00 AM</small> <h3>Opening Ceremony</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 1: 11:00 AM</small> <h3>Football Match: Finals</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 1: 2:00 PM</small> <h3>Volleyball & Badminton</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 2: 10:00 AM</small> <h3>Athletics Meet</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 2: 1:00 PM</small> <h3>Indoor Championships</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 2: 5:00 PM</small> <h3>Prize Distribution & Closing</h3> <p>...</p> </div> </div>
+            </div>
+        </div>
+
+      
+
+
+    </main>
+
+    <footer id="contact">
+        <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a> | © 2025 GEC Banka Sports Club</p>
+    </footer>
+ <nav class="bottom-nav">
+    <ul>
+        <li>
+            <a href="index.html" class="active">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="sports.html" >
+                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12.64 3.08c-.23-.48-.77-.78-1.34-.78s-1.11.3-1.34.78l-1.8 3.86-4.09.62c-.54.08-.98.54-1.05 1.11s.21 1.11.7 1.39l2.97 3.03-.7 4.25c-.09.54.16 1.08.64 1.36s1.07.3 1.48.02l3.65-2 3.65 2c.41.28.99.26 1.48-.02s.73-.82.64-1.36l-.7-4.25 2.97-3.03c.49-.28.84-.81.7-1.39s-.51-1.03-1.05-1.11l-4.09-.62-1.8-3.86zm-1.19 8.2l-1.6 1.63.38 2.3-2-.98-2 .98.38-2.3-1.6-1.63 2.22-.34.99-2.11.99 2.11 2.22.34z"/></svg> Sports
+            </a>
+        </li>
+        <li>
+             <a href="timeline.html">
+                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                Timeline
+            </a>
+        </li>
+        <li>
+             <a href="gallery.html">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                Gallery
+            </a>
+        </li>
+    </ul>
+</nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        // === PASTE YOUR FIREBASE CONFIG HERE ===
+        const firebaseConfig = {
+             apiKey: "AIzaSyAOtc2UrW2hXO4JJK5ZZQcDOfUVbEFmnis",
+             authDomain: "umang-mandar.firebaseapp.com",
+             projectId: "umang-mandar",
+             storageBucket: "umang-mandar.firebasestorage.app",
+             messagingSenderId: "1033556658773",
+             appId: "1:1033556658773:web:ed5c606f77e792136ae2dc",
+             databaseURL: "https://umang-mandar-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
+        // === END OF CONFIG ===
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- DOM Elements ---
+        const liveScoreboardWidgetPlaceholder = document.getElementById('live-match-widget-container');
+        const liveBtn = document.getElementById('live-btn');
+        const liveBtnText = document.getElementById('live-btn-text');
+        const scheduleOngoingList = document.getElementById('schedule-ongoing-matches-list');
+        const scheduleUpcomingList = document.getElementById('schedule-upcoming-matches-list');
+        const scheduleCompletedList = document.getElementById('schedule-completed-matches-list');
+        const scheduleNoMatchesMessage = document.getElementById('schedule-no-matches-message');
+        const scheduleOngoingSection = document.getElementById('schedule-ongoing-matches-section');
+        const scheduleUpcomingSection = document.getElementById('schedule-upcoming-matches-section');
+        const scheduleCompletedSection = document.getElementById('schedule-completed-matches-section');
+        const overallPointsTableBody = document.getElementById('overall-points-table-body');
+        const todayDateEl = document.getElementById('today-date');
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        const greetingHeading = document.getElementById('greeting-heading'); // Greeting heading
+        const recentResultsList = document.getElementById('recent-results-list'); // Results list
+
+        // --- Helper: Capitalize ---
+        function capitalize(str) { if (!str) return ''; return str.charAt(0).toUpperCase() + str.slice(1); }
+
+        // --- Live Score Widget Function ---
+         function createScoreWidget(targetElementId, matchId) { /* ... (Same as previous widget JS) ... */
+             const targetElement = document.getElementById(targetElementId); if (!targetElement) return;
+             targetElement.innerHTML = `<div class="live-score-widget"> ... </div>`; // Initial HTML
+             const widget = targetElement.querySelector('.live-score-widget');
+             // ... Get other widget elements ...
+             const footerEl = widget.querySelector('.widget-footer');
+             function renderWidget(state) { /* ... Render logic ... */ }
+             const matchRef = ref(db, 'matches/' + matchId);
+             onValue(matchRef, (snapshot) => { /* ... Update widget ... */ }, (error) => { /* Handle error */ });
+         }
+         // --- Find and Display Live Match Widget ---
+         const allMatchesRefForWidget = ref(db, 'matches');
+         let liveWidgetSubscription = null;
+         function updateWidget(matchId, matchData){ /* ... (Same as previous widget JS) ... */
+              const teamAName = matchData.teamA?.name || 'Team A'; const teamBName = matchData.teamB?.name || 'Team B';
+              const score = `${matchData.live?.score || 0}-${matchData.live?.wickets || 0}`; const overs = `(${matchData.live?.overs || 0}.${matchData.live?.balls || 0} ov)`;
+              let statusText = matchData.live?.matchStatus === "Innings Break" ? "INNS BREAK" : "LIVE";
+              liveScoreboardWidgetPlaceholder.innerHTML = `<div class="live-scoreboard-widget"> ... HTML with data ... <a href="live-scorecard.html?matchId=${matchId}">View Scorecard</a></div>`;
+              liveBtn.href = `live-scorecard.html?matchId=${matchId}`; liveBtnText.textContent = 'LIVE SCORE'; liveBtn.style.display = 'flex';
+         }
+         function showNoLiveMatch(){ /* ... (Same as previous widget JS) ... */
+             liveScoreboardWidgetPlaceholder.innerHTML = '<p style="text-align: center; color: #9aa6b2; font-size: 0.9em; margin-top: 20px;">No matches currently live.</p>';
+             liveBtn.style.display = 'none';
+          }
+
+         liveWidgetSubscription = onValue(allMatchesRefForWidget, (snapshot) => {
+              let liveMatchFound = false; let firstLiveMatchId = null; let liveMatchData = null;
+              if (snapshot.exists()) {
+                  const matches = snapshot.val();
+                  for (const mId in matches) { const match = matches[mId]; if (match.status === 'live' || match.live?.matchStatus === "Innings Break") { liveMatchFound = true; firstLiveMatchId = mId; liveMatchData = match; break; } }
+              }
+              if (liveMatchFound) { updateWidget(firstLiveMatchId, liveMatchData); } else { showNoLiveMatch(); }
+          }, (error) => { /* ... Handle error ... */ });
+
+
+        // --- Time-Based Greeting Logic ---
+         document.addEventListener('DOMContentLoaded', () => {
+             function getISTDate() {
+                 const now = new Date(); const istOffset = 5.5 * 60; const localOffset = now.getTimezoneOffset();
+                 return new Date(now.getTime() + (istOffset + localOffset) * 60000);
+             }
+             const istDate = getISTDate(); const hours = istDate.getHours();
+             let greeting = "";
+             if (hours < 12) { greeting = "Good Morning 🌞"; }
+             else if (hours < 17) { greeting = "Good Afternoon ☀️"; }
+             else { greeting = "Good Evening 🌇"; }
+             greetingHeading.textContent = greeting;
+         });
+         // --- End Greeting Logic ---
+
+
+        // --- Load Today's Schedule & Recent Results---
+        function getTodayDateString() { /* ... (Same as previous) ... */ }
+        const todayString = getTodayDateString();
+        todayDateEl.textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', month: 'long', day: 'numeric' });
+
+        const matchesRef = ref(db, 'matches');
+        get(matchesRef).then((snapshot) => {
+            scheduleOngoingList.innerHTML = ''; scheduleUpcomingList.innerHTML = ''; scheduleCompletedList.innerHTML = '';
+            let liveCount = 0, upcomingCount = 0, completedCount = 0, anyMatchesToday = false;
+            let recentResultsHTML = ''; let resultsCount = 0; const MAX_RESULTS_DISPLAY = 4;
+
+            if (snapshot.exists()) {
+                const matches = snapshot.val();
+                const matchIds = Object.keys(matches).sort((a,b) => (matches[b].timestamp || 0) - (matches[a].timestamp || 0) || b.localeCompare(a)); // Sort by timestamp (if exists) or key reversed
+
+                matchIds.forEach(matchId => {
+                    const match = matches[matchId];
+                    const teamAName = match.teamA?.name || 'Team A'; const teamBName = match.teamB?.name || 'Team B';
+                    const matchTitle = `${teamAName} vs ${teamBName} (${capitalize(match.sport)})`;
+                    let scoreInfo = match.time || ''; let matchItemHTML = '';
+                    let targetList = null; let link = '#'; let itemClass = 'schedule-item';
+
+                    // --- Populate Today's Schedule ---
+                    if (match.date === todayString) {
+                        anyMatchesToday = true;
+                        if (match.status === 'live' || match.live?.matchStatus?.includes("Live") || match.live?.matchStatus === "Innings Break") {
+                             itemClass += ' live'; targetList = scheduleOngoingList; liveCount++; scoreInfo = `${match.live?.score || 0}-${match.live?.wickets || 0} (${match.live?.overs || 0}.${match.live?.balls || 0} ov)`; if (match.live?.matchStatus === "Innings Break") scoreInfo = "Innings Break"; if(match.live?.inning === 2 && match.live?.targetScore) scoreInfo += ` | Target: ${match.live.targetScore}`; link = `live-scorecard.html?matchId=${matchId}`;
+                        } else if (match.status === 'upcoming') {
+                             itemClass += ' upcoming'; targetList = scheduleUpcomingList; upcomingCount++; link = `#schedule`; scoreInfo = match.time ? `Starts at ${match.time}` : 'Upcoming';
+                        } else if (match.status === 'completed') {
+                             itemClass += ' completed'; targetList = scheduleCompletedList; completedCount++; scoreInfo = match.result || `Final Score Unavailable`; if (!match.result) { /* Try score */ } link = `results.html?matchId=${matchId}`;
+                        }
+                        if (targetList) { matchItemHTML = `<a href="${link}" class="${itemClass}"><p><strong>${matchTitle}</strong></p><small>${scoreInfo}</small></a>`; targetList.insertAdjacentHTML('beforeend', matchItemHTML); }
+                    }
+                    // --- Populate Recent Results ---
+                     if (match.status === 'completed' && resultsCount < MAX_RESULTS_DISPLAY) {
+                         const resultText = match.result || "Result Pending";
+                         recentResultsHTML += `<li><strong>${capitalize(match.sport)}:</strong> ${matchTitle} - ${resultText} <a href="results.html?matchId=${matchId}" style="font-size: 0.9em; color: #aaa;">Details</a></li>`;
+                         resultsCount++;
+                     }
+                }); // End forEach matchId
+            }
+             // Update Schedule visibility
+             scheduleOngoingSection.style.display = liveCount > 0 ? 'block' : 'none'; if (liveCount === 0) scheduleOngoingList.innerHTML = '<p style="color: #9aa6b2; font-size: 0.9em;">No matches currently live.</p>';
+             scheduleUpcomingSection.style.display = upcomingCount > 0 ? 'block' : 'none'; if (upcomingCount === 0) scheduleUpcomingList.innerHTML = '<p style="color: #9aa6b2; font-size: 0.9em;">No more matches scheduled today.</p>';
+             scheduleCompletedSection.style.display = completedCount > 0 ? 'block' : 'none'; if (completedCount === 0) scheduleCompletedList.innerHTML = '<p style="color: #9aa6b2; font-size: 0.9em;">No matches completed yet today.</p>';
+             scheduleNoMatchesMessage.style.display = (!anyMatchesToday && snapshot.exists()) ? 'block' : 'none'; if(!snapshot.exists()) { /* ... */ }
+             // Update Recent Results List
+             if(recentResultsList) { if (resultsCount > 0) { recentResultsList.innerHTML = recentResultsHTML; } else { recentResultsList.innerHTML = '<li style="color: #9aa6b2;">No recent results found.</li>'; }}
+        }).catch(error => { /* ... Handle error ... */ });
+
+
+        // --- Fetch Overall Points ---
+        const overallPointsRef = ref(db, 'overallPoints');
+        get(overallPointsRef).then((snapshot) => {
+             overallPointsTableBody.innerHTML = '';
+             if (snapshot.exists()) {
+                 const pointsData = snapshot.val();
+                 const sortedTeams = Object.entries(pointsData).map(([id, data]) => ({ id, ...data })).sort((a, b) => (b.points || 0) - (a.points || 0));
+                 if (sortedTeams.length > 0) { sortedTeams.forEach((team, index) => { const rank = index + 1; const row = overallPointsTableBody.insertRow(); row.innerHTML = `<td>${rank}</td><td>${team.name || '??'}</td><td><strong>${team.points || 0}</strong></td>`; }); }
+                 else { overallPointsTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #9aa6b2;">Standings empty.</td></tr>'; }
+             } else { overallPointsTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #9aa6b2;">Standings unavailable.</td></tr>'; }
+        }).catch(error => { overallPointsTableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: red;">Error loading standings.</td></tr>'; });
+
+
+        // --- Mobile Menu Toggle ---
+        if(menuBtn && navLinks) {
+             menuBtn.addEventListener('click', (e) => { e.stopPropagation(); navLinks.classList.toggle('mobile-nav-active'); });
+             document.addEventListener('click', (e) => { if (navLinks.classList.contains('mobile-nav-active') && !navLinks.contains(e.target) && !menuBtn.contains(e.target)) { navLinks.classList.remove('mobile-nav-active'); } });
+         }
+
+    </script>
+
+</body>
+</html>

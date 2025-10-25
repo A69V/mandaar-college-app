@@ -1,0 +1,99 @@
+/* --- Embeddable Score Widget Styles --- */
+.live-score-widget {
+    /* Basic container */
+    font-family: Inter, sans-serif; /* Match main font */
+    color: #e6eef6; /* Light text */
+    background: linear-gradient(180deg, #0b1220cc, rgba(10, 16, 26, 0.7)); /* Semi-transparent card bg */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 12px;
+    box-shadow: 0 4px 15px rgba(2, 6, 23, 0.5);
+    backdrop-filter: blur(4px);
+    overflow: hidden; /* Prevent text overflow */
+    min-width: 200px; /* Minimum useful width */
+    max-width: 100%; /* Can take full width if needed */
+    box-sizing: border-box;
+
+    /* Responsive font size using container query units (modern browsers)
+       or use viewport units as fallback */
+    container-type: inline-size; /* Enable container queries */
+    font-size: clamp(0.7rem, 3cqw, 1rem); /* Font size scales with width */
+     /* Fallback for older browsers: */
+    /* font-size: clamp(0.7rem, 2vw, 1rem); */
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.8em; /* Smaller header font */
+    color: #9aa6b2; /* Muted color */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 5px;
+}
+.widget-status {
+    font-weight: bold;
+    color: #FF9F55; /* Orange accent */
+    text-transform: uppercase;
+     white-space: nowrap; /* Prevent wrapping */
+}
+.widget-live-dot { /* Blinking dot */
+    display: inline-block;
+    width: 0.6em; height: 0.6em;
+    background-color: red;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: blink infinite 1.5s; /* Slightly faster blink */
+}
+
+
+.widget-score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.widget-team-name {
+    font-weight: 600;
+    font-size: 1.1em; /* Slightly larger team name */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ... if name too long */
+    flex-shrink: 1; /* Allow shrinking */
+    margin-right: 10px;
+}
+.widget-score-details {
+    text-align: right;
+    white-space: nowrap;
+    font-weight: 700;
+    font-size: 1.2em; /* Larger score */
+}
+.widget-score-details .overs {
+    font-size: 0.8em;
+    color: #9aa6b2; /* Muted */
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.widget-players {
+    font-size: 0.9em; /* Smaller player font */
+    line-height: 1.4;
+    color: #cdd3da; /* Slightly lighter muted */
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 5px;
+}
+.widget-players span { color: #9aa6b2; margin-right: 5px; } /* Labels */
+.widget-players .batsman-score { font-family: monospace; } /* Monospace for numbers */
+.widget-players .striker-star { color: #06b6d4; } /* Accent color for striker */
+
+.widget-footer {
+    font-size: 0.75em;
+    color: #9aa6b2;
+    text-align: center;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+}
+.widget-target { font-weight: bold; color: #f97316;}
