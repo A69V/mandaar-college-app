@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umang Mandar - Sports Festival at GEC Banka</title>
+    <style>
+        /* --- USER'S ORIGINAL CSS CODE (with footer gap fix) --- */
+        * {
+            margin: 0;
+            padding: 0;
+             box-sizing: border-box; /* Added */
+        }
+
+        body {
+            background-color: rgba(0, 0, 0, 0.647);
+            background-image: url("./background.gif");
+            background-blend-mode: multiply;
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+            overflow-x: hidden;
+            transition: all ease-in-out 0.5s;
+             color: white; /* Added */
+             font-family: sans-serif;
+             min-height: 100vh; /* Added */
+             display: flex; /* Added */
+             flex-direction: column; /* Added */
+        }
+        a{
+            text-decoration: none;
+        }
+
+        header {
+            width: 100%;
+             position: sticky; top: 0; z-index: 1000; /* Added */
+             background: linear-gradient(180deg, rgba(8, 8, 8, 1) 40%, rgba(9, 9, 9, 0.7) 80%, rgba(0, 0, 0, 0) 100%); /* Added */
+        }
+
+        nav {
+            max-width: 1200px; /* Adjusted */
+            margin: 0 auto; /* Adjusted */
+            padding: 0 20px; /* Adjusted */
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* background moved to header */
+        }
+        nav ul{
+            list-style: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+        nav ul li{
+            margin: 15px;
+        }
+        nav ul li a{
+            text-decoration: none;
+            color: white;
+            font-size: 1.1em;
+            font-family: sans-serif;
+             transition: color 0.2s ease; /* Added */
+        }
+         nav ul li a:hover { color: #FF9F55; } /* Added */
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo {
+            margin: 20px 0; /* Adjusted */
+        }
+
+        .menu-btn {
+            margin: 20px; background-color: rgba(0, 0, 0, 0); color: aliceblue;
+            border: none; outline: none; cursor: pointer; display: none;
+        }
+
+        .menu-btn img { height: 25px; } /* Corrected height */
+        .menu-btn svg { height: 30px; width: 30px; fill: white;} /* Added SVG style */
+
+
+        .lander {
+            width: 100%; height: 100vh; animation: fadein forwards 1s;
+            position: relative; overflow: hidden; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        @keyframes fadein { /* Unchanged */ }
+
+        .lander-center {
+            z-index: 99; text-align: center;
+        }
+
+        .lander-center p {
+            font-size: clamp(1.5em, 4vw, 2em); text-align: center; color: white;
+            text-shadow: 0px 0px 10px #fbf8f88c; font-family: serif; margin-bottom: 20px;
+        }
+
+        .lander p span {
+             display: block; font-size: clamp(2.5em, 7vw, 3em); line-height: 1.1;
+        }
+
+        .lander-left {
+            position: absolute; left: 0; bottom: 0; height: 80%; max-height: 500px;
+            animation: fadeinleft forwards 2s; z-index: 1; pointer-events: none; /* Make image non-interactive */
+        }
+        @keyframes fadeinleft { /* Unchanged */ }
+        .lander-left img { height: 100%; max-width: none; object-fit: contain; object-position: left bottom;}
+
+        .lander-right {
+            position: absolute; right: 0; bottom: 0; height: 80%; max-height: 500px;
+            animation: fadeinright forwards 2s; z-index: 1; pointer-events: none; /* Make image non-interactive */
+        }
+        @keyframes fadeinright { /* Unchanged */ }
+        .lander-right img { height: 100%; max-width: none; object-fit: contain; object-position: right bottom;}
+
+
+        .lander-cta {
+            margin: 10px 0; display: block; width: 100%; text-align: center;
+        }
+
+        .lander-cta button {
+            background-color: rgba(0, 0, 0, 0.544); color: white; border: solid 1px white;
+            outline: none; cursor: pointer; border-radius: 10px; padding: 10px 18px; /* Adjusted */
+            font-size: 1.1em; margin: 10px; transition: ease-in-out .3s; /* Adjusted */
+        }
+
+        .lander-cta button:hover {
+            background-color: white; color: black; border: solid 1px white; /* Adjusted */
+             transform: scale(1.05); /* Added */
+        }
+
+        /* --- Live Score Widget Placeholder Style --- */
+        #live-match-widget-container {
+             margin-top: 25px; max-width: 380px; margin-left: auto; margin-right: auto;
+             min-height: 100px; /* Reserve space */
+        }
+        /* --- Live Score Widget CSS --- */
+         .live-score-widget {
+             font-family: Inter, sans-serif; color: #e6eef6;
+             background: linear-gradient(180deg, rgba(11, 18, 32, 0.8), rgba(10, 16, 26, 0.7));
+             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
+             padding: 10px 12px; box-shadow: 0 4px 15px rgba(2, 6, 23, 0.5);
+             backdrop-filter: blur(4px); overflow: hidden; min-width: 200px;
+             max-width: 100%; box-sizing: border-box; container-type: inline-size;
+             font-size: clamp(0.7rem, 3cqw, 1rem);
+         }
+         .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.8em; color: #9aa6b2; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 5px; }
+         .widget-status { font-weight: bold; color: #FF9F55; text-transform: uppercase; white-space: nowrap; }
+         .widget-live-dot { display: inline-block; width: 0.6em; height: 0.6em; background-color: red; border-radius: 50%; margin-right: 5px; animation: blink infinite 1.5s; }
+         .widget-score { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+         .widget-team-name { font-weight: 600; font-size: 1.1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; margin-right: 10px; }
+         .widget-score-details { text-align: right; white-space: nowrap; font-weight: 700; font-size: 1.2em; }
+         .widget-score-details .overs { font-size: 0.8em; color: #9aa6b2; font-weight: 500; margin-left: 5px; }
+         .widget-players { font-size: 0.9em; line-height: 1.4; color: #cdd3da; margin-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 5px; }
+         .widget-players span { color: #9aa6b2; margin-right: 5px; }
+         .widget-players .batsman-score { font-family: monospace; }
+         .widget-players .striker-star { color: #06b6d4; }
+         .widget-footer { font-size: 0.75em; color: #9aa6b2; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+         .widget-target { font-weight: bold; color: #f97316; }
+
+
+        .about {
+            margin: 30px auto; padding: 50px 20px; color: #ffffff;
+            font-family: sans-serif; max-width: 1100px;
+            display: flex; flex-direction: row; align-items: center;
+            justify-content: center; gap: 30px; flex-wrap: wrap;
+        }
+
+        .about-img {
+            width: 100%; max-width: 400px; border-radius: 20px;
+            animation: fadeinleft forwards 2s; box-shadow: 0 0 10px rgba(255, 255, 255, 0.675);
+             object-fit: cover; flex-shrink: 0;
+        }
+
+        .about-text {
+             flex: 1; min-width: 300px;
+            font-family: Arial, Helvetica, sans-serif; font-weight: lighter;
+            animation: fadeinright forwards 2s; text-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+        }
+
+        .about-text h2 {
+            font-weight: 300; font-size: clamp(1.8em, 4vw, 2.2em);
+            color: white; line-height: 1.2; margin-bottom: 15px;
+        }
+
+        .about-text h2 span {
+            font-size: 1.5em; font-weight: 600; display: block; color: #FF9F55;
+        }
+
+        .about-text p {
+            font-weight: 400; line-height: 1.7; font-size: clamp(0.9em, 2vw, 1em);
+             color: #e0e0e0;
+        }
+
+         /* --- Base Section Styles (using timeline-content as base) --- */
+         .content-section {
+             padding: 30px 20px; /* Consistent padding */
+             margin: 30px auto; /* Centering */
+             max-width: 1100px; /* Limit width */
+         }
+         .content-box-style { /* Apply this class to sections */
+             padding: 20px 30px;
+             background-color: rgba(9, 6, 82, 0.55); /* Match timeline */
+             position: relative;
+             border-radius: 8px;
+             box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422);
+             backdrop-filter: blur(4px);
+             border: 1px solid rgba(217, 216, 246, 0.2);
+             color: white;
+         }
+         .content-box-style h2 { /* Style section titles */
+             text-align: center; color: #ffffff; text-shadow: 0px 0px 10px #fcfcfc;
+             font-size: 2em; margin-bottom: 25px; font-weight: lighter;
+             border-bottom: 1px solid #FF9F55; padding-bottom: 10px;
+         }
+          .content-box-style h3 { /* Style sub-titles */
+             color: #FF9F55; margin-top: 15px; margin-bottom: 10px;
+             padding-bottom: 5px; font-size: 1.3em; font-weight: normal;
+             border-bottom: 1px solid rgba(255, 159, 85, 0.3);
+         }
+          .content-box-style p { line-height: 1.6; font-size: 1em; color: #f0f0f0; margin-bottom: 10px;}
+          .content-box-style ul { list-style-position: inside; margin-left: 10px; padding-left: 0;}
+          .content-box-style ul li { margin-bottom: 8px; line-height: 1.6; color: #e0e0e0;}
+          /* Table Styles within content box */
+          .content-box-style table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 15px; }
+          .content-box-style th, .content-box-style td { padding: 10px 8px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.2); white-space: normal; } /* Allow wrap */
+          .content-box-style thead { background-color: rgba(255, 255, 255, 0.1); }
+          .content-box-style th { font-weight: bold; color: #FF9F55; }
+          .content-box-style td:first-child { font-weight: bold; }
+          .table-wrapper { overflow-x: auto; } /* Scroll wrapper for tables */
+           /* Gallery Grid */
+           .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
+           .gallery-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 6px; border: 2px solid rgba(255, 255, 255, 0.1); transition: transform 0.2s ease; }
+           .gallery-grid img:hover { transform: scale(1.05); }
+
+
+        /* Timeline Section */
+        .t-line { font-family: sans-serif; padding: 50px 0; }
+        .t-line h2 { /* User style */ }
+        .timeline { /* User style */ }
+        .timeline::after { /* User style */ }
+        .timeline-container { /* User style */ }
+        .timeline-container::after { /* User style */ }
+        .timeline-container:nth-child(odd) { /* User style */ }
+        .timeline-container:nth-child(even) { /* User style */ }
+        .timeline-container:nth-child(even)::after { /* User style */ }
+        .timeline-content {
+            padding: 20px 30px; background-color: rgba(9, 6, 82, 0.486);
+            position: relative; border-radius: 8px;
+            box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422);
+            backdrop-filter: blur(2px); /* Corrected */ color: white;
+        }
+        .timeline-container:nth-child(odd) .timeline-content::before { /* User style */ }
+        .timeline-container:nth-child(even) .timeline-content::before { /* User style */ }
+        .timeline-content h3 { /* User style */ }
+        .timeline-content p { /* User style */ }
+        .timeline-content small { /* User style */ }
+        /* Timeline Responsive */
+        @media screen and (max-width: 768px) { .timeline::after { /* User style */ } .timeline-container { /* User style */ } .timeline-container:nth-child(odd), .timeline-container:nth-child(even) { /* User style */ } .timeline-container::after { /* User style */ } .timeline-container:nth-child(even)::after { /* User style */ } .timeline-container .timeline-content::before { /* User style */ } }
+
+
+        /* Footer */
+        footer {
+            padding: 40px 0 0; background: linear-gradient(180deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 90%);
+            font-family: sans-serif; color: #ccc; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: auto;
+        }
+        .footer {
+            display: flex; flex-wrap: wrap; align-items: flex-start; gap: 30px; /* Corrected gap */
+            justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        }
+        .footer div { margin-bottom: 20px; flex: 1; min-width: 250px;}
+        .footer-left { text-align: center; }
+        .footer-right { text-align: left; }
+        .footer-contact { text-align: left; }
+        .footer-right p { line-height: 1.6; font-size: 0.9em; color: #ccc;}
+        .footer-left a, .footer-contact a { text-decoration: none; color: #ccc; transition: color 0.2s ease;}
+        .footer-left a:hover, .footer-contact a:hover { color: white; }
+        .footer-left ul { list-style: none; padding: 0; margin-top: 15px;}
+        .footer-left ul li { margin: 0 8px; display: inline-block; }
+        .footer-left ul li a img { height: 22px; opacity: 0.7; transition: opacity 0.2s ease;}
+        .footer-left ul li a:hover img { opacity: 1;}
+        .made-by { color: #aaa; margin: 30px auto 0; border-top: 1px solid rgba(255, 255, 255, 0.1); width: 100%; padding: 20px 0; font-size: 0.9em; }
+        .footer-contact h3 { font-size: 1.1em; color: white; margin-bottom: 10px;}
+        .footer-contact ul { list-style: none; padding: 0;}
+        .footer-contact ul li { margin-bottom: 10px; font-size: 0.9em; color: #ccc;}
+        .footer-contact ul li b { color: white;}
+        .made-by a { color: #ccc; text-decoration: none; transition: color 0.2s ease; }
+        .made-by a:hover { color: white; }
+
+        /* Go Down Arrow (User style) */
+        .go-down { position: absolute; bottom: 5%; /* Adjusted */ left: 50%; transform: translateX(-50%); width: 40px; /* Smaller */ animation: fadedown 1.5s infinite alternate ease-in-out; /* Continuous bounce */}
+        @keyframes fadedown { 0% { transform: translate(-50%, 0px); opacity: 0.7; } 100% { transform: translate(-50%, 10px); opacity: 0.3; } } /* Bounce effect */
+
+
+        #gold-glow{ /* ... */ }
+        @keyframes golden-glow { /* ... */ }
+
+
+        /* --- Media Queries --- */
+        @media screen and (max-width: 900px) {
+             nav ul { display: none; }
+             .menu-btn { display: block; }
+             main { padding-top: 0; } /* Remove padding if nav is overlay */
+             header { background: rgba(8,8,8,0.8); backdrop-filter: blur(5px); } /* Solid background for sticky */
+
+            .lander-left, .lander-right { display: none; }
+             .lander-center p { font-size: clamp(1.5em, 5vw, 1.8em); }
+             .lander p span { font-size: clamp(2.2em, 8vw, 2.7em); }
+
+            .about { padding: 30px 15px; flex-direction: column; } /* Stack about */
+            .about-img { max-width: 80%; margin-bottom: 20px;}
+            .about-text { width: 90%; margin: 0; }
+
+             .footer { justify-content: center; text-align: center; }
+             .footer > div { width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; text-align: center;}
+             .footer-contact ul { display: inline-block; text-align: left;}
+
+             /* Simple Mobile Nav Reveal */
+             nav ul.mobile-nav-active {
+                 display: flex; flex-direction: column; position: absolute;
+                 top: 80px; /* Below nav */ left: 0; width: 100%;
+                 background: rgba(8, 8, 8, 0.98); /* Dark background */
+                 padding: 10px 0; box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+                 border-top: 1px solid rgba(255,255,255,0.1);
+             }
+             nav ul.mobile-nav-active li { margin: 10px 0; text-align: center; width: 100%;}
+              nav ul.mobile-nav-active li a { padding: 10px 0; display: block; width: 100%; font-size: 1.2em;}
+
+             .go-down { bottom: 10%; width: 35px;} /* Adjust arrow position */
+             .content-section { padding: 20px 15px; } /* Reduce padding on mobile */
+             .content-box-style { padding: 15px 20px; }
+             .content-box-style h2 { font-size: 1.6em; }
+             .content-box-style h3 { font-size: 1.15em; }
+        }
+
+        @media screen and (max-width: 500px) {
+            .lander-center p { font-size: 1.5em; }
+            .lander p span { font-size: 2.2em; }
+            .lander-cta button { font-size: 1em; padding: 8px 15px;}
+             .about-text { font-size: 0.9em; }
+             .about-text h2 span { font-size: 1.5em; }
+            .live-btn { font-size: 0.8em; padding: 6px 12px; margin-right: 10px;}
+            .dot-blink { height: 8px; width: 8px;}
+             .content-box-style h2 { font-size: 1.4em; }
+             .content-box-style h3 { font-size: 1.1em; }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo"><img src="./mandar-logo.png" alt="Umang Mandar"></a>
+            <ul id="nav-links"> <li><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#tline">Timeline</a></li>
+                <li><a href="#gallery">Gallery</a></li> <li><a href="#schedule">Schedule</a></li> <li><a href="#">Sports</a></li> </ul>
+            <a href="#" class="live-btn" id="live-btn" style="display: none;">
+                <div class="dot-blink"></div> <span id="live-btn-text">LIVE</span>
+            </a>
+            <button class="menu-btn" id="menu-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="lander">
+            <div class="lander-left"> <img src="./left-lander-img.png" alt=""> </div>
+            <div class="lander-center">
+                <p><span>UMANG <br> MANDAR</span><br> 2025-26 | GEC Banka</p>
+                <div class="lander-cta">
+                    <button>Brochure</button>
+                    <button id="gold-glow">Today's Events</button>
+                    <div id="live-match-widget-container" style="margin-top: 25px;">
+                        <p style="color: #9aa6b2; font-size: 0.9em;">Checking for live matches...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lander-right"> <img src="./right-lander-img.png" alt=""> </div>
+            <img src="./chevron-compact-down.svg" alt="Scroll Down" class="go-down">
+        </div>
+
+        <div class="about" id="about">
+            <img src="./about-img.png" alt="Umang Mandar Group Photo" class="about-img">
+            <div class="about-text">
+                <h2>Welcome to <br><span>Umang Mandar</span></h2>
+                <p> We are thrilled to welcome you... [Your full about text here] ...Let the games begin! </p>
+            </div>
+        </div>
+
+         <section class="content-section" id="schedule">
+              <div class="content-box-style">
+                 <h2>Schedule / Fixtures</h2>
+                 <h3>Day 1 (Example)</h3>
+                 <div class="table-wrapper">
+                     <table>
+                         <thead><tr><th>Time</th><th>Event</th><th>Venue</th></tr></thead>
+                         <tbody>
+                             <tr><td>09:00 AM</td><td>Opening Ceremony</td><td>Main Ground</td></tr>
+                             <tr><td>11:00 AM</td><td>Football Final: CSE vs ME</td><td>Football Ground</td></tr>
+                             <tr><td>02:00 PM</td><td>Volleyball Final</td><td>Volleyball Court</td></tr>
+                             <tr><td>02:00 PM</td><td>Badminton Final</td><td>Indoor Hall</td></tr>
+                         </tbody>
+                     </table>
+                 </div>
+                  <h3>Day 2 (Example)</h3>
+                  <div class="table-wrapper">
+                     <table>
+                         <thead><tr><th>Time</th><th>Event</th><th>Venue</th></tr></thead>
+                         <tbody>
+                              <tr><td>10:00 AM</td><td>Athletics: 100m, 200m, Relay</td><td>Track</td></tr>
+                              <tr><td>11:30 AM</td><td>Athletics: Long Jump, Shot Put</td><td>Field</td></tr>
+                              <tr><td>01:00 PM</td><td>Chess/Carrom/TT Finals</td><td>Indoor Hall</td></tr>
+                              <tr><td>05:00 PM</td><td>Closing Ceremony</td><td>Main Ground</td></tr>
+                         </tbody>
+                     </table>
+                  </div>
+                   <p style="text-align: center; margin-top: 15px; font-size: 0.9em; color:#ccc;">*Schedule subject to change.</p>
+              </div>
+         </section>
+
+          <section class="content-section" id="results">
+              <div class="content-box-style">
+                 <h2>Recent Results</h2>
+                  <ul>
+                      <li><strong>Football Final:</strong> CSE Warriors beat ME Titans (2-1)</li>
+                      <li><strong>Cricket Semi-Final:</strong> ECE Strikers won by 5 wickets vs CE Blasters</li>
+                      <li><strong>Badminton (Singles):</strong> Priya Singh (ECE) won vs Rohan Kumar (CSE)</li>
+                      <li><strong>100m Sprint (Men):</strong> Vikram Singh (ME) - Gold</li>
+                  </ul>
+                  <p style="text-align:center; margin-top: 15px;"><a href="#" style="color: #FF9F55; font-weight: bold;">View All Results</a></p>
+              </div>
+         </section>
+
+         <section class="content-section" id="standings">
+              <div class="content-box-style">
+                 <h2>Overall Standings</h2>
+                 <div class="table-wrapper">
+                     <table>
+                         <thead><tr><th>Rank</th><th>Department</th><th>Points</th></tr></thead>
+                         <tbody>
+                             <tr><td>1</td><td>CSE Warriors</td><td>🏆 150</td></tr>
+                             <tr><td>2</td><td>ME Titans</td><td>🥈 125</td></tr>
+                             <tr><td>3</td><td>ECE Strikers</td><td>🥉 110</td></tr>
+                             <tr><td>4</td><td>CE Blasters</td><td>80</td></tr>
+                              <tr><td>5</td><td>IoT Warriors</td><td>65</td></tr>
+                         </tbody>
+                     </table>
+                 </div>
+                 <p style="font-size: 0.8em; color: #aaa; text-align: center; margin-top: 10px;">*Points calculated based on event rankings.</p>
+              </div>
+         </section>
+
+
+        <div class="t-line" id="tline">
+            <h2>Event Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 1: 9:00 AM</small> <h3>Opening Ceremony</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 1: 11:00 AM</small> <h3>Football Match: Finals</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 1: 2:00 PM</small> <h3>Volleyball & Badminton</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 2: 10:00 AM</small> <h3>Athletics Meet</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 2: 1:00 PM</small> <h3>Indoor Championships</h3> <p>...</p> </div> </div>
+                <div class="timeline-container"> <div class="timeline-content"> <small>Day 2: 5:00 PM</small> <h3>Prize Distribution & Closing</h3> <p>...</p> </div> </div>
+            </div>
+        </div>
+
+         <section class="content-section" id="gallery">
+              <div class="content-box-style">
+                 <h2>Gallery Highlights</h2>
+                 <div class="gallery-grid">
+                     <img src="https://via.placeholder.com/200/0000FF/FFFFFF?text=Opening" alt="Gallery Image 1">
+                     <img src="https://via.placeholder.com/200/FF0000/FFFFFF?text=Football" alt="Gallery Image 2">
+                     <img src="https://via.placeholder.com/200/00FF00/FFFFFF?text=Cricket" alt="Gallery Image 3">
+                     <img src="https://via.placeholder.com/200/FFFF00/000000?text=Winners" alt="Gallery Image 4">
+                     <img src="https://via.placeholder.com/200/FF00FF/FFFFFF?text=Crowd" alt="Gallery Image 5">
+                      <img src="https://via.placeholder.com/200/00FFFF/FFFFFF?text=Volleyball" alt="Gallery Image 6">
+                 </div>
+                  <p style="text-align:center; margin-top: 15px;"><a href="#" style="color: #FF9F55; font-weight: bold;">View Full Gallery</a></p>
+              </div>
+         </section>
+
+          <section class="content-section" id="venue">
+              <div class="content-box-style">
+                 <h2>Venue Map</h2>
+                 <div style="text-align: center; border: 1px dashed #ccc; padding: 20px; background: rgba(0,0,0,0.2);">
+                     <p style="margin-bottom: 10px;">[Map Placeholder]</p>
+                     <img src="https://via.placeholder.com/600x300/111/555?text=Campus+Map+Goes+Here" alt="Venue Map Placeholder" style="max-width: 100%; height: auto; border-radius: 4px;">
+                     <p style="margin-top: 15px; font-size: 0.9em;">Main events held at GEC Banka Campus Ground and Indoor Hall.</p>
+                 </div>
+              </div>
+         </section>
+
+
+    </main>
+
+    <footer>
+         <div class="footer">
+             <div class="footer-left">
+                 <img src="./mandar-logo-25.png" alt="Umang Mandar 25 logo">
+                 <ul>
+                     <li><a href="#"><img src="./instagram.svg" alt="Social"></a></li>
+                     <li><a href="#"><img src="./facebook.svg" alt="Social"></a></li>
+                     <li><a href="#"><img src="./youtube.svg" alt="Social"></a></li>
+                     <li><a href="#"><img src="./twitter-x.svg" alt="Social"></a></li>
+                 </ul>
+                 <p class="copyright">© 2025 GEC Banka Sports Club</p>
+             </div>
+             <div class="footer-right">
+                 <p>Umang Mandaar, GEC Banka's annual sports festival...</p>
+             </div>
+             <div class="footer-contact">
+                 <h3>Contact Details</h3>
+                  <ul>
+                      <li><b>Address:</b><br> Government Engineering College Banka...</li> <br>
+                      <li><b>Phone:</b><br> Himanshu Kumar - 9334550188 <br> Satyam Kumar - 9006509174</li> <br>
+                  </ul>
+             </div>
+         </div>
+         <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a></p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        // === PASTE YOUR FIREBASE CONFIG HERE ===
+        const firebaseConfig = {
+             apiKey: "AIzaSyAOtc2UrW2hXO4JJK5ZZQcDOfUVbEFmnis",
+             authDomain: "umang-mandar.firebaseapp.com",
+             projectId: "umang-mandar",
+             storageBucket: "umang-mandar.firebasestorage.app",
+             messagingSenderId: "1033556658773",
+             appId: "1:1033556658773:web:ed5c606f77e792136ae2dc",
+             databaseURL: "https://umang-mandar-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
+        // === END OF CONFIG ===
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- DOM Elements ---
+        const liveScoreboardWidgetPlaceholder = document.getElementById('live-match-widget-container');
+        const liveBtn = document.getElementById('live-btn');
+        const liveBtnText = document.getElementById('live-btn-text');
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        // --- Live Scoreboard Widget Function ---
+         function createScoreWidget(targetElementId, matchId) {
+             const targetElement = document.getElementById(targetElementId);
+             if (!targetElement) return;
+
+             targetElement.innerHTML = `
+                 <div class="live-score-widget">
+                     <div class="widget-header">
+                         <span class="widget-status"><span class="widget-live-dot"></span>LIVE</span>
+                         <span class="widget-match-id">Match: ${matchId.substring(0, 15)}${matchId.length > 15 ? '...' : ''}</span>
+                     </div>
+                     <div class="widget-score">
+                         <span class="widget-team-name">--</span>
+                         <span class="widget-score-details"><span class="widget-runs-wickets">0-0</span><span class="widget-overs">(0.0)</span></span>
+                     </div>
+                     <div class="widget-players">
+                         <div class="widget-batsman-1"><span class="striker-star">*</span> <span>Striker:</span> -- (0)</div>
+                         <div class="widget-batsman-2"><span>Non-Str:</span> -- (0)</div>
+                         <div class="widget-bowler"><span>Bowler:</span> --</div>
+                     </div>
+                     <div class="widget-footer">Loading...</div>
+                 </div>`;
+
+             const widget = targetElement.querySelector('.live-score-widget');
+             const statusEl = widget.querySelector('.widget-status');
+             const teamNameEl = widget.querySelector('.widget-team-name');
+             const scoreEl = widget.querySelector('.widget-runs-wickets');
+             const oversEl = widget.querySelector('.widget-overs');
+             const batsman1El = widget.querySelector('.widget-batsman-1');
+             const batsman2El = widget.querySelector('.widget-batsman-2');
+             const bowlerEl = widget.querySelector('.widget-bowler');
+             const footerEl = widget.querySelector('.widget-footer');
+
+             function renderWidget(state) {
+                 if (!state || !state.live) { footerEl.textContent = "Waiting for data..."; return; }
+                 const live = state.live;
+                 const striker = live.batsmen?.striker || { name: '--', runs: 0, balls: 0 };
+                 const nonStriker = live.batsmen?.nonStriker || { name: '--', runs: 0, balls: 0 };
+                 const bowler = live.bowler || { name: '--' };
+                 const battingTeamName = state[live.battingTeam]?.name || 'Batting';
+
+                 let statusText = live.matchStatus || "LIVE"; let showDot = true;
+                 if (state.status === "completed") { statusText = "FINISHED"; showDot = false; }
+                 else if (live.matchStatus === "Innings Break") { statusText = "INNS BREAK"; showDot = false; }
+                 statusEl.innerHTML = `${showDot ? '<span class="widget-live-dot"></span>' : ''}${statusText}`;
+
+                 teamNameEl.textContent = battingTeamName; scoreEl.textContent = `${live.score}-${live.wickets}`; oversEl.textContent = `(${live.overs}.${live.balls})`;
+                 batsman1El.innerHTML = `<span class="striker-star">*</span> <span>${striker.name}:</span> <span class="batsman-score">${striker.runs} (${striker.balls})</span>`;
+                 batsman2El.innerHTML = `<span>${nonStriker.name}:</span> <span class="batsman-score">${nonStriker.runs} (${nonStriker.balls})</span>`;
+                 bowlerEl.innerHTML = `<span>Bowler:</span> ${bowler.name}`;
+                 let footerText = `${battingTeamName} ${live.score}/${live.wickets} (${live.overs}.${live.balls} ov).`;
+                 if (live.inning === 2 && live.targetScore) { /* ... Target logic ... */ }
+                 else if (state.status === "completed") { footerText = state.result || "Match Finished."; }
+                 footerEl.innerHTML = footerText;
+             }
+
+             const matchRef = ref(db, 'matches/' + matchId);
+             onValue(matchRef, (snapshot) => {
+                 if (snapshot.exists()) {
+                     const state = snapshot.val();
+                     if (state.live && state.teamA && state.teamB) { renderWidget(state); }
+                     else { footerEl.textContent = "Incomplete data..."; }
+                 } else { widget.innerHTML = `<div class="live-score-widget" style="color: #fecaca; border-color: red;">Match ${matchId} not found.</div>`; }
+             }, (error) => { widget.innerHTML = `<div class="live-score-widget" style="color: red; border-color: red;">Connection failed.</div>`; });
+         }
+
+        // --- Find and Display Live Match Widget ---
+        const allMatchesRef = ref(db, 'matches');
+        let liveWidgetSubscription = null;
+
+        liveWidgetSubscription = onValue(allMatchesRef, (snapshot) => {
+            let liveMatchFound = false; let firstLiveMatchId = null;
+            if (snapshot.exists()) {
+                const matches = snapshot.val();
+                for (const matchId in matches) {
+                    const match = matches[matchId];
+                    if (match.status === 'live' || match.live?.matchStatus === "Innings Break") {
+                        liveMatchFound = true; firstLiveMatchId = matchId; break;
+                    }
+                }
+            }
+
+            if (liveMatchFound && firstLiveMatchId) {
+                createScoreWidget('live-match-widget-container', firstLiveMatchId);
+                 liveBtn.href = `live-scorecard.html?matchId=${firstLiveMatchId}`;
+                 liveBtnText.textContent = 'LIVE SCORE';
+                 liveBtn.style.display = 'flex';
+            } else {
+                liveScoreboardWidgetPlaceholder.innerHTML = '<p style="text-align: center; color: #9aa6b2; font-size: 0.9em; margin-top: 20px;">No matches currently live.</p>';
+                liveBtn.style.display = 'none';
+            }
+
+        }, (error) => {
+             console.error("Error listening for live matches:", error);
+             liveScoreboardWidgetPlaceholder.innerHTML = '<p style="color: red; text-align: center; margin-top: 20px;">Error loading live score.</p>';
+             liveBtn.style.display = 'none';
+        });
+
+         // --- Simple Mobile Menu Toggle ---
+         if(menuBtn && navLinks) {
+             menuBtn.addEventListener('click', (e) => {
+                 e.stopPropagation(); // Prevent click from closing immediately
+                 navLinks.classList.toggle('mobile-nav-active');
+             });
+             // Close menu if clicking outside
+             document.addEventListener('click', (e) => {
+                 if (navLinks.classList.contains('mobile-nav-active') && !navLinks.contains(e.target) && !menuBtn.contains(e.target)) {
+                     navLinks.classList.remove('mobile-nav-active');
+                 }
+             });
+         }
+
+    </script>
+</body>
+</html>

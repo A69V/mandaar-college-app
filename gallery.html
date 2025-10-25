@@ -680,11 +680,46 @@ display: flex;
                 box-shadow: 0 0 10px #000;
                 z-index: 99;
             }
+            h2{
+                display: block;
+                color: #e76c0e;
+                font-family: sans-serif;
+                border-bottom: solid 1px #e76c0e;
+                width: 90%;
+                margin: 20px auto;
+                padding: 5px 0;
+            }
+            @media screen and (max-width: 900px){
+                .gallery{
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                .about-img{
+                    width: 50%;
+                }
+            }
+            @media screen and(max-width: 500px) {
+                .gallery{
+                    grid-template-columns: 1fr;
+                }
+            }
         </style>
         <!-- Gallery -->
         <h1>Gallery</h1>
+        <h2>Recent</h2>
 <div class="gallery">
-
+    <img src="./about-img.png" alt="">
+    <img src="./about-img.png" alt="">
+    <img src="./about-img.png" alt="">
+    <img src="./about-img.png" alt="">
+    <img src="./about-img.png" alt="">
+    <img src="./about-img.png" alt="">
+    <img src="./about-img.png" alt="">
+    <img src="./about-img.png" alt="">
+    <img src="./about-img.png" alt="">
+    <img src="./about-img.png" alt="">
+</div>
+        <h2>Day 1</h2>
+<div class="gallery">
     <img src="./about-img.png" alt="">
     <img src="./about-img.png" alt="">
     <img src="./about-img.png" alt="">

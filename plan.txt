@@ -19,3 +19,18 @@ Live Scoreboard
 
 Privacy page
 Contact
+
+
+
+today's matches
+point table
+score board
+
+
+Landing Page
+About
+Sponsors
+Today's Events with a link to full event time line of 10 days
+Overall Point Table of Departments with a link to detailed page about ranking in indivual games
+Updates of the match {latest 5} with link to the 
+Gallery section with 5 image and link to gallery
