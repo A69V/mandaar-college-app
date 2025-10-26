@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Details - Umang Mandar</title> <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Added box-sizing */
+        }
+
+        body {
+            background-color: rgba(0, 0, 0, 0.647);
+            background-image: url("../background.gif"); /* Ensure path is correct */
+            background-blend-mode: multiply;
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+            overflow-x: hidden;
+            transition: all ease-in-out 0.5s;
+            color: white;
+            font-family: sans-serif;
+            min-height: 100vh; /* Ensure footer stays down */
+            display: flex; /* Flex layout for footer */
+            flex-direction: column; /* Stack header, main, footer */
+        }
+
+        header {
+            width: 100%;
+             position: sticky; /* Make header sticky */
+             top: 0;
+             z-index: 1000;
+        }
+
+        nav {
+            max-width: 100%;
+            min-width: 250px;
+            /* max-height: 200px; Remove max-height */
+            height: 100px;
+            margin: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(180deg, rgba(8, 8, 8, 1) 2%, rgba(9, 9, 9, 0.62) 63%, rgba(10, 10, 10, 0.46) 79%, rgba(0, 0, 0, 0) 100%);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo {
+            margin: 20px;
+        }
+
+        .menu-btn { /* Your existing styles */ display: none; margin: 20px; background: none; border: none; cursor: pointer;}
+        .menu-btn img { height: 30px; }
+
+        .live-btn {
+            background-color: #080808a5; color: white; outline: none; padding: 10px 20px;
+            display: flex; flex-direction: row; align-items: center; justify-content: center;
+            gap: 10px; border-radius: 50px; border: solid 1px white;
+            font-weight: bold; font-size: 1em; margin: 20px; cursor: pointer; text-decoration: none;
+        }
+        .live-btn:hover { background-color: #222; }
+
+        .dot-blink {
+            height: 10px; width: 10px; background-color: red; border-radius: 50%;
+            animation: blink infinite 2s;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+        /* --- STYLES FOR SPORTS PAGE --- */
+        main {
+             flex-grow: 1; /* Allow main content to grow */
+             padding-top: 100px; /* Space below sticky nav */
+             margin-top: -100px; /* Pull content up */
+        }
+
+        .content-box {
+            padding: 20px 30px;
+            background-color: rgba(9, 6, 82, 0.55); /* Slightly increased opacity */
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422);
+            backdrop-filter: blur(4px); /* Increased blur */
+            margin-bottom: 25px;
+            border: 1px solid rgba(217, 216, 246, 0.2); /* Subtle border */
+        }
+
+        .content-box h2 {
+            text-align: center; color: #ffffff; text-shadow: 0px 0px 10px #fcfcfc;
+            font-size: 1.8em; margin-bottom: 20px; font-weight: lighter;
+            border-bottom: 1px solid #FF9F55; padding-bottom: 10px;
+        }
+
+        .content-box h3 {
+            color: #FF9F55; margin-top: 15px; margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 159, 85, 0.3); padding-bottom: 5px;
+            font-size: 1.3em;
+        }
+
+        .content-box p { line-height: 1.6; font-size: 1em; color: #f0f0f0; }
+        .content-box ul { list-style-position: inside; margin-left: 10px; padding-left: 0;} /* Fix ul padding */
+        .content-box ul li { margin-bottom: 10px; line-height: 1.6; }
+
+        .sports-banner {
+            width: 100%; height: 25vh; /* Adjusted height */ min-height: 150px;
+            background-image: url('../cricket-banner.webp'); /* Default */
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: white;
+            background-blend-mode: multiply; background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .sports-banner h1 {
+            font-size: clamp(2em, 6vw, 4em); /* Responsive font size */
+            text-shadow: 0px 0px 20px #000; font-family: sans-serif;
+            font-weight: bold; text-transform: uppercase;
+        }
+
+        .sports-container {
+            display: flex; flex-direction: row; max-width: 1400px;
+            margin: 30px auto; padding: 0 20px; gap: 25px;
+        }
+
+        .main-content-area { /* Renamed to avoid conflict */
+            flex: 2; /* 2/3 width */
+            min-width: 0; /* Allow shrinking */
+        }
+
+        .sidebar-area { /* Renamed to avoid conflict */
+            flex: 1; /* 1/3 width */
+            min-width: 280px; /* Minimum sidebar width */
+        }
+
+        /* --- Points Table & Team Table --- */
+        .points-table, .team-table {
+            width: 100%; border-collapse: collapse; font-size: 0.9em;
+            /* overflow-x: auto; Removed, handled by wrapper now */
+        }
+        .points-table th, .points-table td, .team-table th, .team-table td {
+            padding: 10px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap; /* Prevent wrapping in tables */
+        }
+        .points-table thead, .team-table thead { background-color: rgba(255, 255, 255, 0.1); }
+        .points-table th, .team-table th { font-weight: bold; color: #FF9F55; }
+        .points-table tbody tr:hover, .team-table tbody tr:hover { background-color: rgba(255, 255, 255, 0.05); }
+        .points-table td:first-child, .team-table td:first-child { font-weight: bold; }
+        .table-wrapper { overflow-x: auto; } /* Wrapper for horizontal scroll */
+
+
+        /* --- Tabbed Team Interface --- */
+        .team-tabs-container { padding: 0; }
+        .tab-bar {
+            display: flex; background-color: rgba(0, 0, 0, 0.3);
+            border-top-left-radius: 8px; border-top-right-radius: 8px;
+            overflow-x: auto; /* Allow tabs to scroll horizontally on mobile */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        .tab-bar::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome/Safari */
+
+        .tab-btn {
+            padding: 15px 20px; cursor: pointer; background-color: transparent;
+            border: none; color: #ddd; font-size: 1em; font-family: sans-serif;
+            border-bottom: 3px solid transparent; transition: all 0.3s ease;
+            white-space: nowrap; /* Prevent tab names wrapping */
+            flex-shrink: 0; /* Prevent tabs shrinking too much */
+        }
+        .tab-btn:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .tab-btn.active { color: white; font-weight: bold; border-bottom-color: #FF9F55; }
+        .tab-content-area { padding: 20px 30px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-content .team-table { font-size: 1em; }
+
+        /* --- Match Timeline Widget --- */
+        .match-list-section h3 { /* Style sections for matches */
+             color: #FF9F55; margin-top: 15px; margin-bottom: 10px;
+             border-bottom: 1px solid rgba(255, 159, 85, 0.3); padding-bottom: 5px;
+             font-size: 1.3em;
+        }
+        .match-item {
+            background-color: rgba(0, 0, 0, 0.2); padding: 10px 15px;
+            border-radius: 5px; margin-bottom: 10px;
+            border-left: 4px solid #4a4a88;
+            display: block; /* Make it a block-level link */
+            text-decoration: none; color: inherit;
+             transition: background-color 0.2s ease;
+        }
+         .match-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+         }
+        .match-item p { margin: 0; font-size: 1em; }
+        .match-item small { font-size: 0.9em; color: #ccc; display: block; margin-top: 3px;}
+        .match-item.live { border-left-color: #f00; animation: blink-border 1.5s infinite; }
+        .match-item.upcoming { border-left-color: #ca8a04; } /* Yellow for upcoming */
+        .match-item.completed { border-left-color: #166534; } /* Green for completed */
+        .match-item.live p strong { color: #FF9F55; }
+
+        @keyframes blink-border { /* Unchanged */ 0%, 100% { box-shadow: 0 0 5px rgba(255, 0, 0, 0); } 50% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.7); } }
+
+        /* --- Live Scoreboard Widget (Sidebar) --- */
+         .live-scoreboard-widget {
+             /* Reuse content-box styles but adjust */
+             padding: 15px 20px;
+             background-color: rgba(255, 0, 0, 0.1); /* Reddish tint for live */
+             border: 1px solid rgba(255, 0, 0, 0.5);
+             box-shadow: 0px 0px 12px rgba(255, 0, 0, 0.4);
+             backdrop-filter: blur(4px);
+             border-radius: 8px;
+             margin-bottom: 25px;
+             text-align: center;
+         }
+          .live-scoreboard-widget h3 {
+             color: #ffcccc; /* Light red */
+             margin-bottom: 10px;
+             font-size: 1.2em;
+             border-bottom: 1px solid rgba(255,0,0,0.3);
+             padding-bottom: 5px;
+          }
+           .live-scoreboard-widget .widget-scoreline {
+             font-size: 1.5em;
+             font-weight: bold;
+             margin-bottom: 8px;
+           }
+           .live-scoreboard-widget .widget-details {
+             font-size: 0.9em;
+             color: #ddd;
+             margin-bottom: 15px;
+           }
+            .live-scoreboard-widget a {
+                display: inline-block;
+                padding: 8px 15px;
+                background-color: rgba(255, 0, 0, 0.5);
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+                transition: background-color 0.2s ease;
+            }
+             .live-scoreboard-widget a:hover {
+                 background-color: rgba(255, 0, 0, 0.8);
+             }
+
+
+        /* --- Footer --- */
+        footer {
+            padding: 40px 0 0;
+            background: linear-gradient(180deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
+            font-family: sans-serif; color: white; text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Add subtle top border */
+            margin-top: auto; /* Push footer to bottom */
+        }
+
+        .footer {
+            display: flex; flex-direction: row; align-items: flex-start;
+            gap: 20px; /* CORRECTED */
+            justify-content: space-between; flex-wrap: wrap; /* Allow wrapping */
+            max-width: 1200px; /* Limit footer width */
+            margin: 0 auto; /* Center footer content */
+            padding: 0 20px; /* Add padding */
+        }
+        .footer div { /* Adjust margin for wrapped items */
+             margin-bottom: 20px;
+         }
+        .footer-left { width: 300px; text-align: center; color: white; flex-shrink: 0;}
+        .footer-right { max-width: 500px; text-align: center; }
+        .footer-right p { line-height: 1.5em; }
+        .footer-left a { text-decoration: none; color: white; }
+        .footer-left ul { list-style: none; text-align: center; padding: 0;}
+        .footer-left ul li { margin: 10px; display: inline-block; }
+        .footer-left ul li a img { height: 20px; }
+        .made-by {
+            text-decoration: none; color: white; margin: 20px auto 0; /* Adjust margin */
+            border-top: dotted 1px white; width: 100%; padding: 15px 0;
+        }
+        .footer-contact { text-align: left; width: 300px; flex-shrink: 0;}
+        .footer-contact ul { list-style: none; padding: 0;}
+         .footer-contact ul li { margin-bottom: 10px;} /* Add spacing */
+        .made-by a { color: white; }
+
+
+        /* --- MEDIA QUERIES --- */
+        @media screen and (max-width: 900px) {
+            nav ul { display: none; }
+            .menu-btn { display: block; } /* Show menu button */
+             main { padding-top: 110px; }
+            .sports-container { flex-direction: column; padding: 0 15px; }
+            .sidebar-area { min-width: unset; } /* Allow sidebar to shrink fully */
+            .sports-banner h1 { font-size: 2.5em; }
+
+             .footer { /* Center items when stacked */
+                 justify-content: center;
+                 text-align: center;
+             }
+             .footer > div { /* Ensure divs take full width when stacked */
+                 width: 100%;
+                 max-width: 500px; /* Limit width */
+                 margin-left: auto;
+                 margin-right: auto;
+             }
+             .footer-contact { text-align: center;}
+             .footer-left ul { text-align: center;}
+
+              .live-btn{
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                z-index: 999;
+            }
+            .lander-cta button{
+                display: block;
+                margin: 20px auto;
+            }
+            .menu-btn{
+                display: inline-block;
+                margin: 30px;
+            }
+.go-down{
+    position: absolute;
+    left: 45%;
+    transform: translateX(-50%);
+    padding: 0;
+    margin: 0;
+}
+        }
+
+        @media screen and (max-width: 500px) {
+            .sports-banner h1 { font-size: 2em; }
+            .content-box { padding: 15px 20px; }
+            .points-table, .team-table { font-size: 0.8em; }
+            .points-table th, .points-table td, .team-table th, .team-table td { padding: 8px 5px; }
+            .tab-btn { font-size: 0.9em; padding: 12px 15px; }
+            .tab-content-area { padding: 15px 20px; }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="../index.html" class="logo"><img src="../mandar-logo.png" alt="Umang Mandar"></a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#tline">Events</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">Updates</a></li>
+                <li><a href="index.html">Sports</a></li> </ul>
+            <a href="#" class="live-btn" id="live-btn" style="display: none;">
+                <div class="dot-blink"></div> <span id="live-btn-text">LIVE</span>
+            </a>
+            <button class="menu-btn" id="menu-btn"><img src="./menu.svg" alt="Menu"></button> </nav>
+    </header>
+
+    <main>
+        <div class="sports-banner" id="sports-banner">
+            <h1 id="sport-title-banner">Sport Name</h1> </div>
+
+        <div class="sports-container">
+
+            <div class="main-content-area">
+<div id="live-scoreboard-widget-placeholder">
+                     <div class="content-box" style="text-align: center; padding: 20px;">
+                         <p style="color: var(--muted); font-size: 0.9em;">Checking for live matches...</p>
+                     </div>
+                 </div>
+                <section class="content-box">
+                    <h2>About the Game</h2>
+                    <p id="sport-description">Loading description...</p>
+                </section>
+
+                <section class="content-box">
+                    <h2>Event Rules</h2>
+                    <ul id="sport-rules">
+                        <li>Loading rules...</li>
+                    </ul>
+                </section>
+
+                 <section class="content-box team-tabs-container">
+                    <div class="tab-bar" id="team-tab-bar">
+                         <p style="padding: 15px; color: var(--muted);">Loading teams...</p>
+                    </div>
+                    <div class="tab-content-area" id="team-tab-content">
+                         <p style="padding: 15px; color: var(--muted); text-align: center;">Select a team tab above.</p>
+                    </div>
+                </section>
+            </div>
+
+            <div class="sidebar-area">
+
+                 
+
+
+                <div class="content-box">
+                    <h2>Point Table</h2> <div class="table-wrapper"> <table class="points-table">
+                            <thead>
+                                <tr>
+                                    <th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>Pts</th>
+                                </tr>
+                            </thead>
+                            <tbody id="points-table-body">
+                                <tr><td colspan="6" style="text-align: center; color: var(--muted);">Loading points...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h2>Match Timeline</h2>
+                    <div class="match-list-section" id="ongoing-matches-section" style="display: none;">
+                        <h3>Ongoing</h3>
+                        <div id="ongoing-matches-list">
+                            <p style="color: var(--muted); font-size: 0.9em;">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="match-list-section" id="upcoming-matches-section" style="display: none;">
+                         <h3>Upcoming</h3>
+                         <div id="upcoming-matches-list">
+                             <p style="color: var(--muted); font-size: 0.9em;">Loading...</p>
+                         </div>
+                    </div>
+                     <div class="match-list-section" id="past-matches-section" style="display: none;">
+                         <h3>Past Matches</h3>
+                         <div id="past-matches-list">
+                              <p style="color: var(--muted); font-size: 0.9em;">Loading...</p>
+                         </div>
+                    </div>
+                    <p id="no-matches-message" style="color: var(--muted); font-size: 0.9em; text-align: center; display: none;">No matches found for this sport.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        // === PASTE YOUR FIREBASE CONFIG HERE ===
+        const firebaseConfig = {
+             apiKey: "AIzaSyAOtc2UrW2hXO4JJK5ZZQcDOfUVbEFmnis",
+             authDomain: "umang-mandar.firebaseapp.com",
+             projectId: "umang-mandar",
+             storageBucket: "umang-mandar.firebasestorage.app",
+             messagingSenderId: "1033556658773",
+             appId: "1:1033556658773:web:ed5c606f77e792136ae2dc",
+             databaseURL: "https://umang-mandar-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
+        // === END OF CONFIG ===
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- Get Sport Name from URL ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const sportName = urlParams.get('sport') || 'cricket'; // Default to football if not specified
+
+        // --- DOM Elements ---
+        const sportTitleBanner = document.getElementById('sport-title-banner');
+        const sportDescription = document.getElementById('sport-description');
+        const sportRules = document.getElementById('sport-rules');
+        const teamTabBar = document.getElementById('team-tab-bar');
+        const teamTabContent = document.getElementById('team-tab-content');
+        const pointsTableBody = document.getElementById('points-table-body');
+        const ongoingMatchesList = document.getElementById('ongoing-matches-list');
+        const upcomingMatchesList = document.getElementById('upcoming-matches-list');
+        const pastMatchesList = document.getElementById('past-matches-list');
+        const liveScoreboardWidgetPlaceholder = document.getElementById('live-scoreboard-widget-placeholder');
+        const liveBtn = document.getElementById('live-btn');
+        const liveBtnText = document.getElementById('live-btn-text');
+        const sportsBanner = document.getElementById('sports-banner');
+        const noMatchesMessage = document.getElementById('no-matches-message');
+        const ongoingSection = document.getElementById('ongoing-matches-section');
+        const upcomingSection = document.getElementById('upcoming-matches-section');
+        const pastSection = document.getElementById('past-matches-section');
+
+
+        // --- Helper: Capitalize First Letter ---
+        function capitalize(str) {
+            if (!str) return '';
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        // --- Set Banner Title and Image (customize image path) ---
+        sportTitleBanner.textContent = capitalize(sportName);
+        document.title = `${capitalize(sportName)} - Umang Mandar`; // Update page title
+        // Optional: Dynamically set banner image based on sport
+        // sportsBanner.style.backgroundImage = `url('./${sportName}-banner.jpg')`;
+
+        // --- Placeholder Data Fetching (Replace with actual content or Firebase) ---
+        const descriptions = {
+             football: "Welcome to the Umang Mandar Football tournament! Football, the world's most popular sport, is a game of passion, strategy, and teamwork. Here at GEC Banka, it's where departments clash for glory on the field. Expect thrilling matches, incredible goals, and a roaring crowd.",
+             cricket: "Get ready for the crack of the bat and thrilling finishes in the Umang Mandar Cricket championship! Teams will battle it out with strategy and skill in this beloved sport.",
+             // Add descriptions for other sports
+             default: "Welcome to the Umang Mandar event for " + capitalize(sportName) + ". Enjoy the competition!"
+        };
+         const rules = {
+             football: [
+                 "Each team: 11 players + 5 substitutes.",
+                 "Match duration: 60 minutes (two 30-min halves) + 10-min break.",
+                 "Standard FIFA rules apply unless specified.",
+                 "Red card = suspension for next match. 2 Yellows = Red.",
+                 "Appropriate footwear required.",
+                 "Referee's decision is final."
+             ],
+             cricket: [
+                 "Teams consist of 11 players.",
+                 "Match format: 20 overs per side (T20).",
+                 "Standard ICC T20 rules apply.",
+                 "One bowler can bowl a maximum of 4 overs.",
+                 "Free hit applies for No Balls.",
+                 "Umpire's decision is final."
+             ],
+             // Add rules for other sports
+              default: ["Follow standard rules.", "Respect officials.", "Play Fair."]
+        };
+        sportDescription.textContent = descriptions[sportName] || descriptions.default;
+        sportRules.innerHTML = (rules[sportName] || rules.default).map(rule => `<li>${rule}</li>`).join('');
+
+
+        // --- Fetch and Display Teams & Members ---
+        const teamsRef = ref(db, `sports/${sportName}/teams`);
+        get(teamsRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const teams = snapshot.val();
+                teamTabBar.innerHTML = ''; // Clear loading message
+                teamTabContent.innerHTML = ''; // Clear loading message
+                let isFirstTab = true;
+
+                for (const teamId in teams) {
+                    const team = teams[teamId];
+                    const teamName = team.name || `Team ${teamId.substring(0, 4)}`;
+
+                    // Create Tab Button
+                    const tabButton = document.createElement('button');
+                    tabButton.classList.add('tab-btn');
+                    tabButton.dataset.tab = teamId; // Use teamId for linking
+                    tabButton.textContent = teamName;
+                    if (isFirstTab) {
+                        tabButton.classList.add('active');
+                    }
+                    teamTabBar.appendChild(tabButton);
+
+                    // Create Tab Content (Member List)
+                    const tabDiv = document.createElement('div');
+                    tabDiv.classList.add('tab-content');
+                    tabDiv.id = teamId; // Match data-tab
+                    if (isFirstTab) {
+                        tabDiv.classList.add('active');
+                    }
+
+                    let tableHTML = `
+                        <div class="table-wrapper">
+                        <table class="team-table">
+                            <thead><tr><th>Member Name</th><th>Role</th></tr></thead>
+                            <tbody>
+                    `;
+                    if (team.members && Object.keys(team.members).length > 0) { // Check if members exist and is not empty
+                         // Convert members object to array to sort if needed, or iterate directly
+                         Object.values(team.members).forEach(member => { // Iterate using Object.values if order doesn't matter
+                            tableHTML += `<tr><td>${member.name || 'N/A'}</td><td>${member.role || 'Player'}</td></tr>`;
+                         });
+                    } else {
+                        tableHTML += `<tr><td colspan="2" style="text-align: center; color: var(--muted);">No members listed</td></tr>`;
+                    }
+                    tableHTML += `</tbody></table></div>`;
+                    tabDiv.innerHTML = tableHTML;
+                    teamTabContent.appendChild(tabDiv);
+
+                    isFirstTab = false; // Only first tab is active initially
+                }
+
+                // Add Tab Switching Logic (using event delegation)
+                teamTabBar.addEventListener('click', (event) => {
+                    if (event.target.classList.contains('tab-btn')) {
+                        const targetTabId = event.target.getAttribute('data-tab');
+
+                        // Deactivate all
+                        teamTabBar.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                        teamTabContent.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                        // Activate clicked
+                        event.target.classList.add('active');
+                        const targetContent = document.getElementById(targetTabId);
+                        if(targetContent) { // Check if element exists
+                             targetContent.classList.add('active');
+                        }
+                    }
+                });
+
+            } else {
+                teamTabBar.innerHTML = '<p style="padding: 15px; color: var(--muted);">No teams found for this sport.</p>';
+                 teamTabContent.innerHTML = ''; // Clear content area too
+            }
+        }).catch(error => {
+            console.error("Error fetching teams:", error);
+            teamTabBar.innerHTML = '<p style="padding: 15px; color: red;">Error loading teams.</p>';
+        });
+
+        // --- Fetch and Display Points Table ---
+        const pointsRef = ref(db, `sports/${sportName}/pointsTable`);
+        get(pointsRef).then((snapshot) => {
+             pointsTableBody.innerHTML = ''; // Clear loading
+             if (snapshot.exists()) {
+                 const pointsData = snapshot.val();
+                 // Convert object to array and sort by points (descending), then name (ascending)
+                 const sortedTeams = Object.entries(pointsData)
+                    .map(([id, data]) => ({ id, ...data }))
+                    .sort((a, b) => (b.points || 0) - (a.points || 0) || (a.name || '').localeCompare(b.name || '')); // Added default name for sorting safety
+
+                 if (sortedTeams.length > 0) {
+                     sortedTeams.forEach(team => {
+                         const row = pointsTableBody.insertRow();
+                         row.innerHTML = `
+                             <td>${team.name || 'Unknown Team'}</td>
+                             <td>${team.played || 0}</td>
+                             <td>${team.won || 0}</td>
+                             <td>${team.drawn || 0}</td>
+                             <td>${team.lost || 0}</td>
+                             <td><strong>${team.points || 0}</strong></td>
+                         `;
+                     });
+                 } else {
+                      pointsTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--muted);">Points table is empty.</td></tr>';
+                 }
+             } else {
+                  pointsTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--muted);">Points table not available.</td></tr>';
+             }
+        }).catch(error => {
+            console.error("Error fetching points table:", error);
+             pointsTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Error loading points.</td></tr>';
+        });
+
+        // --- Fetch and Display Matches ---
+        const matchesRef = ref(db, 'matches');
+        get(matchesRef).then((snapshot) => {
+            ongoingMatchesList.innerHTML = '';
+            upcomingMatchesList.innerHTML = '';
+            pastMatchesList.innerHTML = '';
+            let liveCount = 0;
+            let upcomingCount = 0;
+            let pastCount = 0;
+            let anyMatchesFound = false;
+
+            if (snapshot.exists()) {
+                const matches = snapshot.val();
+                // Get match IDs and sort them (e.g., reverse chronological or by a timestamp if you add one)
+                const matchIds = Object.keys(matches).sort().reverse(); // Simple reverse sort for now
+
+                matchIds.forEach(matchId => {
+                    const match = matches[matchId];
+
+                    // Filter by current sport
+                    if (match.sport !== sportName) return;
+                    anyMatchesFound = true; // Mark that we found at least one match
+
+                    const teamAName = match.teamA?.name || 'Team A';
+                    const teamBName = match.teamB?.name || 'Team B';
+                    const matchTitle = `${teamAName} vs ${teamBName}`;
+                    let scoreInfo = '';
+                    let dateTimeInfo = match.dateTime || ''; // Assuming you might add dateTime later
+
+                    let matchItemHTML = '';
+                    let targetList = null;
+                    let link = '#';
+                    let itemClass = 'match-item';
+
+                    if (match.status === 'live' || match.live?.matchStatus?.includes("Live") || match.live?.matchStatus === "Innings Break") {
+                        itemClass += ' live';
+                        targetList = ongoingMatchesList;
+                        liveCount++;
+                        scoreInfo = `${match.live?.score || 0}-${match.live?.wickets || 0} (${match.live?.overs || 0}.${match.live?.balls || 0} ov)`;
+                        if (match.live?.matchStatus === "Innings Break") scoreInfo = "Innings Break";
+                         if(match.live?.inning === 2 && match.live?.targetScore) scoreInfo += ` | Target: ${match.live.targetScore}`;
+                        link = `../live-scorecard.html?matchId=${matchId}`; // Link to live scorecard
+                    } else if (match.status === 'upcoming') {
+                         itemClass += ' upcoming';
+                         targetList = upcomingMatchesList;
+                         upcomingCount++;
+                         // Link to admin setup page if applicable, otherwise maybe just '#'
+                         link = `setup-cricket.html?sport=${sportName}&matchId=${matchId}`; // Adjust filename if needed
+                         scoreInfo = dateTimeInfo || 'Upcoming';
+                    } else if (match.status === 'completed') {
+                         itemClass += ' completed';
+                         targetList = pastMatchesList;
+                         pastCount++;
+                         scoreInfo = match.result || `Final Score Unavailable`;
+                          // Try to get score from innings data if result missing
+                          if (!match.result) {
+                              if (match.innings?.inning2) {
+                                scoreInfo = `Final: ${match.innings.inning2.score || '?'}/${match.innings.inning2.wickets || '?'}`;
+                              } else if (match.innings?.inning1) {
+                                scoreInfo = `Final: ${match.innings.inning1.score || '?'}/${match.innings.inning1.wickets || '?'}`;
+                              }
+                          }
+                         link = `results.html?matchId=${matchId}`; // Link to results page
+                    }
+
+                    if (targetList) {
+                        matchItemHTML = `
+                            <a href="${link}" class="${itemClass}">
+                                <p><strong>${matchTitle}</strong></p>
+                                <small>${scoreInfo}</small>
+                            </a>`;
+                        // Prepend to show newest first if sorted reverse chronological
+                        targetList.insertAdjacentHTML('beforeend', matchItemHTML); // Or use 'beforeend' for normal order
+                    }
+                });
+            }
+
+            // Update section visibility and messages
+            ongoingSection.style.display = liveCount > 0 ? 'block' : 'none';
+             if (liveCount === 0) ongoingMatchesList.innerHTML = '<p style="color: var(--muted); font-size: 0.9em;">No ongoing matches.</p>';
+
+             upcomingSection.style.display = upcomingCount > 0 ? 'block' : 'none';
+             if (upcomingCount === 0) upcomingMatchesList.innerHTML = '<p style="color: var(--muted); font-size: 0.9em;">No upcoming matches scheduled.</p>';
+
+             pastSection.style.display = pastCount > 0 ? 'block' : 'none';
+             if (pastCount === 0) pastMatchesList.innerHTML = '<p style="color: var(--muted); font-size: 0.9em;">No past match results.</p>';
+
+             // Show the "No matches found" message only if all counts are zero AND we checked Firebase
+             noMatchesMessage.style.display = (!anyMatchesFound && snapshot.exists()) ? 'block' : 'none';
+              if(!snapshot.exists()) { // Handle case where /matches node doesn't exist at all
+                 noMatchesMessage.textContent = 'Match data not available.';
+                 noMatchesMessage.style.display = 'block';
+              }
+
+
+        }).catch(error => {
+            console.error("Error fetching matches:", error);
+            ongoingMatchesList.innerHTML = '<p style="color: red;">Error loading matches.</p>';
+            upcomingMatchesList.innerHTML = '';
+            pastMatchesList.innerHTML = '';
+            noMatchesMessage.textContent = 'Error loading match data.';
+            noMatchesMessage.style.display = 'block';
+        });
+
+
+         // --- Live Scoreboard Widget Logic ---
+         const allMatchesRef = ref(db, 'matches');
+         let liveMatchFound = false; // Flag to track if we found a live match
+         let liveMatchSubscription = null; // To hold the onValue listener
+
+         // Function to update the widget content
+         function updateWidget(matchId, matchData) {
+            const teamAName = matchData.teamA?.name || 'Team A';
+            const teamBName = matchData.teamB?.name || 'Team B';
+            const score = `${matchData.live?.score || 0}-${matchData.live?.wickets || 0}`;
+            const overs = `(${matchData.live?.overs || 0}.${matchData.live?.balls || 0} ov)`;
+            let statusText = matchData.live?.matchStatus === "Innings Break" ? "INNS BREAK" : "LIVE";
+
+            liveScoreboardWidgetPlaceholder.innerHTML = `
+                <div class="live-scoreboard-widget">
+                    <h3><span class="dot-blink"></span> ${statusText}</h3>
+                    <div class="widget-scoreline">${teamAName} vs ${teamBName}</div>
+                    <div class="widget-details">${score} ${overs}</div>
+                    <a href="../live-scorecard.html?matchId=${matchId}">View Scorecard</a>
+                </div>
+            `;
+             // Update main Live button
+             liveBtn.href = `../live-scorecard.html?matchId=${matchId}`;
+             liveBtnText.textContent = 'LIVE SCORE';
+             liveBtn.style.display = 'flex';
+         }
+
+        // Function to show "No Live Match" message
+         function showNoLiveMatch() {
+             liveScoreboardWidgetPlaceholder.innerHTML = `
+                 <div class="content-box" style="text-align: center; padding: 20px;">
+                     <p style="color: var(--muted); font-size: 0.9em;">No ongoing ${capitalize(sportName)} matches right now.</p>
+                 </div>
+             `;
+             liveBtn.style.display = 'none'; // Hide main live button
+         }
+
+        // Listen for changes in all matches to find the relevant live one
+        liveMatchSubscription = onValue(allMatchesRef, (snapshot) => {
+             liveMatchFound = false;
+             let liveMatchId = null;
+             let liveMatchData = null;
+
+             if (snapshot.exists()) {
+                 const matches = snapshot.val();
+                 // Find the *first* match for this sport that is live or in break
+                 for (const matchId in matches) {
+                     const match = matches[matchId];
+                     if (match.sport === sportName && (match.status === 'live' || match.live?.matchStatus === "Innings Break")) {
+                         liveMatchFound = true;
+                         liveMatchId = matchId;
+                         liveMatchData = match;
+                         break;
+                     }
+                 }
+             }
+
+             if (liveMatchFound && liveMatchId && liveMatchData) {
+                 updateWidget(liveMatchId, liveMatchData);
+             } else {
+                 showNoLiveMatch();
+             }
+
+         }, (error) => {
+              console.error("Error listening for live matches:", error);
+              liveScoreboardWidgetPlaceholder.innerHTML = `
+                 <div class="content-box" style="text-align: center; padding: 20px;">
+                     <p style="color: red;">Error loading live score.</p>
+                 </div>
+             `;
+             liveBtn.style.display = 'none';
+         });
+
+
+    </script>
+</body>
+</html>
