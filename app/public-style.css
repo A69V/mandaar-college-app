@@ -228,9 +228,7 @@ footer { /* ... (Your footer styles with gap: 20px; fixed) ... */ margin-top: au
      }
      nav ul#nav-links.mobile-nav-active li { margin: 10px 0; text-align: center; width: 100%;}
      nav ul#nav-links.mobile-nav-active li a { padding: 10px 0; display: block; width: 100%; font-size: 1.2em;}
-     body{
-        display: block;
-     }
+    
 }
 
 @media screen and (max-width: 500px) {
