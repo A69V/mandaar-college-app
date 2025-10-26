@@ -189,10 +189,10 @@
         /* --- Generic Content Box (Used for the page title) --- */
         .content-box {
             padding: 20px 30px;
-            background-color: rgba(9, 6, 82, 0.486);
+            background-color: rgba(9, 6, 82, 0);
             position: relative;
             border-radius: 8px;
-            box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422);
+            /* box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422); */
             backdrop-filter: blur(2px);
             margin-bottom: 25px;
         }
@@ -333,14 +333,15 @@
 <body>
     <header>
         <nav>
-            <a href="#" class="logo"><img src="./mandar-logo.png" alt="Umang Mandar"></a>
+            <a href="./index.html" class="logo"><img src="./mandar-logo.png" alt="Umang Mandar"></a>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#">Event Timeline</a></li>
-                <li><a href="#">Gallery</a></li>
-                <li><a href="#">Updates</a></li>
-                <li><a href="sports-list.html">Sports</a></li>
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./index.html#about">About</a></li>
+                <li><a href="./index.html#timeline">Event Timeline</a></li>
+                <li><a href="./index.html#schedule">Today's Events</a></li>
+                <li><a href="./gallery.html">Gallery</a></li>
+                <!-- <li><a href="#">Updates</a></li> -->
+                <li><a href="./sports.html">Sports</a></li>
             </ul>
             <button class="live-btn" id="live-btn">
                 <div class="dot-blink"></div> <span>LIVE</span>

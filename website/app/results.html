@@ -226,7 +226,7 @@
 
             if (!matchId) {
                 matchTitleEl.textContent = "Error: No Match ID provided.";
-                 if (backLink) backLink.href = 'index.html'; // Fallback
+                 if (backLink) backLink.href = './index.html'; // Fallback
                  if (bottomNavBack) bottomNavBack.href = 'index.html';
                 return;
             }
@@ -237,7 +237,7 @@
 
                 if (!snapshot.exists()) {
                     matchTitleEl.textContent = `Error: Match ${matchId} not found.`;
-                     if (backLink) backLink.href = 'index.html'; // Fallback
+                     if (backLink) backLink.href = './index.html'; // Fallback
                      if (bottomNavBack) bottomNavBack.href = 'index.html';
                     return;
                 }
@@ -261,14 +261,14 @@
                  console.error("Error fetching match data:", error);
                  matchTitleEl.textContent = "Error loading match data.";
                  resultSummaryEl.textContent = "Could not load result.";
-                  if (backLink) backLink.href = 'index.html'; // Fallback
+                  if (backLink) backLink.href = './index.html'; // Fallback
                   if (bottomNavBack) bottomNavBack.href = 'index.html';
             }
 
              // --- Set Back Button Links ---
              const sportHubUrl = `sport-details.html?sport=${sportForBackLink}`; // Use sport from data
              if (backLink) {
-                 backLink.href = sportHubUrl;
+                 backLink.href = './index.html';
                  backLink.style.display = 'inline-block'; // Show the button
              }
              if(bottomNavBack){
