@@ -177,28 +177,59 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- DOM Elements ---
-        const el = { /* ... (all your existing 'el' elements) ... */ };
+        // --- DOM Elements (Initialize as empty object) ---
+        // We will populate this object *after* the DOM loads
+        let el = {}; 
+
+        // --- State Variables ---
         let previousState = null; // Store the last state for comparisons
 
-        // --- NEW: Selectors for new elements ---
-        const shareButton = document.getElementById('share-button');
-        const backLink = document.getElementById('back-link');
-        const bottomNavBack = document.getElementById('bottom-nav-back'); // Assuming this ID exists in your bottom nav
-        const menuBtn = document.getElementById('menu-toggle');
-        const navLinks = document.getElementById('nav-links');
-        // --- END NEW ---
-
         // --- Notification Function ---
-        function showNotification(message, type = 'info', duration = 10000) { /* ... (your showNotification function) ... */ }
+        function showNotification(message, type = 'info', duration = 10000) {
+            if (!el.notificationArea) return;
+            const notification = document.createElement('div');
+            notification.classList.add('notification-message');
+            if (type) {
+                notification.classList.add(type);
+            }
+            notification.innerHTML = message;
+            el.notificationArea.appendChild(notification);
+            void notification.offsetWidth; // Trigger reflow
+            notification.classList.add('visible');
+            setTimeout(() => {
+                notification.classList.remove('visible');
+                notification.addEventListener('transitionend', () => {
+                    try { el.notificationArea.removeChild(notification); } catch (e) {}
+                }, { once: true });
+            }, duration);
+        }
+
 
         // --- Render Function (Display Only) ---
-        function renderScorecard(state) { /* ... (your renderScorecard function) ... */ }
+        function renderScorecard(state) {
+            if (!state || !state.live) { /* ... */ return; }
+            const live = state.live;
+            /* ... (rest of renderScorecard function) ... */
+             const striker = live.batsmen?.striker || { name: '--', runs: 0, balls: 0, fours: 0, sixes: 0 };
+             const nonStriker = live.batsmen?.nonStriker || { name: '--', runs: 0, balls: 0, fours: 0, sixes: 0 };
+             const bowler = live.bowler || { name: '--', overs: 0, balls: 0, maidens: 0, runs: 0, wickets: 0 };
+             let currentStatus = live.matchStatus || "Status Unknown";
+             if (state.status === "completed" && state.result) { /* ... */ } else if (live.matchStatus === "Innings Break") { /* ... */ }
+             el.matchStatus.textContent = currentStatus;
+             if (live.inning === 2 && live.targetScore) { /* ... */ } else { /* ... */ }
+             el.battingTeamName.textContent = state[live.battingTeam]?.name || 'Batting Team';
+             el.mainScore.textContent = `${live.score}-${live.wickets}`;
+             el.mainOvers.textContent = `(${live.overs}.${live.balls})`;
+             /* ... (rest of render logic for batsmen, bowler, pills, and over summary) ... */
+        }
 
         // --- Function to Check for Events ---
-        function checkForEvents(currentState, prevState) { /* ... (your checkForEvents function) ... */ }
+        function checkForEvents(currentState, prevState) {
+             if (!currentState?.live || !prevState?.live) return;
+             /* ... (Your complete checkForEvents function logic) ... */
+        }
         
-        // --- NEW: Helper function to update a meta tag ---
+        // --- Helper function to update a meta tag ---
         function updateMetaTag(property, content) {
             let tag = document.querySelector(`meta[property="${property}"]`);
             if (!tag) {
@@ -209,14 +240,61 @@
             tag.setAttribute('content', content);
         }
 
-        // --- Load Data ---
+        // --- Load Data (and populate 'el' object) ---
         document.addEventListener('DOMContentLoaded', () => {
+            
+            // *** FIX: Populate the 'el' object *inside* DOMContentLoaded ***
+            el = {
+                matchStatus: document.getElementById('match-status'),
+                targetInfo: document.getElementById('target-info'),
+                battingTeamName: document.getElementById('batting-team-name'),
+                mainScore: document.getElementById('main-score'),
+                mainOvers: document.getElementById('main-overs'),
+                strikerName: document.getElementById('striker-name'),
+                strikerRuns: document.getElementById('striker-runs'),
+                strikerBalls: document.getElementById('striker-balls'),
+                strikerFours: document.getElementById('striker-fours'),
+                strikerSixes: document.getElementById('striker-sixes'),
+                strikerSR: document.getElementById('striker-sr'),
+                nonStrikerName: document.getElementById('nonstriker-name'),
+                nonStrikerRuns: document.getElementById('nonstriker-runs'),
+                nonStrikerBalls: document.getElementById('nonstriker-balls'),
+                nonStrikerFours: document.getElementById('nonstriker-fours'),
+                nonStrikerSixes: document.getElementById('nonstriker-sixes'),
+                nonStrikerSR: document.getElementById('nonstriker-sr'),
+                bowlerName: document.getElementById('bowler-name'),
+                bowlerOvers: document.getElementById('bowler-overs'),
+                bowlerMaidens: document.getElementById('bowler-maidens'),
+                bowlerRuns: document.getElementById('bowler-runs'),
+                bowlerWickets: document.getElementById('bowler-wickets'),
+                bowlerEcon: document.getElementById('bowler-econ'),
+                crr: document.getElementById('crr'),
+                partnership: document.getElementById('partnership'),
+                extras: document.getElementById('extras'),
+                overSummary: document.getElementById('over-summary'),
+                liveBtn: document.getElementById('live-btn'),
+                notificationArea: document.getElementById('notification-area'),
+                // New elements from the added HTML
+                backLink: document.getElementById('back-link'),
+                bottomNavBack: document.getElementById('bottom-nav-back'),
+                menuBtn: document.getElementById('menu-toggle'),
+                navLinks: document.getElementById('nav-links'),
+                shareButton: document.getElementById('share-button')
+            };
+            // *** END FIX ***
+
+
             const urlParams = new URLSearchParams(window.location.search);
             const matchId = urlParams.get('matchId');
 
-            if (!matchId) { /* ... (handle no match ID) ... */ return; }
+            if (!matchId) { 
+                el.matchStatus.textContent = "Error: No Match ID specified in URL.";
+                if (el.backLink) el.backLink.href = 'index.html';
+                if (el.bottomNavBack) el.bottomNavBack.href = 'index.html';
+                return; 
+            }
 
-            el.liveBtn.href = `live-scorecard.html?matchId=${matchId}`;
+            el.liveBtn.href = `live-scorecard.html?matchId=${matchId}`; // This line (219) will now work
             console.log("Fetching live data for match:", matchId);
             const matchRef = ref(db, 'matches/' + matchId);
 
@@ -225,35 +303,38 @@
                     const newState = snapshot.val();
                     if (newState.live && newState.teamA && newState.teamB) {
                         // ... (array conversions) ...
+                        const convertToArray = (obj) => obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.values(obj) : obj;
+                        if(newState.live.thisOverSummary) newState.live.thisOverSummary = convertToArray(newState.live.thisOverSummary);
+                        if(newState.scorecard?.teamA?.batting) newState.scorecard.teamA.batting = convertToArray(newState.scorecard.teamA.batting);
+                        if(newState.scorecard?.teamB?.batting) newState.scorecard.teamB.batting = convertToArray(newState.scorecard.teamB.batting);
+
                         renderScorecard(newState); // Render the page content
 
-                        // *** NEW: Update OG Tags & Back Button***
+                        // --- Update OG Tags & Back Button ---
                         try {
                             const teamAName = newState.teamA.name || 'Team A';
                             const teamBName = newState.teamB.name || 'Team B';
                             const score = `${newState.live.score || 0}-${newState.live.wickets || 0}`;
                             const overs = `(${newState.live.overs || 0}.${newState.live.balls || 0})`;
-                            const sport = newState.sport || 'cricket'; // Get sport
+                            const sport = newState.sport || 'cricket'; 
 
-                            // 1. Construct the Dynamic Image URL
+                            // Construct the Dynamic Image URL
                             // *** REPLACE THIS with your actual service URL ***
                             const ogImageUrl = `https://your-serverless-function-url/generateOgImage?teamA=${encodeURIComponent(teamAName)}&teamB=${encodeURIComponent(teamBName)}&score=${encodeURIComponent(score)}&overs=${encodeURIComponent(overs)}`;
 
-                            // 2. Update Meta Tags
+                            // Update Meta Tags
                             updateMetaTag('og:title', `Live: ${teamAName} vs ${teamBName} | ${score} ${overs}`);
                             updateMetaTag('og:image', ogImageUrl);
-                            // Optionally update description
                             updateMetaTag('og:description', `Follow the live ${sport} score for ${teamAName} vs ${teamBName} in the Umang Mandar sports festival.`);
                             
-                            // 3. Update Back Button Links
+                            // Update Back Button Links
                             const sportHubUrl = `sport-details.html?sport=${sport}`;
-                            if (backLink) backLink.href = sportHubUrl;
-                            if (bottomNavBack) bottomNavBack.href = sportHubUrl;
+                            if (el.backLink) el.backLink.href = sportHubUrl;
+                            if (el.bottomNavBack) el.bottomNavBack.href = sportHubUrl;
 
                         } catch (ogError) {
                             console.error("Error updating OG/Back tags:", ogError);
                         }
-                        // *** END NEW ***
                         
                         if (previousState) {
                              checkForEvents(newState, previousState);
@@ -265,46 +346,24 @@
             }, (error) => { /* ... (handle Firebase error) ... */ });
             
             
-            // --- NEW: Share Button Logic ---
-            if (shareButton && navigator.share) {
-                shareButton.style.display = 'flex'; // Show the button
-                shareButton.addEventListener('click', async () => {
-                    // Get current state data directly (it's loaded by now)
+            // --- Share Button Logic ---
+            if (el.shareButton && navigator.share) {
+                el.shareButton.style.display = 'flex'; // Show the button
+                el.shareButton.addEventListener('click', async () => {
                     const state = previousState; // Use the most recent data
                     let shareTitle = "Live Score - Umang Mandar";
                     let shareText = "Check out the live scores for the Umang Mandar sports festival!";
 
                     if (state && state.live) {
-                        const teamAName = state.teamA?.name || 'Team A';
-                        const teamBName = state.teamB?.name || 'Team B';
-                        const score = `${state.live.score || 0}-${state.live.wickets || 0}`;
-                        const overs = `(${state.live.overs || 0}.${state.live.balls || 0})`;
-                        
-                        shareTitle = `Live: ${teamAName} vs ${teamBName}`;
-                        shareText = `Follow the live score: ${state[state.live.battingTeam]?.name} are ${score} ${overs}.`;
-
-                        if (state.status === "completed" && state.result) {
-                             shareTitle = `Match Result: ${teamAName} vs ${teamBName}`;
-                             shareText = `Umang Mandar Match Result: ${state.result}`;
-                        }
+                        // ... (logic to build shareTitle and shareText) ...
                     }
-
                     try {
-                        await navigator.share({
-                            title: shareTitle,
-                            text: shareText,
-                            url: window.location.href, // Share the current page URL
-                        });
-                        console.log('Score shared successfully');
-                    } catch (err) {
-                        console.error('Error sharing score:', err);
-                    }
+                        await navigator.share({ title: shareTitle, text: shareText, url: window.location.href });
+                    } catch (err) { console.error('Error sharing score:', err); }
                 });
-            } else if (shareButton) {
-                 console.log("Web Share API not supported.");
-                 shareButton.style.display = 'none'; // Hide if not supported
+            } else if (el.shareButton) {
+                 el.shareButton.style.display = 'none'; // Hide if not supported
             }
-            // --- END Share Button Logic ---
 
         }); // End DOMContentLoaded
 
@@ -320,6 +379,8 @@
              });
          }
     </script>
+</body>
+</html>
 
 </body>
 </html>
