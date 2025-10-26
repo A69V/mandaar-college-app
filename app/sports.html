@@ -7,19 +7,27 @@
     <link rel="stylesheet" href="public-style.css"> <style>
         /* Additional styles specific to sports grid */
         .sports-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+            display: flex; 
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
             gap: 20px;
             padding: 20px 0; /* Add padding around grid */
         }
         .sport-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             background-color: var(--card-bg, rgba(9, 6, 82, 0.55));
             border-radius: var(--radius, 8px);
-            padding: 30px 20px;
+            width: 130px;
+            height: 100px;
             text-align: center;
             text-decoration: none;
             color: var(--text-light, white);
-            font-size: 1.3em;
+            font-size: 1em;
             font-weight: 600;
             border: var(--card-border, 1px solid rgba(217, 216, 246, 0.2));
             box-shadow: var(--card-shadow, 0px 0px 12px rgba(217, 216, 246, 0.422));
@@ -58,25 +66,22 @@
             <p style="text-align: center; margin-bottom: 30px; color: var(--text-muted);">Click on a sport to see details, teams, schedule, and points.</p>
 
             <div class="sports-grid">
-                <a href="sport-details.html?sport=cricket" class="sport-card">🏏 Cricket</a>
-                <a href="sport-details.html?sport=football" class="sport-card">⚽ Football</a>
-                <a href="sport-details.html?sport=badminton" class="sport-card">🏸 Badminton</a>
-                <a href="sport-details.html?sport=tabletennis" class="sport-card">🏓 Table Tennis</a>
-                <a href="sport-details.html?sport=volleyball" class="sport-card">🏐 Volleyball</a>
-                <a href="sport-details.html?sport=kabaddi" class="sport-card">🏃‍♂️ Kabaddi</a>
-                <a href="sport-details.html?sport=shotput" class="sport-card">🏋️ Shot Put</a>
-                <a href="sport-details.html?sport=javelin" class="sport-card">🏹 Javelin</a>
-                <a href="sport-details.html?sport=chess" class="sport-card">♟️ Chess</a>
-                <a href="sport-details.html?sport=carrom" class="sport-card">🎯 Carrom</a>
-                <a href="sport-details.html?sport=athletics" class="sport-card">👟 Athletics</a>
+                <a href="sport-details.html?sport=cricket" class="sport-card"><span>🏏</span> Cricket</a>
+                <a href="sport-details.html?sport=football" class="sport-card"><span>⚽</span> Football</a>
+                <a href="sport-details.html?sport=badminton" class="sport-card"><span>🏸</span> Badminton</a>
+                <a href="sport-details.html?sport=tabletennis" class="sport-card"><span>🏓</span> Table Tennis</a>
+                <a href="sport-details.html?sport=volleyball" class="sport-card"><span>🏐</span> Volleyball</a>
+                <a href="sport-details.html?sport=kabaddi" class="sport-card"><span>🏃‍♂️</span> Kabaddi</a>
+                <a href="sport-details.html?sport=shotput" class="sport-card"><span>🏋️</span> Shot Put</a>
+                <a href="sport-details.html?sport=javelin" class="sport-card"><span>🏹</span> Javelin</a>
+                <a href="sport-details.html?sport=chess" class="sport-card"><span>♟️</span> Chess</a>
+                <a href="sport-details.html?sport=carrom" class="sport-card"><span>🎯</span> Carrom</a>
+                <a href="sport-details.html?sport=athletics" class="sport-card"><span>👟</span> Athletics</a>
                 </div>
         </section>
     </main>
 
-    <footer id="contact">
-        <div class="footer"> </div>
-        <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a></p>
-    </footer>
+    
 
     <nav class="bottom-nav">
     <ul>

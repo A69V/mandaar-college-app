@@ -35,6 +35,7 @@
             max-width: 100%;
             min-width: 250px;
             max-height: 200px;
+            width: 100%;
             height: 100px;
             margin: auto;
             display: flex;
@@ -399,8 +400,27 @@ nav ul li a{
             .about-text p{
                 margin-top: 20px;
             }
+            .menu-btn{
+                z-index: 1000;
+            }
             nav ul{
-                display: none;
+                position: fixed;
+                flex-direction: column;
+                background: black;
+                background: linear-gradient(90deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
+                top: 0px;
+                padding: 0;
+                height: 100%;
+                right: 0;
+                width: 0px;
+                z-index: 999;
+                justify-content: flex-start;
+                align-items: flex-end;
+                overflow: hidden;
+            }
+            .closed-nav-pane{
+                width: 100%;
+                padding: 100px 30px 0 50px;
             }
             .live-btn{
                 position: fixed;
@@ -746,17 +766,17 @@ nav ul li a{
 
 <body>
     <header>
-        <nav>
+        <nav id="thenav">
             <a href="#" class="logo"><img src="./mandar-logo.png" alt="Umang Mandar"></a>
-            <ul>
-                <li><a href="#">Home</a></li>
+            <ul id="nav-panel">
+                <li><a href="/">Home</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#">Event Timeline</a></li>
-                <li><a href="#">Gallery</a></li>
-                <li><a href="#">Updates</a></li>
-                <li><a href="#">Sports</a></li>
+                <li><a href="#timeline">Event Timeline</a></li>
+                <li><a href="./gallery.html">Gallery</a></li>
+                <!-- <li><a href="">Updates</a></li> -->
+                <li><a href="./sports.html">Sports</a></li>
             </ul>
-<a href="./scoreboard.html?matchId=cse-vs-civil-1" class="live-btn" id="live-btn"><div class="dot-blink"></div> <span>LIVE SCORE</span></a>
+<a href="./scoreboard.html?matchId=cse-vs-civil-1" class="live-btn" id="live-btn"><div class="dot-blink"></div> <span>LIVE</span></a>
 
             <button class="menu-btn" id="menu-btn"><img src="./menu.svg" alt=""></button>
         </nav>
@@ -831,17 +851,27 @@ nav ul li a{
                      </table>
                  </div>
                   
-                  <p style="text-align:center; margin-top: 15px;"><a href="#" style="color: #FF9F55; font-weight: bold;">View all Events</a></p>
+                  <p style="text-align:center; margin-top: 15px;"><a href="./events.html" style="color: #FF9F55; font-weight: bold;">View all Events</a></p>
                    <p style="text-align: center; margin-top: 15px; font-size: 0.9em; color:#ccc;">*Schedule subject to change.</p>
               </div>
          </section>
-         <section class="content-section">
+         <!-- <section class="content-section" id="results">
+              <div class="content-box-style">
+                 <h2>Recent Results</h2>
+                  <ul id="recent-results-list">
+                      <li style="color: #9aa6b2;">Loading recent results...</li>
+                  </ul>
+                   <p style="text-align:center; margin-top: 15px;"><a href="#" style="color: #FF9F55; font-weight: bold;">View All Results</a></p>
+              </div>
+         </section> -->
+
+         <section class="content-section" id="timeline">
             <div class="t-line" id="tline">
             <h2 style="text-align: center; color: #ffffff; text-shadow: 0px 0px 10px #fcfcfc;
     font-size: 2em; margin-bottom: 25px; font-weight: lighter;
     border-bottom: 1px solid #FF9F55; padding-bottom: 10px;">Event Timeline</h2>
 
-            <div class="timeline">
+            <div class="timeline" >
 
                 <div class="timeline-container">
                     <div class="timeline-content">
@@ -1075,6 +1105,27 @@ display: flex;
     <script type="module">
         // ... Your existing Firebase script ...
     </script>
+    <script>
+        document.getElementById("menu-btn").addEventListener('click', function(){
+            
+document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
+        })
+        document.getElementById('nav-panel').addEventListener('click', function(){
+            document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
+
+        })
+        window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+    document.getElementById("thenav").style.position = "fixed";
+    // document.getElementById("logo").style.fontSize = "25px";
+  } else {
+    document.getElementById("thenav").style.position = "static";
+    // document.getElementById("logo").style.fontSize = "35px";
+  }
+}
+    </script>
      <script>
         // install-pwa.js
 
@@ -1082,7 +1133,7 @@ let deferredPrompt = null;
 const installPromptContainer = document.getElementById('install-prompt');
 const installButton = document.getElementById('btn-install');
 const cancelButton = document.getElementById('btn-cancel-install');
-
+const recentResultsList = document.getElementById('recent-results-list'); // Results list
 // --- Check localStorage ---
 // Don't show the prompt if 'pwaInstalled' or 'pwaInstallDismissed' is true in localStorage
 const isInstalled = localStorage.getItem('pwaInstalled') === 'true';
