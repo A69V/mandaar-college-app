@@ -22,19 +22,19 @@ header {
             width: 100%;
              position: sticky; top: 0; z-index: 1000; /* Added */
              border: none;
-             background: linear-gradient(180deg, rgba(8, 8, 8, 1) 40%, rgba(9, 9, 9, 0.7) 80%, rgba(0, 0, 0, 0) 100%); /* Added */
-        }
+/* background: linear-gradient(180deg, var(--bg-gradient-start) 40%, var(--bg-gradient-mid) 60%, rgba(0, 0, 0, 0) 100%);  */
+       }
 
         nav {
             max-width: 1200px; /* Adjusted */
             margin: 0 auto; /* Adjusted */
             padding: 0 20px; /* Adjusted */
-            height: 100px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             /* background moved to header */
-            background: linear-gradient(180deg, rgba(8, 8, 8, 1) 40%, rgba(9, 9, 9, 0.7) 80%, rgba(0, 0, 0, 0) 100%); /* Added */
+            /* background: linear-gradient(180deg, rgba(8, 8, 8, 1) 40%, rgba(9, 9, 9, 0.7) 80%, rgba(0, 0, 0, 0) 100%); */
         }
         nav ul{
             list-style: none;
@@ -55,12 +55,9 @@ header {
         }
          nav ul li a:hover { color: #FF9F55; } /* Added */
 
-        .logo img {
-            height: 50px;
-        }
 
         .logo {
-            margin: 20px 0; /* Adjusted */
+            margin: 0; /* Adjusted */
         }
 
         .menu-btn {
@@ -106,7 +103,7 @@ header {
 
          /* --- Base Section Styles (for new sections) --- */
          .content-section { padding: 30px 20px; margin: 30px auto; max-width: 1100px; }
-         .content-box-style { padding: 20px 30px; background-color: rgba(9, 6, 82, 0.55); position: relative; border-radius: 8px; box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422); backdrop-filter: blur(4px); border: 1px solid rgba(217, 216, 246, 0.2); color: white; margin-bottom: 30px;}
+         .content-box-style { padding: 20px 30px; background-color: rgba(9, 6, 82, 0.338); position: relative; border-radius: 8px; box-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422); backdrop-filter: blur(4px); border: 1px solid rgba(217, 216, 246, 0.2); color: white; margin-bottom: 30px;}
          .content-box-style h2 { text-align: center; color: #ffffff; text-shadow: 0px 0px 10px #fcfcfc; font-size: 2em; margin-bottom: 25px; font-weight: lighter; border-bottom: 1px solid #FF9F55; padding-bottom: 10px;}
          .content-box-style h3 { color: #FF9F55; margin-top: 15px; margin-bottom: 10px; padding-bottom: 5px; font-size: 1.3em; font-weight: normal; border-bottom: 1px solid rgba(255, 159, 85, 0.3); }
          .content-box-style p { line-height: 1.6; font-size: 1em; color: #f0f0f0; margin-bottom: 10px;}
@@ -185,7 +182,7 @@ header {
              nav ul#nav-links { display: none; }
              .menu-btn { display: block; }
              main { padding-top: 20px; }
-             header { background: linear-gradient(180deg, rgba(8, 8, 8, 1) 40%, rgba(9, 9, 9, 0.7) 80%, rgba(0, 0, 0, 0) 100%); /* Added */}
+             /* header { background: linear-gradient(180deg, rgba(8, 8, 8, 1) 40%, rgba(9, 9, 9, 0.7) 80%, rgba(0, 0, 0, 0) 100%); Added} */
 
              .lander-left, .lander-right { display: none; }
              .lander-center p.festival-title { font-size: clamp(1.5em, 5vw, 1.8em); }
@@ -234,13 +231,15 @@ header {
 
 <body>
     <header>
-        <nav>
-            <a href="#" class="logo"><img src="../mandar-logo.png" alt="Umang Mandar"></a>
-            <ul id="nav-links"> <li><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#tline">Timeline</a></li>
-                <li><a href="#gallery">Gallery</a></li> <li><a href="#schedule">Schedule</a></li> <li><a href="sports.html">Sports</a></li> </ul>
-            <a href="#" class="live-btn" id="live-btn">
+        <nav class="top-nav">
+             <a href="index.html" class="logo"><img src="../mandar-logo.png" alt="Umang Mandar"></a>
+            <ul id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="sports.html">Sports</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li> <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+             <a href="#" class="live-btn" id="live-btn">
                 <div class="dot-blink"></div> <span id="live-btn-text">LIVE</span>
             </a>
            
@@ -248,7 +247,7 @@ header {
     </header>
 
     <main>
-<section class="content-section">
+<section class="content-section" style="margin: 5px; padding: 0;">
     <h1 style="text-align: center;" id="greeting-heading"></h1>
 </section>
         
@@ -302,7 +301,15 @@ header {
 
 
     </main>
-
+<style>
+    .bottom-nav{
+        height: auto;
+        padding: 0;
+    }
+    .bottom-nav ul li{
+          margin: 0 15px;
+    }
+</style>
     <footer id="contact">
         <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a> | © 2025 GEC Banka Sports Club</p>
     </footer>

@@ -37,7 +37,13 @@
          .timeline-container:nth-child(even) .timeline-content::before { border-right-color: rgba(255,255,255,0.7); /* Match border */ }
          /* Timeline dot colors */
          .timeline-container::after { border-color: var(--accent-orange); box-shadow: 0 0 10px var(--accent-orange); }
-
+.content-box{
+    background-color: rgba(0,0,0,0);
+    box-shadow: none;
+}
+header{
+    border: none;
+}
      </style>
 </head>
 <body>
@@ -60,7 +66,7 @@
     </header>
 
     <main>
-         <div class="content-box t-line" id="tline" style="background: none; border: none; box-shadow: none; backdrop-filter: none;"> <h2 style="color:white; text-shadow: 0 0 10px white;">Event Timeline</h2> <div class="timeline">
+         <div class="content-box t-line" id="tline" > <h2 style="color:white; text-shadow: 0 0 10px white;">Event Timeline</h2> <div class="timeline">
                 <div class="timeline-container"> <div class="timeline-content"> <small>Day 1: 9:00 AM</small> <h3>Opening Ceremony</h3> <p>...</p> </div> </div>
                 <div class="timeline-container"> <div class="timeline-content"> <small>Day 1: 11:00 AM</small> <h3>Football Match: Finals</h3> <p>...</p> </div> </div>
                 <div class="timeline-container"> <div class="timeline-content"> <small>Day 1: 2:00 PM</small> <h3>Volleyball & Badminton</h3> <p>...</p> </div> </div>

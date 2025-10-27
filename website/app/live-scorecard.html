@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Scorecard - Umang Mandar</title>
+    <link rel="stylesheet" href="public-style.css">
     <style>
         /* --- Basic Styles from your UI --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -21,9 +22,9 @@
             display: flex;
             flex-direction: column;
         }
-        header { width: 100%; }
+        header { width: 100%; border: none;}
         nav {
-            max-width: 100%; min-width: 250px; max-height: 200px; height: 100px;
+            max-width: 100%; min-width: 250px; max-height: 200px; height: 80px;
             margin: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between;
             background: linear-gradient(180deg, rgba(8, 8, 8, 1) 2%, rgba(9, 9, 9, 0.62) 63%, rgba(10, 10, 10, 0.46) 79%, rgba(0, 0, 0, 0) 100%);
             position: sticky; /* Make nav sticky */
@@ -36,7 +37,7 @@
         .logo { margin: 20px; }
         .logo img { height: 50px; }
         .live-btn { /* Style from your UI */
-            background-color: #080808a5; color: white; outline: none; padding: 10px 20px;
+            background-color: #080808a5; color: white; outline: none;
             display: flex; flex-direction: row; align-items: center; justify-content: center;
             gap: 10px; border-radius: 50px; border: solid 1px white;
             font-weight: bold; font-size: 1em; margin: 20px; cursor: pointer; text-decoration: none; /* Added */
@@ -293,34 +294,7 @@
     <footer>
         <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a> | © 2025 GEC Banka Sports Club</p>
     </footer>
-    <style>
-
-        .bottom-nav{
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #000;
-        }
-        .bottom-nav ul{
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            list-style: none;
-            align-self: center;
-            margin-left: 10px;
-        }
-        .bottom-nav ul li a{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .bottom-nav ul li a{
-padding: 20px;
-color: white;
-text-decoration: none;
-        }
-    </style>
+    
 <div class="bottom-nav">
     <ul>
         <li>
