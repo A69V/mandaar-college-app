@@ -1,0 +1,259 @@
+/* public-style.css */
+/* --- Base & Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-dark: #080808;
+    --bg-gradient-start: rgba(8, 8, 8, 1);
+    --bg-gradient-mid: rgba(9, 9, 9, 0.62);
+    --bg-gradient-end: rgba(10, 10, 10, 0.46);
+    --text-light: #ffffff;
+    --text-muted: #9aa6b2;
+    --accent-orange: #FF9F55;
+    --accent-blue: #06b6d4; /* Borrowed from scorer */
+    --card-bg: rgba(9, 6, 82, 0.55); /* From timeline */
+    --card-shadow: 0px 0px 12px rgba(217, 216, 246, 0.422); /* From timeline */
+    --card-border: 1px solid rgba(217, 216, 246, 0.2);
+    --live-red: #f43f5e;
+    --completed-green: #166534;
+    --upcoming-yellow: #ca8a04;
+    --radius: 8px;
+    --pad: 15px 20px;
+    font-family: sans-serif; /* From landing page */
+}
+
+body {
+    background-color: rgba(0, 0, 0, 0.647);
+    background-image: url("../background.gif"); /* Ensure path is correct */
+    background-blend-mode: multiply;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow-x: hidden;
+    color: var(--text-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Changed from row */
+    line-height: 1.6;
+    /* display: none; */
+}
+
+a { text-decoration: none; color: var(--accent-orange); }
+a:hover { color: white; }
+
+/* --- Header & Top Navigation --- */
+header {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: linear-gradient(180deg, var(--bg-gradient-start) 40%, var(--bg-gradient-mid) 80%, rgba(0, 0, 0, 0) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+}
+
+nav.top-nav {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo img { height: 45px; vertical-align: middle; }
+.logo { margin-right: 20px; } /* Space between logo and links */
+
+
+nav.top-nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+nav.top-nav ul li { margin: 0 15px; }
+nav.top-nav ul li a { color: #ccc; font-size: 1.1em; font-weight: 500; transition: color 0.2s ease; }
+nav.top-nav ul li a:hover { color: white; }
+
+.live-btn {
+    background-color: rgba(0, 0, 0, 0.545); color: white; outline: none; padding: 8px 18px;
+    display: flex; align-items: center; gap: 8px; border-radius: 50px;
+    border: solid 2px rgb(255, 255, 255); font-weight: bold; font-size: 0.9em;
+    cursor: pointer; text-decoration: none; transition: background-color 0.2s ease;
+    margin-left: 20px; /* Space it from nav links */
+}
+/* .live-btn:hover { background-color: rgba(255, 0, 0, 0.8);  } */
+.dot-blink { height: 8px; width: 8px; background-color: rgb(254, 2, 2); border-radius: 50%; animation: blink infinite 1.5s ease-in-out; }
+@keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+
+.menu-toggle-btn { /* Hamburger for mobile */
+    background: none; border: none; cursor: pointer; display: none; padding: 10px;
+}
+.menu-toggle-btn svg { width: 28px; height: 28px; fill: white; }
+
+/* --- Main Content Area --- */
+main {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 1200px; /* Limit content width */
+    margin: 20px auto; /* Add top/bottom margin and center */
+    padding: 0 20px; /* Horizontal padding */
+}
+
+/* --- Content Box Style (Applied to sections) --- */
+.content-box {
+    padding: var(--pad);
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(4px);
+    border: var(--card-border);
+    margin-bottom: 30px;
+}
+.content-box{
+    background-color: rgba(0,0,0,0);
+    box-shadow: none;
+}
+.content-box h2 {
+    text-align: center; color: var(--accent-blue); /* Use blue accent */
+    font-size: 1.6em; margin-bottom: 20px; font-weight: 600;
+    border-bottom: 1px solid rgba(6, 182, 212, 0.3); padding-bottom: 10px;
+    text-shadow: none;
+}
+.content-box h3 {
+    color: var(--accent-orange); margin-top: 20px; margin-bottom: 10px;
+    padding-bottom: 5px; font-size: 1.25em; font-weight: 600;
+    border-bottom: 1px solid rgba(255, 159, 85, 0.2);
+}
+.content-box p { color: #cbd5e1; margin-bottom: 10px; font-size: 0.95em;}
+.content-box ul { list-style-position: inside; margin-left: 0; padding-left: 10px; }
+.content-box ul li { margin-bottom: 8px; color: #cbd5e1; font-size: 0.95em;}
+.table-wrapper { overflow-x: auto; margin-top: 15px; }
+.content-box table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+.content-box th, .content-box td { padding: 10px 8px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.15); white-space: nowrap; }
+.content-box thead { background-color: rgba(255, 255, 255, 0.05); }
+.content-box th { font-weight: 600; color: var(--accent-orange); font-size: 0.9em; text-transform: uppercase;}
+.content-box tbody tr:hover { background-color: rgba(255, 255, 255, 0.04); }
+.content-box td:first-child { font-weight: 500; color: #fff;}
+
+/* Specific styles for schedule/results items */
+.schedule-item, .result-item {
+    background-color: rgba(0, 0, 0, 0.2); padding: 10px 15px;
+    border-radius: 5px; margin-bottom: 10px;
+    border-left: 4px solid var(--accent-blue); /* Blue default */
+    display: block; text-decoration: none; color: #cbd5e1;
+    transition: background-color 0.2s ease;
+}
+.schedule-item:hover, .result-item:hover { background-color: rgba(255, 255, 255, 0.05); }
+.schedule-item p, .result-item p { margin: 0; font-size: 1em; color: #fff; font-weight: 500;}
+.schedule-item small, .result-item small { font-size: 0.85em; color: var(--text-muted); display: block; margin-top: 4px;}
+.schedule-item.live { border-left-color: var(--live-red); animation: blink-border 1.5s infinite alternate; }
+.schedule-item.live p strong { color: var(--accent-orange); }
+.result-item strong { color: var(--accent-orange); } /* Highlight winner/score */
+
+/* Gallery */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
+.gallery-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 6px; border: 2px solid rgba(255, 255, 255, 0.1); transition: transform 0.2s ease; cursor: pointer; }
+.gallery-grid img:hover { transform: scale(1.05); }
+
+/* Back Button */
+.back-button-container { margin-bottom: 20px; }
+.back-button {
+    display: inline-block; /* Allow alignment */
+    background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.15);
+    color: var(--text-muted); padding: 8px 15px; border-radius: 6px;
+    text-decoration: none; font-size: 0.9em; font-weight: 600; transition: all 0.2s ease;
+}
+.back-button:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
+/* Share Button (on scorecard) */
+.share-button {
+    background: var(--accent-blue); color: white; border: none; padding: 8px 15px;
+    border-radius: 6px; font-size: 0.9em; font-weight: 600; cursor: pointer;
+    margin-left: 10px; transition: background-color 0.2s ease;
+}
+.share-button:hover { background-color: #0891b2; } /* Darker blue */
+
+
+/* --- Bottom Navigation Bar --- */
+.bottom-nav {
+    display: none; /* Hidden on desktop */
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: var(--bg-dark); /* Solid dark */
+                background: linear-gradient(0deg, rgba(8, 8, 8, 1) 2%, rgba(9, 9, 9, 0.62) 63%, rgba(10, 10, 10, 0.46) 79%, rgba(0, 0, 0, 0) 100%);
+
+    /* border-top: 1px solid rgba(255, 255, 255, 0.1); */
+    z-index: 1001; /* Above content, below sticky header maybe? */
+}
+.bottom-nav ul { list-style: none; display: flex; justify-content: space-around; padding: 5px 0; margin: 0; }
+.bottom-nav li { flex: 1; text-align: center; }
+.bottom-nav a {
+    display: flex; flex-direction: column; align-items: center; padding: 8px 5px;
+    text-decoration: none; color: var(--text-muted); font-size: 0.8em; font-weight: 500; /* Adjusted font */
+}
+.bottom-nav a svg { width: 24px; height: 24px; margin-bottom: 3px; fill: currentColor; }
+.bottom-nav a:hover, .bottom-nav a.active { color: var(--accent-orange); } /* Use orange accent */
+
+/* Footer (User style with corrections) */
+footer { /* ... (Your footer styles with gap: 20px; fixed) ... */ margin-top: auto; }
+.footer { /* ... */ gap: 20px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.footer div { /* ... */ }
+/* ... rest of footer rules ... */
+
+
+/* --- Media Queries --- */
+@media screen and (max-width: 900px) {
+     nav.top-nav ul { display: none; }
+     .menu-toggle-btn { display: block; } /* Show menu button */
+     main { padding-top: 20px; } /* Reset top padding */
+
+     .sports-container { flex-direction: column; padding: 0 15px; }
+     .main-content-area { order: 1; } /* Keep main content first */
+     .sidebar-area { order: 2; min-width: unset; }
+     .sports-banner h1 { font-size: 2.5em; }
+
+     .footer { justify-content: center; text-align: center; }
+     .footer > div { width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; text-align: center;}
+     .footer-contact ul { display: inline-block; text-align: left;}
+
+     /* Show Bottom Nav */
+     body { padding-bottom: 60px; } /* Space for bottom nav */
+     .bottom-nav { display: block; }
+
+     /* Mobile Nav Menu Overlay */
+     nav ul#nav-links.mobile-nav-active {
+         display: flex; flex-direction: column; position: absolute;
+         top: 80px; left: 0; width: 100%;
+         background: rgba(8, 8, 8, 0.98);
+         padding: 10px 0; box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+         border-top: 1px solid rgba(255,255,255,0.1);
+     }
+     nav ul#nav-links.mobile-nav-active li { margin: 10px 0; text-align: center; width: 100%;}
+     nav ul#nav-links.mobile-nav-active li a { padding: 10px 0; display: block; width: 100%; font-size: 1.2em;}
+    
+}
+
+@media screen and (max-width: 500px) {
+    .sports-banner h1 { font-size: 2em; }
+    .content-box { padding: 15px 20px; }
+    .content-box h2 { font-size: 1.4em; }
+    .content-box h3 { font-size: 1.1em; }
+    .content-box table { font-size: 0.8em; }
+    .content-box th, .content-box td { padding: 8px 5px; }
+    .live-btn { font-size: 0.8em; padding: 6px 12px; margin: 10px; /* Adjust margin */}
+    .dot-blink { height: 8px; width: 8px;}
+    .bottom-nav a { font-size: 0.75em; } /* Slightly smaller bottom nav text */
+    .bottom-nav a svg { width: 20px; height: 20px; }
+}
+
+/* Specific styles from user's code only if absolutely needed */
+#gold-glow{ box-shadow: 0 0 0 rgb(255, 225, 0); animation: golden-glow 10 2s; }
+@keyframes golden-glow { /* ... user keyframe ... */ }
+.go-down { /* ... user style ... */ }
+@keyframes fadedown { /* ... user keyframe ... */ }
+/* Keep timeline specific styles only if the timeline page uses them distinctly */
+/* .timeline { ... } .timeline::after { ... } etc. */
