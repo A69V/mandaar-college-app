@@ -505,6 +505,39 @@ header {
          }
 
     </script>
+   <script>
+        // --- 1. Back Button Logic ---
+        
 
+        // --- 2. Share Button Logic ---
+        async function shareContent() {
+            const shareData = {
+                title: 'Check this out!',
+                text: 'I found this really cool web page.',
+                url: window.location.href // Gets the current page URL
+            };
+
+            // Check if the modern Web Share API is supported
+            if (navigator.share) {
+                try {
+                    // Open the native share dialog
+                    await navigator.share(shareData);
+                    console.log('Content shared successfully');
+                } catch (err) {
+                    console.error('Error sharing:', err);
+                }
+            } else {
+                // --- Fallback for Desktop / Unsupported Browsers ---
+                // Try to copy the URL to the clipboard
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert('Link copied to clipboard!');
+                } catch (err) {
+                    console.error('Failed to copy link:', err);
+                    alert('Sharing is not supported on this browser.');
+                }
+            }
+        }
+    </script>
 </body>
 </html>

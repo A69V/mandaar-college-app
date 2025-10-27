@@ -203,11 +203,15 @@
                 <li><a href="#">Updates</a></li>
                 <li><a href="sport.html?sport=cricket">Sports</a></li>
             </ul>
-             <a href="" class="live-btn" id="live-btn" style="display: none;"><div class="dot-blink"></div> <span>Live</span></a>
+            <button href="" class="live-btn" id="live-btn" onclick="shareContent()">
+            Share
+        </button>
+             <!-- <a href="" class="live-btn" id="live-btn" style="display: none;"><div class="dot-blink"></div> <span>Live</span></a> -->
         </nav>
     </header>
-
+   
     <main>
+
         <div class="scorecard-container">
             <h1 class="score-header">Live Scorecard</h1>
             <p class="match-status" id="match-status">Loading match status...</p>
@@ -695,5 +699,41 @@
         });
     </script>
 
+    <script>
+        // --- 1. Back Button Logic ---
+        function goBack() {
+            history.back();
+        }
+
+        // --- 2. Share Button Logic ---
+        async function shareContent() {
+            const shareData = {
+                title: 'Check this out!',
+                text: 'I found this really cool web page.',
+                url: window.location.href // Gets the current page URL
+            };
+
+            // Check if the modern Web Share API is supported
+            if (navigator.share) {
+                try {
+                    // Open the native share dialog
+                    await navigator.share(shareData);
+                    console.log('Content shared successfully');
+                } catch (err) {
+                    console.error('Error sharing:', err);
+                }
+            } else {
+                // --- Fallback for Desktop / Unsupported Browsers ---
+                // Try to copy the URL to the clipboard
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert('Link copied to clipboard!');
+                } catch (err) {
+                    console.error('Failed to copy link:', err);
+                    alert('Sharing is not supported on this browser.');
+                }
+            }
+        }
+    </script>
 </body>
 </html>

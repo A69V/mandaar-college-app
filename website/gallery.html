@@ -20,8 +20,11 @@
             background-repeat: no-repeat;
             overflow-x: hidden;
             transition: all ease-in-out 0.5s;
+            font-family: sans-serif;
         }
-
+a{
+    text-decoration: none;
+}
         header {
             width: 100%;
         }
@@ -30,6 +33,7 @@
             max-width: 100%;
             min-width: 250px;
             max-height: 200px;
+            width: 100%;
             height: 100px;
             margin: auto;
             display: flex;
@@ -126,7 +130,9 @@ nav ul li a{
             animation: fadeinleft forwards 2s;
 
         }
-
+header{
+    width: 100%;
+}
         @keyframes fadeinleft {
             0% {
                 transform: translateX(-20px);
@@ -377,6 +383,43 @@ nav ul li a{
             .about-text {
                 width: 90%;
             }
+              .menu-btn{
+                z-index: 1000;
+            }
+            nav ul{
+                position: fixed;
+                flex-direction: column;
+                background: black;
+                background: linear-gradient(90deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
+                top: 0px;
+                padding: 0;
+                height: 100%;
+                right: 0;
+                width: 0px;
+                z-index: 999;
+                justify-content: flex-start;
+                align-items: flex-end;
+                overflow: hidden;
+            }
+            .closed-nav-pane{
+                width: 100%;
+                padding: 100px 30px 0 50px;
+            }
+            .live-btn{
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                z-index: 999;
+            }
+            .lander-cta a{
+                display: block;
+                margin: 20px auto;
+                width: 50%;
+            }
+            .menu-btn{
+                display: inline-block;
+                margin: 30px;
+            }
 
         }
 
@@ -388,6 +431,7 @@ nav ul li a{
             .about-text h2 span {
                 font-size: 1.5em;
             }
+
         }
 
 
@@ -598,18 +642,18 @@ nav ul li a{
 
 <body>
     <header>
-        <nav>
+        <nav id="thenav">
             <a href="./index.html" class="logo"><img src="./mandar-logo.png" alt="Umang Mandar"></a>
-            <ul>
+            <ul id="nav-panel">
                 <li><a href="./index.html">Home</a></li>
-                <li><a href="./index.html#about">About</a></li>
+                <li><a href="./index.hrml#about">About</a></li>
                 <li><a href="./index.html#timeline">Event Timeline</a></li>
-                <li><a href="./index.html#schedule">Today's Events</a></li>
+                <li><a href="./index.html#standings">Point Table</a></li>
                 <li><a href="./gallery.html">Gallery</a></li>
-                <!-- <li><a href="#">Updates</a></li> -->
+                <!-- <li><a href="">Updates</a></li> -->
                 <li><a href="./sports.html">Sports</a></li>
             </ul>
-<button class="live-btn" id="live-btn"><div class="dot-blink"></div> <span>LIVE</span></button>
+<a href="./scoreboard.html?matchId=cse-vs-civil-1" class="live-btn" id="live-btn"><div class="dot-blink"></div> <span>LIVE</span></a>
 
             <button class="menu-btn" id="menu-btn"><img src="./menu.svg" alt=""></button>
         </nav>
@@ -672,7 +716,7 @@ display: flex;
             .gallery img{
                 max-width: 300px;
                 margin: 10px;
-                
+                margin: 10px auto;
                 max-height: 200px;
             }
             .gallery img:hover{
@@ -698,9 +742,12 @@ display: flex;
                     width: 50%;
                 }
             }
-            @media screen and(max-width: 500px) {
+            @media screen and (max-width: 500px) {
                 .gallery{
                     grid-template-columns: 1fr;
+                }
+                .about-img{
+                    width: 100%;
                 }
             }
         </style>
@@ -769,6 +816,27 @@ display: flex;
         </div>
         <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a></p>
     </footer>
+        <script>
+        document.getElementById("menu-btn").addEventListener('click', function(){
+            
+document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
+        })
+        document.getElementById('nav-panel').addEventListener('click', function(){
+            document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
+
+        })
+        window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+    document.getElementById("thenav").style.position = "fixed";
+    // document.getElementById("logo").style.fontSize = "25px";
+  } else {
+    document.getElementById("thenav").style.position = "static";
+    // document.getElementById("logo").style.fontSize = "35px";
+  }
+}
+    </script>
 </body>
 
 </html>

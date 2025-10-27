@@ -56,12 +56,12 @@ header{
                 <li><a href="timeline.html" class="active">Timeline</a></li> <li><a href="gallery.html">Gallery</a></li>
                 <li><a href="index.html#contact">Contact</a></li>
             </ul>
-             <a href="#" class="live-btn" id="live-btn" style="display: none;">
+             <!-- <a href="#" class="live-btn" id="live-btn">
                 <div class="dot-blink"></div> <span id="live-btn-text">LIVE</span>
-            </a>
-            <button class="menu-toggle-btn" id="menu-toggle">
-                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-            </button>
+            </a> -->
+           <button href="" class="live-btn" id="live-btn" onclick="shareContent()">
+            Share
+        </button>
         </nav>
     </header>
 
@@ -129,6 +129,40 @@ header{
 
          // --- Mobile Menu Toggle ---
          if(menuBtn && navLinks) { /* ... Same toggle logic as index.html ... */ }
+    </script>
+       <script>
+        // --- 1. Back Button Logic ---
+        
+
+        // --- 2. Share Button Logic ---
+        async function shareContent() {
+            const shareData = {
+                title: 'Check this out!',
+                text: 'I found this really cool web page.',
+                url: window.location.href // Gets the current page URL
+            };
+
+            // Check if the modern Web Share API is supported
+            if (navigator.share) {
+                try {
+                    // Open the native share dialog
+                    await navigator.share(shareData);
+                    console.log('Content shared successfully');
+                } catch (err) {
+                    console.error('Error sharing:', err);
+                }
+            } else {
+                // --- Fallback for Desktop / Unsupported Browsers ---
+                // Try to copy the URL to the clipboard
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert('Link copied to clipboard!');
+                } catch (err) {
+                    console.error('Failed to copy link:', err);
+                    alert('Sharing is not supported on this browser.');
+                }
+            }
+        }
     </script>
 </body>
 </html>
