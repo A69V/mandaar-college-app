@@ -330,6 +330,127 @@
         </li>
     </ul>
 </div>
+ <style>
+        /* --- PWA Install Prompt Styles --- */
+.install-prompt-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 450px; /* Limit width */
+    background-color: rgba(9, 6, 82, 0.85); /* Dark blue, semi-transparent */
+    border: 1px solid rgba(217, 216, 246, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 1500;
+    padding: 15px 20px;
+    display: none; /* Hidden by default */
+    opacity: 0;
+    transition: opacity 0.4s ease-out, bottom 0.4s ease-out;
+}
+
+.install-prompt-container.visible {
+    display: block;
+    opacity: 1;
+    bottom: 20px; /* Animate from slightly lower if preferred */
+}
+
+.install-prompt-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.install-prompt-logo {
+    height: 40px; /* Adjust size */
+    width: 40px;
+    border-radius: 8px; /* Slightly rounded */
+    flex-shrink: 0;
+}
+
+.install-prompt-text {
+    flex-grow: 1;
+    color: white;
+}
+
+.install-prompt-text strong {
+    font-size: 1.1em;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.install-prompt-text p {
+    font-size: 0.85em;
+    color: #ccc; /* Muted text */
+    line-height: 1.4;
+}
+
+.install-prompt-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons on small screens initially */
+    gap: 8px;
+    align-items: center; /* Center buttons */
+}
+
+.install-prompt-buttons button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.install-prompt-buttons button:active {
+    transform: scale(0.95); /* Click effect */
+}
+
+.btn-install-confirm {
+    background-color: #FF9F55; /* Orange accent */
+    color: #111;
+}
+.btn-install-confirm:hover {
+    background-color: #ffb47d;
+}
+
+.btn-install-cancel {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #eee;
+}
+.btn-install-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Responsive adjustments for the prompt */
+@media screen and (min-width: 400px) { /* Side-by-side buttons on wider screens */
+     .install-prompt-buttons {
+        flex-direction: row;
+    }
+}
+
+@media screen and (max-width: 900px) { /* Adjust bottom position if footer/nav overlap */
+     .install-prompt-container {
+        bottom: 10px; /* Reduce bottom margin */
+     }
+}
+    </style>
+<div id="install-prompt" class="install-prompt-container">
+        <div class="install-prompt-content">
+            <img src="./umang-mandar-logo.png" alt="App Logo" class="install-prompt-logo"> <div class="install-prompt-text">
+                <strong>Install Umang Mandar App?</strong>
+                <p>Add to your Home screen for quick access, even offline.</p>
+            </div>
+            <div class="install-prompt-buttons">
+                <button id="btn-install" class="btn-install-confirm">Install</button>
+                <button id="btn-cancel-install" class="btn-install-cancel">Not Now</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
@@ -737,5 +858,98 @@
             }
         }
     </script>
+    <script>
+        // install-pwa.js
+
+let deferredPrompt = null;
+const installPromptContainer = document.getElementById('install-prompt');
+const installButton = document.getElementById('btn-install');
+const cancelButton = document.getElementById('btn-cancel-install');
+const recentResultsList = document.getElementById('recent-results-list'); // Results list
+// --- Check localStorage ---
+// Don't show the prompt if 'pwaInstalled' or 'pwaInstallDismissed' is true in localStorage
+const isInstalled = localStorage.getItem('pwaInstalled') === 'true';
+const isDismissed = localStorage.getItem('pwaInstallDismissed') === 'true';
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the default browser mini-infobar
+    e.preventDefault();
+    console.log('beforeinstallprompt event fired.');
+
+    // Store the event
+    deferredPrompt = e;
+
+    // Show custom prompt ONLY if not installed and not dismissed (checked via localStorage)
+    if (!isInstalled && !isDismissed) {
+        console.log('Showing custom install prompt.');
+        if (installPromptContainer) {
+            installPromptContainer.classList.add('visible');
+        }
+    } else {
+        console.log('Install prompt criteria met, but localStorage indicates installed or dismissed.');
+    }
+});
+
+if (installButton) {
+    installButton.addEventListener('click', async () => {
+        console.log('Install button clicked.');
+        // Hide the custom prompt
+        if (installPromptContainer) {
+            installPromptContainer.classList.remove('visible');
+        }
+
+        if (deferredPrompt) {
+            // Show the browser's install dialog
+            deferredPrompt.prompt();
+            console.log('Browser install prompt shown.');
+
+            // Wait for user choice
+            try {
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+
+                deferredPrompt = null; // Clear the stored prompt
+
+                if (outcome === 'accepted') {
+                    console.log('User accepted install.');
+                    // --- Save state to localStorage ---
+                    localStorage.setItem('pwaInstalled', 'true');
+                } else {
+                    console.log('User dismissed install prompt.');
+                }
+            } catch (error) {
+                 console.error('Error handling install choice:', error);
+                 deferredPrompt = null;
+            }
+        } else {
+            console.log('deferredPrompt not available.');
+        }
+    });
+}
+
+if (cancelButton) {
+    cancelButton.addEventListener('click', () => {
+        console.log('Cancel button clicked.');
+        // Hide the custom prompt
+        if (installPromptContainer) {
+            installPromptContainer.classList.remove('visible');
+        }
+        // --- Save state to localStorage ---
+        localStorage.setItem('pwaInstallDismissed', 'true');
+        console.log('Marked install prompt as dismissed in localStorage.');
+    });
+}
+
+// Optional: Listen for actual installation
+window.addEventListener('appinstalled', () => {
+    console.log('PWA was installed');
+    if (installPromptContainer) {
+        installPromptContainer.classList.remove('visible');
+    }
+    // --- Ensure state is saved to localStorage ---
+    localStorage.setItem('pwaInstalled', 'true');
+    deferredPrompt = null;
+});
+     </script>
 </body>
 </html>
