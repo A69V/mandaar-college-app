@@ -239,16 +239,16 @@ header {
                 <li><a href="timeline.html">Timeline</a></li>
                 <li><a href="gallery.html" class="active">Gallery</a></li> <li><a href="index.html#contact">Contact</a></li>
             </ul>
-             <a href="#" class="live-btn" id="live-btn">
-                <div class="dot-blink"></div> <span id="live-btn-text">LIVE</span>
-            </a>
+            <button href="" class="live-btn" id="live-btn" onclick="shareContent()">
+            Share
+        </button>
            
         </nav>
     </header>
 
     <main>
 <section class="content-section" style="margin: 5px; padding: 0;">
-    <h1 style="text-align: center;" id="greeting-heading"></h1>
+    <h1 style="text-align: center;color: white; text-shadow: 0 0 10px white;" id="greeting-heading"></h1>
 </section>
         
          <section class="content-section" id="schedule">
@@ -505,15 +505,15 @@ header {
          }
 
     </script>
-   <script>
+  <script>
         // --- 1. Back Button Logic ---
         
 
         // --- 2. Share Button Logic ---
         async function shareContent() {
             const shareData = {
-                title: 'Check this out!',
-                text: 'I found this really cool web page.',
+                title: '',
+                text: '',
                 url: window.location.href // Gets the current page URL
             };
 

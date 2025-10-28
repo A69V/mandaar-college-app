@@ -22,9 +22,11 @@
             transition: all ease-in-out 0.5s;
             font-family: sans-serif;
         }
-a{
-    text-decoration: none;
-}
+
+        a {
+            text-decoration: none;
+        }
+
         header {
             width: 100%;
         }
@@ -44,22 +46,26 @@ a{
             z-index: 999;
             background: linear-gradient(180deg, rgba(8, 8, 8, 1) 2%, rgba(9, 9, 9, 0.62) 63%, rgba(10, 10, 10, 0.46) 79%, rgba(0, 0, 0, 0) 100%);
         }
-nav ul{
-    list-style: none;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-nav ul li{
-    margin: 15px;
-}
-nav ul li a{
-    text-decoration: none;
-    color: white;
-    font-size: 1.1em;
-    font-family: sans-serif;
-}
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.1em;
+            font-family: sans-serif;
+        }
+
         .logo img {
             height: 50px;
         }
@@ -130,9 +136,11 @@ nav ul li a{
             animation: fadeinleft forwards 2s;
 
         }
-header{
-    width: 100%;
-}
+
+        header {
+            width: 100%;
+        }
+
         @keyframes fadeinleft {
             0% {
                 transform: translateX(-20px);
@@ -383,10 +391,12 @@ header{
             .about-text {
                 width: 90%;
             }
-              .menu-btn{
+
+            .menu-btn {
                 z-index: 1000;
             }
-            nav ul{
+
+            nav ul {
                 position: fixed;
                 flex-direction: column;
                 background: black;
@@ -401,22 +411,26 @@ header{
                 align-items: flex-end;
                 overflow: hidden;
             }
-            .closed-nav-pane{
+
+            .closed-nav-pane {
                 width: 100%;
                 padding: 100px 30px 0 50px;
             }
-            .live-btn{
+
+            .live-btn {
                 position: fixed;
                 bottom: 10px;
                 right: 10px;
                 z-index: 999;
             }
-            .lander-cta a{
+
+            .lander-cta a {
                 display: block;
                 margin: 20px auto;
                 width: 50%;
             }
-            .menu-btn{
+
+            .menu-btn {
                 display: inline-block;
                 margin: 30px;
             }
@@ -619,22 +633,27 @@ header{
                 border-color: transparent white transparent transparent;
             }
         }
-        #gold-glow{
+
+        #gold-glow {
             box-shadow: 0 0 0 rgb(255, 225, 0);
             animation: golden-glow 10 2s;
         }
+
         @keyframes golden-glow {
-            0%{
+            0% {
                 box-shadow: 0 0 0 rgba(255, 255, 0);
             }
-            50%{
+
+            50% {
                 box-shadow: 0 0 10px rgba(255, 255, 0);
             }
-            100%{
+
+            100% {
                 box-shadow: 0 0 0 rgba(255, 255, 0);
             }
         }
-        main{
+
+        main {
             color: white;
         }
     </style>
@@ -653,20 +672,22 @@ header{
                 <!-- <li><a href="">Updates</a></li> -->
                 <li><a href="./sports.html">Sports</a></li>
             </ul>
-<a href="./scoreboard.html?matchId=cse-vs-civil-1" class="live-btn" id="live-btn"><div class="dot-blink"></div> <span>LIVE</span></a>
+            <a href="./scoreboard.html?matchId=cse-vs-civil-1" class="live-btn" id="live-btn">
+                <div class="dot-blink"></div> <span>LIVE</span>
+            </a>
 
             <button class="menu-btn" id="menu-btn"><img src="./menu.svg" alt=""></button>
         </nav>
     </header>
     <main>
-        
+
         <style>
-           .live-btn{
-background-color: #080808a5;
-color: white;
-outline: none;
-padding: 10px 20px;
-display: flex;
+            .live-btn {
+                background-color: #080808a5;
+                color: white;
+                outline: none;
+                padding: 10px 20px;
+                display: flex;
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
@@ -676,14 +697,15 @@ display: flex;
                 font-weight: bold;
                 font-size: 1em;
                 margin: 20px;
-           }
+            }
+
             .dot-blink {
                 height: 10px;
                 width: 10px;
                 background-color: red;
                 border-radius: 50%;
                 animation: blink infinite 2s;
-                
+
             }
 
             @keyframes blink {
@@ -699,7 +721,8 @@ display: flex;
                     opacity: 0;
                 }
             }
-            h1{
+
+            h1 {
                 text-align: center;
                 font-family: sans-serif;
                 text-shadow: 0 0 10px white;
@@ -707,25 +730,29 @@ display: flex;
                 row-gap: 10px;
                 font-size: 2.5em;
             }
-            .gallery{
+
+            .gallery {
                 width: 90%;
                 margin: 20px auto;
                 display: grid;
                 grid-template-columns: repeat(6, 1fr);
             }
-            .gallery img{
+
+            .gallery img {
                 max-width: 300px;
                 margin: 10px;
                 margin: 10px auto;
                 max-height: 200px;
             }
-            .gallery img:hover{
+
+            .gallery img:hover {
                 width: 100%;
 
                 box-shadow: 0 0 10px #000;
                 z-index: 99;
             }
-            h2{
+
+            h2 {
                 display: block;
                 color: #e76c0e;
                 font-family: sans-serif;
@@ -734,38 +761,44 @@ display: flex;
                 margin: 20px auto;
                 padding: 5px 0;
             }
-            @media screen and (max-width: 900px){
-                .gallery{
+
+            @media screen and (max-width: 900px) {
+                .gallery {
                     grid-template-columns: repeat(3, 1fr);
                 }
-                .about-img{
+
+                .about-img {
                     width: 50%;
                 }
-                 nav ul{
-                position: fixed;
-                flex-direction: column;
-                background: black;
-                background: linear-gradient(90deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
-                top: 0px;
-                padding: 0;
-                height: 100%;
-                right: 0;
-                width: 0px;
-                z-index: 999;
-                justify-content: flex-start;
-                align-items: flex-end;
-                overflow: hidden;
+
+                nav ul {
+                    position: fixed;
+                    flex-direction: column;
+                    background: black;
+                    background: linear-gradient(90deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
+                    top: 0px;
+                    padding: 0;
+                    height: 100%;
+                    right: 0;
+                    width: 0px;
+                    z-index: 999;
+                    justify-content: flex-start;
+                    align-items: flex-end;
+                    overflow: hidden;
+                }
+
+                .closed-nav-pane {
+                    width: 100%;
+                    padding: 100px 30px 0 50px;
+                }
             }
-            .closed-nav-pane{
-                width: 100%;
-                padding: 100px 30px 0 50px;
-            }
-            }
+
             @media screen and (max-width: 500px) {
-                .gallery{
+                .gallery {
                     grid-template-columns: 1fr;
                 }
-                .about-img{
+
+                .about-img {
                     width: 100%;
                 }
             }
@@ -773,31 +806,31 @@ display: flex;
         <!-- Gallery -->
         <h1>Gallery</h1>
         <h2>Recent</h2>
-<div class="gallery">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-</div>
+        <div class="gallery">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+        </div>
         <h2>Day 1</h2>
-<div class="gallery">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-    <img src="./about-img.png" alt="">
-</div>
+        <div class="gallery">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+            <img src="./about-img.png" alt="">
+        </div>
 
     </main>
 
@@ -835,48 +868,28 @@ display: flex;
         </div>
         <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a></p>
     </footer>
-        <script>
-        document.getElementById("menu-btn").addEventListener('click', function(){
-            
-document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
+    <script>
+        document.getElementById("menu-btn").addEventListener('click', function () {
+
+            document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
         })
-        document.getElementById('nav-panel').addEventListener('click', function(){
+        document.getElementById('nav-panel').addEventListener('click', function () {
             document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
 
         })
-        window.onscroll = function() {scrollFunction()};
+        window.onscroll = function () { scrollFunction() };
 
-function scrollFunction() {
-  if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-    document.getElementById("thenav").style.position = "fixed";
-    // document.getElementById("logo").style.fontSize = "25px";
-  } else {
-    document.getElementById("thenav").style.position = "static";
-    // document.getElementById("logo").style.fontSize = "35px";
-  }
-}
+        function scrollFunction() {
+            if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+                document.getElementById("thenav").style.position = "fixed";
+                // document.getElementById("logo").style.fontSize = "25px";
+            } else {
+                document.getElementById("thenav").style.position = "static";
+                // document.getElementById("logo").style.fontSize = "35px";
+            }
+        }
     </script>
-     <script>
-        document.getElementById("menu-btn").addEventListener('click', function(){
-            
-document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
-        })
-        document.getElementById('nav-panel').addEventListener('click', function(){
-            document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
 
-        })
-        window.onscroll = function() {scrollFunction()};
-
-function scrollFunction() {
-  if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-    document.getElementById("thenav").style.position = "fixed";
-    // document.getElementById("logo").style.fontSize = "25px";
-  } else {
-    document.getElementById("thenav").style.position = "static";
-    // document.getElementById("logo").style.fontSize = "35px";
-  }
-}
-    </script>
 </body>
 
 </html>

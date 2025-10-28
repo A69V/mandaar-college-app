@@ -129,7 +129,7 @@
         .sports-banner {
             width: 90%; height: 25vh; /* Adjusted height */ min-height: 150px;
             border-radius: 20px;
-            background-image: url('./imgs/cricket.jpg'); /* Default */
+            background-image: url('./imgs/football.jpg'); /* Default */
             background-size: cover; background-position: center;
             display: flex; align-items: center; justify-content: center;
             text-align: center; color: white;
@@ -511,7 +511,7 @@
 
         // --- Get Sport Name from URL ---
         const urlParams = new URLSearchParams(window.location.search);
-        const sportName = urlParams.get('sport') || 'cricket'; // Default to football if not specified
+        const sportName = urlParams.get('sport') || 'football'; // Default to football if not specified
 
         // --- DOM Elements ---
         const sportTitleBanner = document.getElementById('sport-title-banner');
@@ -548,7 +548,7 @@
         // --- Placeholder Data Fetching (Replace with actual content or Firebase) ---
         const descriptions = {
              football: "Welcome to the Umang Mandar Football tournament! Football, the world's most popular sport, is a game of passion, strategy, and teamwork. Here at GEC Banka, it's where departments clash for glory on the field. Expect thrilling matches, incredible goals, and a roaring crowd.",
-             cricket: "Get ready for the crack of the bat and thrilling finishes in the Umang Mandar Cricket championship! Teams will battle it out with strategy and skill in this beloved sport.",
+             football: "Get ready for the crack of the bat and thrilling finishes in the Umang Mandar football championship! Teams will battle it out with strategy and skill in this beloved sport.",
              // Add descriptions for other sports
              default: "Welcome to the Umang Mandar event for " + capitalize(sportName) + ". Enjoy the competition!"
         };
@@ -561,7 +561,7 @@
                  "Appropriate footwear required.",
                  "Referee's decision is final."
              ],
-             cricket: [
+             football: [
                  "Teams consist of 11 players.",
                  "Match format: 20 overs per side (T20).",
                  "Standard ICC T20 rules apply.",
@@ -736,7 +736,7 @@
                          targetList = upcomingMatchesList;
                          upcomingCount++;
                          // Link to admin setup page if applicable, otherwise maybe just '#'
-                         link = `setup-cricket.html?sport=${sportName}&matchId=${matchId}`; // Adjust filename if needed
+                         link = `setup-football.html?sport=${sportName}&matchId=${matchId}`; // Adjust filename if needed
                          scoreInfo = dateTimeInfo || 'Upcoming';
                     } else if (match.status === 'completed') {
                          itemClass += ' completed';

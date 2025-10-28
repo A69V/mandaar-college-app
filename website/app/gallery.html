@@ -128,6 +128,7 @@ header{
         display: none;
     }
 }
+
     </style>
 </head>
 <body>
@@ -149,7 +150,7 @@ header{
 
     <main>
         <section class="content-box">
-            <h2>Gallery</h2>
+            <h2 style="color: white; text-shadow: 0 0 10px white;">Gallery</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px;">Click on an image to view it larger and download.</p>
 <h3>Moments from Mandaar 2024</h3>
             <div class="gallery-grid" id="gallery-grid">
@@ -287,15 +288,15 @@ header{
             }
         }); // End DOMContentLoaded
     </script>
-     <script>
+  <script>
         // --- 1. Back Button Logic ---
         
 
         // --- 2. Share Button Logic ---
         async function shareContent() {
             const shareData = {
-                title: 'Check this out!',
-                text: 'Moments of joy and sportsmanship from Umang Mandar 25',
+                title: '',
+                text: '',
                 url: window.location.href // Gets the current page URL
             };
 
