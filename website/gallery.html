@@ -741,6 +741,25 @@ display: flex;
                 .about-img{
                     width: 50%;
                 }
+                 nav ul{
+                position: fixed;
+                flex-direction: column;
+                background: black;
+                background: linear-gradient(90deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
+                top: 0px;
+                padding: 0;
+                height: 100%;
+                right: 0;
+                width: 0px;
+                z-index: 999;
+                justify-content: flex-start;
+                align-items: flex-end;
+                overflow: hidden;
+            }
+            .closed-nav-pane{
+                width: 100%;
+                padding: 100px 30px 0 50px;
+            }
             }
             @media screen and (max-width: 500px) {
                 .gallery{
@@ -817,6 +836,27 @@ display: flex;
         <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a></p>
     </footer>
         <script>
+        document.getElementById("menu-btn").addEventListener('click', function(){
+            
+document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
+        })
+        document.getElementById('nav-panel').addEventListener('click', function(){
+            document.getElementById('nav-panel').classList.toggle('closed-nav-pane');
+
+        })
+        window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+    document.getElementById("thenav").style.position = "fixed";
+    // document.getElementById("logo").style.fontSize = "25px";
+  } else {
+    document.getElementById("thenav").style.position = "static";
+    // document.getElementById("logo").style.fontSize = "35px";
+  }
+}
+    </script>
+     <script>
         document.getElementById("menu-btn").addEventListener('click', function(){
             
 document.getElementById('nav-panel').classList.toggle('closed-nav-pane');

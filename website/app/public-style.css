@@ -103,7 +103,11 @@ main {
     margin: 20px auto; /* Add top/bottom margin and center */
     padding: 0 20px; /* Horizontal padding */
 }
-
+@media screen and (min-width: 900px) {
+    body{
+        display: none;
+    }
+}
 /* --- Content Box Style (Applied to sections) --- */
 .content-box {
     padding: var(--pad);

@@ -188,7 +188,11 @@
                 padding: 10px 15px;
             }
         }
-
+@media screen and (min-width: 900px) {
+    body{
+        display: none;
+    }
+}
 
     </style>
 </head>
@@ -701,15 +705,13 @@
 
     <script>
         // --- 1. Back Button Logic ---
-        function goBack() {
-            history.back();
-        }
+        
 
         // --- 2. Share Button Logic ---
         async function shareContent() {
             const shareData = {
                 title: 'Check this out!',
-                text: 'I found this really cool web page.',
+                text: 'Live Score of the ongoing match #Mandar25',
                 url: window.location.href // Gets the current page URL
             };
 
