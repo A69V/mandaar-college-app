@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Scorecard - Umang Mandar</title>
+    <link rel="stylesheet" href="public-style.css"> 
+    <style>
+        /* --- Basic Styles from your UI --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: rgba(0, 0, 0, 0.647);
+            background-image: url("../background.gif"); /* Adjust path if needed */
+            background-blend-mode: multiply;
+            background-size: cover;
+            background-position: top;
+            background-repeat: no-repeat;
+            overflow-x: hidden;
+            color: #e6eef6;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header { width: 100%; border: none;}
+        nav {
+            max-width: 100%; min-width: 250px; max-height: 200px; height: 80px;
+            margin: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+            background: linear-gradient(180deg, rgba(8, 8, 8, 1) 2%, rgba(9, 9, 9, 0.62) 63%, rgba(10, 10, 10, 0.46) 79%, rgba(0, 0, 0, 0) 100%);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        nav ul { list-style: none; display: flex; }
+        nav ul li { margin: 15px; }
+        nav ul li a { text-decoration: none; color: white; font-size: 1.1em; font-family: sans-serif; }
+        .logo { margin: 20px; }
+        .logo img { height: 50px; }
+        .live-btn {
+            background-color: #080808a5; color: white; outline: none;
+            display: flex; flex-direction: row; align-items: center; justify-content: center;
+            gap: 10px; border-radius: 50px; border: solid 1px white;
+            font-weight: bold; font-size: 1em; margin: 20px; cursor: pointer; text-decoration: none;
+        }
+        .dot-blink {
+            height: 10px; width: 10px; background-color: red; border-radius: 50%;
+            animation: blink infinite 2s;
+        }
+        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        main { flex-grow: 1; padding: 20px; margin-top: -100px; padding-top: 120px; }
+        footer {
+            padding: 40px 0 0; background: linear-gradient(180deg, rgba(8, 8, 8, 0.01) 0%, rgba(7, 7, 7, 0.26) 9%, rgba(7, 7, 7, 0.5) 29%, rgba(6, 6, 6, 1) 67%);
+            font-family: sans-serif; color: white; text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .made-by { padding: 15px 0; font-size: 0.9em; }
+        .made-by a { color: white; }
+
+        /* --- Scorecard Specific Styles --- */
+        :root {
+            --card: #0b1220; --muted: #9aa6b2; --accent: #06b6d4; --glass: rgba(255,255,255,0.04);
+            --radius: 14px; --pad: 16px; --shadow: 0 6px 24px rgba(2,6,23,0.6);
+            --football-accent: #f97316; /* Orange for football */
+        }
+        .scorecard-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: rgba(8, 8, 8, 0.8);
+            border-radius: var(--radius);
+            padding: var(--pad);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        .score-header { text-align: center; margin-bottom: 20px; color: var(--accent); font-size: 1.8em; }
+        .match-status { text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 1.1em; color: #FF9F55; }
+        
+        /* --- CRICKET Scorecard Styles --- */
+        .target-info { text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 1.2em; color: var(--football-accent); }
+        .score-main {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px; gap: 16px;
+            background: var(--glass); border-radius: 10px; margin-bottom: 15px;
+        }
+        .score-main .team-name{font-size: 1.5em; font-weight: 700;}
+        .score-main .score{font-size: 2.5em; font-weight: 800; line-height: 1;}
+        .score-main .overs{font-size: 1.3em; color: var(--muted); font-weight: 600;}
+        .batsman-bowler-card {
+            background: var(--glass); border-radius: 10px; margin-bottom: 15px; padding: var(--pad);
+        }
+        table.live-stats{width:100%; border-collapse:collapse; font-size: 0.95em;}
+        table.live-stats th, table.live-stats td{padding: 10px; text-align:left; border-bottom:1px solid var(--glass)}
+        table.live-stats th{font-size: 0.8em; color: var(--muted); text-transform:uppercase; letter-spacing:0.5px}
+        table.live-stats td{font-weight: 600;}
+        table.live-stats .stat-num{text-align:right; font-family:monospace; font-size: 1.1em; width: 40px;}
+        table.live-stats .striker-dot{display:inline-block; width:8px; height:8px; background:var(--accent); border-radius:50%; margin-right:8px}
+        .info-pills{display:flex; gap:10px; justify-content:center; flex-wrap: wrap; margin-bottom: 15px;}
+        .pill{background:var(--glass);padding: 8px 14px; border-radius:999px; font-weight:600; font-size: 0.9em;}
+        .pill .label{color:var(--muted); margin-right:6px}
+        .over-summary-card { background: var(--glass); border-radius: 10px; padding: var(--pad); margin-bottom: 15px;}
+        .over-summary-card label { font-size: 0.8em; color: var(--muted); display: block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .over-summary { display: flex; flex-wrap: wrap; gap: 6px; }
+        .ball-icon {
+            width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.08);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9em; font-weight: 700; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .ball-icon.wicket { background: #f43f5e; color: #fff; border: none; }
+        .ball-icon.six { background: var(--accent); color: #000; border: none; }
+        .ball-icon.four { background: #7c3aed; color: #fff; border: none; }
+        .ball-icon.extra { font-size: 0.75em; background: #eab308; color: #000; border: none; }
+
+        /* --- NEW: FOOTBALL Scorecard Styles --- */
+        .fb-score-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            gap: 10px;
+            background: var(--glass);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .fb-team {
+            flex: 1;
+            text-align: center;
+        }
+        .fb-team-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            display: block;
+        }
+        .fb-team-a { text-align: left; }
+        .fb-team-b { text-align: right; }
+        .fb-score-details {
+            flex: 0 1 auto;
+            text-align: center;
+        }
+        .fb-score {
+            font-size: 3em;
+            font-weight: 800;
+            line-height: 1;
+            color: white;
+        }
+        .fb-match-time {
+            font-size: 1.2em;
+            color: var(--football-accent);
+            font-weight: 600;
+            font-family: monospace;
+        }
+        .fb-card {
+            background: var(--glass);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            padding: var(--pad);
+        }
+        .fb-card-header {
+            font-size: 0.9em;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .fb-scorers-lists {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .fb-scorer-list {
+            list-style: none;
+            flex: 1;
+            font-size: 0.95em;
+        }
+        .fb-scorer-list li {
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .fb-scorer-list.team-b-list {
+            text-align: right;
+        }
+        .fb-stats-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .fb-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1em;
+            gap: 10px;
+        }
+        .fb-stat-label {
+            color: var(--muted);
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .fb-stat-value {
+            font-weight: 700;
+            font-family: monospace;
+            font-size: 1.2em;
+            min-width: 60px; /* Align values */
+        }
+        .fb-stat-value:first-child { text-align: left; }
+        .fb-stat-value:last-child { text-align: right; }
+
+        .fb-stat-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: -8px; /* Pull it closer to the stat row */
+            margin-bottom: 8px;
+        }
+        .fb-stat-bar {
+            height: 100%;
+            width: 50%; /* Default */
+            background: var(--football-accent);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+
+        /* --- Notification Styles (Shared) --- */
+        #notification-area {
+            position: fixed; top: 20px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000; display: flex; flex-direction: column;
+            align-items: center; gap: 8px;
+            width: 90%; max-width: 500px;
+            pointer-events: none;
+        }
+        .notification-message {
+            background-color: rgba(6, 182, 212, 0.9);
+            color: #080808; padding: 12px 20px;
+            border-radius: 8px; font-size: 0.95em; font-weight: 600;
+            text-align: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            pointer-events: all; max-width: 100%;
+        }
+        .notification-message.visible { opacity: 1; transform: translateY(0); }
+        .notification-message.wicket { background-color: rgba(244, 63, 94, 0.9); color: white; }
+        .notification-message.milestone { background-color: rgba(255, 159, 85, 0.9); color: #080808; }
+        .notification-message.match-end { background-color: rgba(34, 197, 94, 0.9); color: #080808; }
+
+
+        /* --- Responsive Styles --- */
+        @media screen and (max-width: 768px) {
+            nav ul { display: none; }
+            main { padding-top: 110px; }
+            .score-header { font-size: 1.5em; }
+            .match-status { font-size: 1em; }
+            #notification-area { top: 10px; width: 95%; } /* Adjusted top */
+            .notification-message { font-size: 0.85em; padding: 10px 15px; }
+
+            /* Cricket Mobile */
+            .score-main .team-name{font-size: 1.2em;}
+            .score-main .score{font-size: 2em;}
+            .score-main .overs{font-size: 1.1em;}
+            table.live-stats{font-size: 0.9em;}
+            table.live-stats th, table.live-stats td{padding: 8px;}
+            table.live-stats .stat-num{width: 35px;}
+            .ball-icon { width: 28px; height: 28px; font-size: 0.8em;}
+            .target-info { font-size: 1em; }
+
+            /* Football Mobile */
+            .fb-team-name { font-size: 1.1em; }
+            .fb-score { font-size: 2.2em; }
+            .fb-match-time { font-size: 1em; }
+            .fb-stat-row { font-size: 1em; }
+            .fb-stat-value { font-size: 1em; min-width: 45px; }
+            .fb-stat-label { font-size: 0.8em; }
+        }
+        @media screen and (min-width: 900px) {
+            body{
+                /* display: none; */ /* Removing this rule, it hides everything */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo"><img src="../mandar-logo.png" alt="Umang Mandar"></a> 
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#tline">Events</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">Updates</a></li>
+                <li><a href="sport.html?sport=cricket">Sports</a></li>
+            </ul>
+            <button href="" class="live-btn" id="live-btn" onclick="shareContent()">
+                Share
+            </button>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="scorecard-container">
+            <h1 class="score-header" id="score-header">Live Scorecard</h1>
+            <p class="match-status" id="match-status">Loading match data...</p>
+            <div id="notification-area"></div>
+
+            <div id="cricket-scoreboard" style="display: none;">
+                <p class="target-info" id="target-info" style="display: none;"></p>
+            
+                <div class="score-main">
+                    <div>
+                        <div class="team-name" id="batting-team-name">--</div>
+                        <div class="muted">Batting</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="score" id="main-score">0-0</div>
+                        <div class="overs" id="main-overs">(0.0)</div>
+                    </div>
+                </div>
+
+                <div class="batsman-bowler-card">
+                    <h3 style="color: var(--muted); font-size:0.9em; margin-bottom: 10px;">Current Players</h3>
+                    <table class="live-stats">
+                        <thead>
+                            <tr>
+                                <th>Batsman</th>
+                                <th class="stat-num">R</th> <th class="stat-num">B</th>
+                                <th class="stat-num">4s</th> <th class="stat-num">6s</th>
+                                <th class="stat-num">SR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="striker-row">
+                                <td><span class="striker-dot"></span><span id="striker-name">...</span></td>
+                                <td class="stat-num" id="striker-runs">0</td> <td class="stat-num" id="striker-balls">0</td>
+                                <td class="stat-num" id="striker-fours">0</td> <td class="stat-num" id="striker-sixes">0</td>
+                                <td class="stat-num" id="striker-sr">0.00</td>
+                            </tr>
+                            <tr id="nonstriker-row">
+                                <td><span style="opacity:0" class="striker-dot"></span><span id="nonstriker-name">...</span></td>
+                                <td class="stat-num" id="nonstriker-runs">0</td> <td class="stat-num" id="nonstriker-balls">0</td>
+                                <td class="stat-num" id="nonstriker-fours">0</td> <td class="stat-num" id="nonstriker-sixes">0</td>
+                                <td class="stat-num" id="nonstriker-sr">0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr style="border-color: var(--glass); margin: 15px 0;">
+                    <table class="live-stats">
+                        <thead>
+                            <tr>
+                                <th>Bowler</th>
+                                <th class="stat-num">O</th> <th class="stat-num">M</th>
+                                <th class="stat-num">R</th> <th class="stat-num">W</th>
+                                <th class="stat-num">Econ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="bowler-name">...</td>
+                                <td class="stat-num" id="bowler-overs">0.0</td> <td class="stat-num" id="bowler-maidens">0</td>
+                                <td class="stat-num" id="bowler-runs">0</td> <td class="stat-num" id="bowler-wickets">0</td>
+                                <td class="stat-num" id="bowler-econ">0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="info-pills">
+                    <div class="pill"><span class="label">CRR:</span> <span id="crr">0.00</span></div>
+                    <div class="pill"><span class="label">Partnership:</span> <span id="partnership">0 (0)</span></div>
+                    <div class="pill"><span class="label">Extras:</span> <span id="extras">0</span></div>
+                </div>
+
+                <div class="over-summary-card">
+                    <label>This Over</label>
+                    <div class="over-summary" id="over-summary" style="flex-direction: row-reverse; justify-content: flex-end;">
+                        </div>
+                </div>
+            </div> <div id="football-scoreboard" style="display: none;">
+                <div class="fb-score-main">
+                    <div class="fb-team fb-team-a">
+                        <span class="fb-team-name" id="fb-team-a-name">Team A</span>
+                    </div>
+                    <div class="fb-score-details">
+                        <div class="fb-score" id="fb-score">0 - 0</div>
+                        <div class="fb-match-time" id="fb-match-time">00:00</div>
+                    </div>
+                    <div class="fb-team fb-team-b">
+                        <span class="fb-team-name" id="fb-team-b-name">Team B</span>
+                    </div>
+                </div>
+
+                <div class="fb-card">
+                    <h3 class="fb-card-header">Goal Scorers</h3>
+                    <div class="fb-scorers-lists">
+                        <ul id="fb-team-a-scorers" class="fb-scorer-list team-a-list">
+                            </ul>
+                        <ul id="fb-team-b-scorers" class="fb-scorer-list team-b-list">
+                            </ul>
+                    </div>
+                </div>
+
+                <div class="fb-card">
+                    <h3 class="fb-card-header">Match Stats</h3>
+                    <div class="fb-stats-grid">
+                        <div class="fb-stat-row">
+                            <span class="fb-stat-value" id="fb-stat-a-possession">50%</span>
+                            <span class="fb-stat-label">Possession</span>
+                            <span class="fb-stat-value" id="fb-stat-b-possession">50%</span>
+                        </div>
+                        <div class="fb-stat-bar-container">
+                            <div class="fb-stat-bar" id="fb-stat-bar-possession"></div>
+                        </div>
+
+                        <div class="fb-stat-row">
+                            <span class="fb-stat-value" id="fb-stat-a-shots">0</span>
+                            <span class="fb-stat-label">Shots</span>
+                            <span class="fb-stat-value" id="fb-stat-b-shots">0</span>
+                        </div>
+                        
+                        <div class="fb-stat-row">
+                            <span class="fb-stat-value" id="fb-stat-a-shotsOnTarget">0</span>
+                            <span class="fb-stat-label">Shots on Target</span>
+                            <span class="fb-stat-value" id="fb-stat-b-shotsOnTarget">0</span>
+                        </div>
+                        
+                        <div class="fb-stat-row">
+                            <span class="fb-stat-value" id="fb-stat-a-corners">0</span>
+                            <span class="fb-stat-label">Corners</span>
+                            <span class="fb-stat-value" id="fb-stat-b-corners">0</span>
+                        </div>
+
+                        <div class="fb-stat-row">
+                            <span class="fb-stat-value" id="fb-stat-a-fouls">0</span>
+                            <span class="fb-stat-label">Fouls</span>
+                            <span class="fb-stat-value" id="fb-stat-b-fouls">0</span>
+                        </div>
+                        
+                        <div class="fb-stat-row">
+                            <span class="fb-stat-value" id="fb-stat-a-cards">0Y 0R</span>
+                            <span class="fb-stat-label">Cards</span>
+                            <span class="fb-stat-value" id="fb-stat-b-cards">0Y 0R</span>
+                        </div>
+                    </div>
+                </div>
+            </div> <p style="text-align: center; font-size: 0.8em; color: var(--muted); margin-top: 20px;">
+                Match data updates in real-time.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <p class="made-by">Made with ❤️ by <a href="https://github.com/A69V" target="_blank">Abhinav Shankar</a> | © 2025 GEC Banka Sports Club</p>
+    </footer>
+    
+    <div class="bottom-nav"> 
+        <ul>
+     <li>
+         <a href="index.html" >
+             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+             Home
+         </a>
+     </li>
+     <li>
+         <a href="sports.html" class="active">
+             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12.64 3.08c-.23-.48-.77-.78-1.34-.78s-1.11.3-1.34.78l-1.8 3.86-4.09.62c-.54.08-.98.54-1.05 1.11s.21 1.11.7 1.39l2.97 3.03-.7 4.25c-.09.54.16 1.08.64 1.36s1.07.3 1.48.02l3.65-2 3.65 2c.41.28.99.26 1.48-.02s.73-.82.64-1.36l-.7-4.25 2.97-3.03c.49-.28.84-.81.7-1.39s-.51-1.03-1.05-1.11l-4.09-.62-1.8-3.86zm-1.19 8.2l-1.6 1.63.38 2.3-2-.98-2 .98.38-2.3-1.6-1.63 2.22-.34.99-2.11.99 2.11 2.22.34z"/></svg> Sports
+         </a>
+     </li>
+     <li>
+         <a href="timeline.html">
+             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            Timeline
+         </a>
+     </li>
+     <li>
+         <a href="gallery.html">
+             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            Gallery
+         </a>
+     </li>
+    </ul>
+    </div>
+    
+    <style> /* Your PWA styles... */ </style>
+    <div id="install-prompt" class="install-prompt-container">
+        </div>
+
+    
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+    // === PASTE YOUR FIREBASE CONFIG HERE ===
+    const firebaseConfig = {
+        apiKey: "AIzaSyAOtc2UrW2hXO4JJK5ZZQcDOfUVbEFmnis",
+        authDomain: "umang-mandar.firebaseapp.com",
+        projectId: "umang-mandar",
+        storageBucket: "umang-mandar.firebasestorage.app",
+        messagingSenderId: "1033556658773",
+        appId: "1:1033556658773:web:ed5c606f77e792136ae2dc",
+        databaseURL: "https://umang-mandar-default-rtdb.asia-southeast1.firebasedatabase.app/"
+    };
+    // === END OF CONFIG ===
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // --- DOM Elements (Shared) ---
+    const el = {
+        scoreHeader: document.getElementById('score-header'),
+        matchStatus: document.getElementById('match-status'),
+        liveBtn: document.getElementById('live-btn'),
+        notificationArea: document.getElementById('notification-area'),
+        cricketContainer: document.getElementById('cricket-scoreboard'),
+        footballContainer: document.getElementById('football-scoreboard')
+    };
+
+    // --- DOM Elements (Cricket) ---
+    const el_c = {
+        targetInfo: document.getElementById('target-info'),
+        battingTeamName: document.getElementById('batting-team-name'),
+        mainScore: document.getElementById('main-score'),
+        mainOvers: document.getElementById('main-overs'),
+        strikerName: document.getElementById('striker-name'),
+        strikerRuns: document.getElementById('striker-runs'),
+        strikerBalls: document.getElementById('striker-balls'),
+        strikerFours: document.getElementById('striker-fours'),
+        strikerSixes: document.getElementById('striker-sixes'),
+        strikerSR: document.getElementById('striker-sr'),
+        nonStrikerName: document.getElementById('nonstriker-name'),
+        nonStrikerRuns: document.getElementById('nonstriker-runs'),
+        nonStrikerBalls: document.getElementById('nonstriker-balls'),
+        nonStrikerFours: document.getElementById('nonstriker-fours'),
+        nonStrikerSixes: document.getElementById('nonstriker-sixes'),
+        nonStrikerSR: document.getElementById('nonstriker-sr'),
+        bowlerName: document.getElementById('bowler-name'),
+        bowlerOvers: document.getElementById('bowler-overs'),
+        bowlerMaidens: document.getElementById('bowler-maidens'),
+        bowlerRuns: document.getElementById('bowler-runs'),
+        bowlerWickets: document.getElementById('bowler-wickets'),
+        bowlerEcon: document.getElementById('bowler-econ'),
+        crr: document.getElementById('crr'),
+        partnership: document.getElementById('partnership'),
+        extras: document.getElementById('extras'),
+        overSummary: document.getElementById('over-summary')
+    };
+
+    // --- DOM Elements (Football) ---
+    const el_f = {
+        teamAName: document.getElementById('fb-team-a-name'),
+        teamBName: document.getElementById('fb-team-b-name'),
+        score: document.getElementById('fb-score'),
+        matchTime: document.getElementById('fb-match-time'),
+        teamAScorers: document.getElementById('fb-team-a-scorers'),
+        teamBScorers: document.getElementById('fb-team-b-scorers'),
+        statAPoss: document.getElementById('fb-stat-a-possession'),
+        statBPoss: document.getElementById('fb-stat-b-possession'),
+        statBarPoss: document.getElementById('fb-stat-bar-possession'),
+        statAShots: document.getElementById('fb-stat-a-shots'),
+        statBShots: document.getElementById('fb-stat-b-shots'),
+        statAShotsOnTarget: document.getElementById('fb-stat-a-shotsOnTarget'),
+        statBShotsOnTarget: document.getElementById('fb-stat-b-shotsOnTarget'),
+        statACorners: document.getElementById('fb-stat-a-corners'),
+        statBCorners: document.getElementById('fb-stat-b-corners'),
+        statAFouls: document.getElementById('fb-stat-a-fouls'),
+        statBFouls: document.getElementById('fb-stat-b-fouls'),
+        statACards: document.getElementById('fb-stat-a-cards'),
+        statBCards: document.getElementById('fb-stat-b-cards')
+    };
+
+    // --- State ---
+    let previousState = null;
+
+    // --- Notification Function (Shared) ---
+    function showNotification(message, type = 'info', duration = 10000) {
+        if (!el.notificationArea) return;
+        const notification = document.createElement('div');
+        notification.classList.add('notification-message', type);
+        notification.innerHTML = message;
+        el.notificationArea.appendChild(notification);
+        void notification.offsetWidth; // Trigger reflow
+        notification.classList.add('visible');
+
+        setTimeout(() => {
+            notification.classList.remove('visible');
+            notification.addEventListener('transitionend', () => {
+                try { el.notificationArea.removeChild(notification); } catch (e) {}
+            }, { once: true });
+        }, duration);
+    }
+
+    // --- Render Function (CRICKET) ---
+    function renderCricketScorecard(state) {
+        if (!state || !state.live || !el.cricketContainer) return;
+        const live = state.live;
+        const striker = live.batsmen?.striker || { name: '--', runs: 0, balls: 0, fours: 0, sixes: 0 };
+        const nonStriker = live.batsmen?.nonStriker || { name: '--', runs: 0, balls: 0, fours: 0, sixes: 0 };
+        const bowler = live.bowler || { name: '--', overs: 0, balls: 0, maidens: 0, runs: 0, wickets: 0 };
+
+        // Status & Target
+        let currentStatus = live.matchStatus || "Status Unknown";
+        if (state.status === "completed" && state.result) {
+            currentStatus = `Finished: ${state.result}`;
+            el.liveBtn.style.display = 'none';
+        } else if (currentStatus.includes("Live") || currentStatus.includes("Break")) {
+            el.liveBtn.style.display = 'flex';
+        } else {
+            el.liveBtn.style.display = 'none';
+        }
+        el.matchStatus.textContent = currentStatus;
+
+        if (live.inning === 2 && live.targetScore) {
+            el_c.targetInfo.textContent = `Target: ${live.targetScore}`;
+            el_c.targetInfo.style.display = 'block';
+        } else {
+            el_c.targetInfo.style.display = 'none';
+        }
+
+        // Main Score
+        el_c.battingTeamName.textContent = state[live.battingTeam]?.name || 'Batting Team';
+        el_c.mainScore.textContent = `${live.score}-${live.wickets}`;
+        el_c.mainOvers.textContent = `(${live.overs}.${live.balls})`;
+
+        // Batsmen
+        el_c.strikerName.textContent = striker.name;
+        el_c.strikerRuns.textContent = striker.runs;
+        el_c.strikerBalls.textContent = striker.balls;
+        el_c.strikerFours.textContent = striker.fours;
+        el_c.strikerSixes.textContent = striker.sixes;
+        el_c.strikerSR.textContent = (striker.balls > 0) ? (striker.runs / striker.balls * 100).toFixed(2) : '0.00';
+        
+        el_c.nonStrikerName.textContent = nonStriker.name;
+        el_c.nonStrikerRuns.textContent = nonStriker.runs;
+        el_c.nonStrikerBalls.textContent = nonStriker.balls;
+        el_c.nonStrikerFours.textContent = nonStriker.fours;
+        el_c.nonStrikerSixes.textContent = nonStriker.sixes;
+        el_c.nonStrikerSR.textContent = (nonStriker.balls > 0) ? (nonStriker.runs / nonStriker.balls * 100).toFixed(2) : '0.00';
+
+        // Bowler
+        const bowlerTotalBalls = (bowler.overs || 0) * 6 + (bowler.balls || 0);
+        el_c.bowlerName.textContent = bowler.name;
+        el_c.bowlerOvers.textContent = `${bowler.overs || 0}.${bowler.balls || 0}`;
+        el_c.bowlerMaidens.textContent = bowler.maidens || 0;
+        el_c.bowlerRuns.textContent = bowler.runs || 0;
+        el_c.bowlerWickets.textContent = bowler.wickets || 0;
+        el_c.bowlerEcon.textContent = (bowlerTotalBalls > 0) ? (bowler.runs / bowlerTotalBalls * 6).toFixed(2) : '0.00';
+
+        // Pills
+        el_c.crr.textContent = live.runRate || '0.00';
+        el_c.partnership.textContent = `${live.partnership?.runs || 0} (${live.partnership?.balls || 0})`;
+        el_c.extras.textContent = live.extras?.total || 0;
+
+        // Over Summary
+        el_c.overSummary.innerHTML = '';
+        if (live.thisOverSummary && Array.isArray(live.thisOverSummary)) {
+            [...live.thisOverSummary].reverse().forEach(ballEvent => {
+                const ballEl = document.createElement('div');
+                ballEl.classList.add('ball-icon');
+                let text = ballEvent;
+                if (ballEvent === 'W') { ballEl.classList.add('wicket'); }
+                else if (ballEvent === '6') { ballEl.classList.add('six'); }
+                else if (ballEvent === '4') { ballEl.classList.add('four'); }
+                else if (ballEvent === '.') { text = '•'; }
+                else if (String(ballEvent).match(/^(wd|nb|b|lb)/)) { ballEl.classList.add('extra'); }
+                ballEl.textContent = text;
+                el_c.overSummary.appendChild(ballEl);
+            });
+        }
+    }
+
+    // --- Event Checker (CRICKET) ---
+    function checkForCricketEvents(currentState, prevState) {
+        // (This is your original checkForEvents function, unchanged)
+        if (!currentState?.live || !prevState?.live) return;
+        // ... (Your full, existing checkForEvents logic goes here) ...
+        const currentLive = currentState.live;
+        const prevLive = prevState.live;
+        const scoreChanged = currentLive.score !== prevLive.score;
+        const wicketsChanged = currentLive.wickets !== prevLive.wickets;
+        const overChanged = currentLive.overs !== prevLive.overs;
+        const bowlerChanged = currentLive.bowler?.id !== prevLive.bowler?.id;
+
+        const lastBallEvent = currentLive.thisOverSummary?.[currentLive.thisOverSummary.length - 1];
+        const prevOverSummaryLength = prevLive.thisOverSummary?.length || 0;
+        const currentOverSummaryLength = currentLive.thisOverSummary?.length || 0;
+        const newBallBowled = currentOverSummaryLength > prevOverSummaryLength || overChanged;
+
+        if (newBallBowled && scoreChanged) {
+            const strikerName = currentLive.batsmen?.striker?.name || 'Batsman';
+            if (lastBallEvent === '6') showNotification(`<strong>SIX!</strong> by ${strikerName}!`, 'milestone');
+            else if (lastBallEvent === '4') showNotification(`<strong>FOUR!</strong> by ${strikerName}!`, 'milestone');
+        }
+        if (wicketsChanged && currentLive.wickets > prevLive.wickets) {
+             showNotification(`<strong>WICKET!</strong>`, 'wicket');
+             // Add more complex wicket logic here if needed
+        }
+        // ... (and so on for milestones, end of over, etc.) ...
+    }
+
+    // --- Render Function (FOOTBALL) ---
+    function renderFootballScorecard(state) {
+        if (!state || !state.live || !el.footballContainer) return;
+        const live = state.live;
+        const teamA = live.teamA || { score: 0, scorers: [], possession: 50, shots: 0, shotsOnTarget: 0, corners: 0, fouls: 0, yellowCards: 0, redCards: 0 };
+        const teamB = live.teamB || { score: 0, scorers: [], possession: 50, shots: 0, shotsOnTarget: 0, corners: 0, fouls: 0, yellowCards: 0, redCards: 0 };
+
+        // Status
+        let currentStatus = live.matchStatus || "Status Unknown";
+        if (state.status === "completed" && state.result) {
+            currentStatus = `Finished: ${state.result}`;
+            el.liveBtn.style.display = 'none';
+        } else if (currentStatus.includes("Live") || currentStatus.includes("Time")) { // Half Time, Full Time etc.
+            el.liveBtn.style.display = 'flex';
+        } else {
+            el.liveBtn.style.display = 'none';
+        }
+        el.matchStatus.textContent = currentStatus;
+
+        // Header
+        el_f.teamAName.textContent = state.teamA?.name || 'Team A';
+        el_f.teamBName.textContent = state.teamB?.name || 'Team B';
+        el_f.score.textContent = `${teamA.score} - ${teamB.score}`;
+        el_f.matchTime.textContent = live.matchTime || '00:00';
+
+        // Scorers
+        el_f.teamAScorers.innerHTML = teamA.scorers.map(s => `<li>${s.name} (${s.time})</li>`).join('');
+        el_f.teamBScorers.innerHTML = teamB.scorers.map(s => `<li>${s.name} (${s.time})</li>`).join('');
+
+        // Stats
+        const totalPoss = (teamA.possession || 0) + (teamB.possession || 0);
+        const aPossPercent = (totalPoss > 0) ? (teamA.possession / totalPoss) * 100 : 50;
+        const bPossPercent = 100 - aPossPercent;
+
+        el_f.statAPoss.textContent = `${Math.round(aPossPercent)}%`;
+        el_f.statBPoss.textContent = `${Math.round(bPossPercent)}%`;
+        el_f.statBarPoss.style.width = `${aPossPercent}%`;
+
+        el_f.statAShots.textContent = teamA.shots;
+        el_f.statBShots.textContent = teamB.shots;
+        el_f.statAShotsOnTarget.textContent = teamA.shotsOnTarget;
+        el_f.statBShotsOnTarget.textContent = teamB.shotsOnTarget;
+        el_f.statACorners.textContent = teamA.corners;
+        el_f.statBCorners.textContent = teamB.corners;
+        el_f.statAFouls.textContent = teamA.fouls;
+        el_f.statBFouls.textContent = teamB.fouls;
+        el_f.statACards.textContent = `${teamA.yellowCards || 0}Y ${teamA.redCards || 0}R`;
+        el_f.statBCards.textContent = `${teamB.yellowCards || 0}Y ${teamB.redCards || 0}R`;
+    }
+
+    // --- Event Checker (FOOTBALL) ---
+    function checkForFootballEvents(currentState, prevState) {
+        if (!currentState?.live || !prevState?.live) return;
+        const cl = currentState.live; // current live
+        const pl = prevState.live; // previous live
+        
+        // 1. Goal
+        if (cl.teamA?.score > pl.teamA?.score) {
+            const newScorer = cl.teamA.scorers[cl.teamA.scorers.length - 1] || { name: 'Player', time: '' };
+            showNotification(`<strong>GOAL!</strong> for ${currentState.teamA.name}! Scored by ${newScorer.name} (${newScorer.time})`, 'milestone', 15000);
+        }
+        if (cl.teamB?.score > pl.teamB?.score) {
+            const newScorer = cl.teamB.scorers[cl.teamB.scorers.length - 1] || { name: 'Player', time: '' };
+            showNotification(`<strong>GOAL!</strong> for ${currentState.teamB.name}! Scored by ${newScorer.name} (${newScorer.time})`, 'milestone', 15000);
+        }
+
+        // 2. Card
+        if (cl.teamA?.yellowCards > pl.teamA?.yellowCards) showNotification(`Yellow Card for ${currentState.teamA.name}`, 'milestone');
+        if (cl.teamB?.yellowCards > pl.teamB?.yellowCards) showNotification(`Yellow Card for ${currentState.teamB.name}`, 'milestone');
+        if (cl.teamA?.redCards > pl.teamA?.redCards) showNotification(`<strong>Red Card!</strong> for ${currentState.teamA.name}`, 'wicket');
+        if (cl.teamB?.redCards > pl.teamB?.redCards) showNotification(`<strong>Red Card!</strong> for ${currentState.teamB.name}`, 'wicket');
+
+        // 3. Match Status Change
+        if (cl.matchStatus !== pl.matchStatus) {
+            if (cl.matchStatus === "Half Time") {
+                showNotification(`<strong>Half Time.</strong> Score: ${cl.teamA.score} - ${cl.teamB.score}`, 'milestone', 15000);
+            } else if (cl.matchStatus === "Second Half") {
+                showNotification(`Second half is underway!`, 'info');
+            }
+        }
+        
+        // 4. Match End
+        if (currentState.status === "completed" && prevState.status !== "completed") {
+            showNotification(`<strong>Full Time!</strong> ${currentState.result}`, 'match-end', 20000);
+        }
+    }
+
+
+    // --- Load Data (Main Logic) ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const matchId = urlParams.get('matchId');
+
+        if (!matchId) {
+            el.matchStatus.textContent = "Error: No Match ID specified in URL (append ?matchId=your-match-id).";
+            el.liveBtn.style.display = 'none';
+            return;
+        }
+
+        // el.liveBtn.href = `live-scorecard.html?matchId=${matchId}`; // Link to self?
+        console.log("Fetching live data for match:", matchId);
+        const matchRef = ref(db, 'matches/' + matchId);
+
+        onValue(matchRef, (snapshot) => {
+            if (!snapshot.exists()) {
+                console.error("Error: Match data not found for ID:", matchId);
+                el.matchStatus.textContent = `Error: Match '${matchId}' not found.`;
+                el.liveBtn.style.display = 'none';
+                previousState = null;
+                return;
+            }
+
+            const newState = snapshot.val();
+            
+            // === THIS IS THE SPORT-SWITCHING LOGIC ===
+            const sport = newState.sport || 'cricket'; // Default to cricket if 'sport' field is missing
+
+            // Set shared elements
+            el.scoreHeader.textContent = `Live ${sport.charAt(0).toUpperCase() + sport.slice(1)} Scorecard`;
+
+            if (sport === 'cricket') {
+                // Show Cricket, Hide Football
+                el.cricketContainer.style.display = 'block';
+                el.footballContainer.style.display = 'none';
+
+                // --- Data Processing for Cricket ---
+                const convertToArray = (obj) => obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.values(obj) : obj;
+                if(newState.live.thisOverSummary) newState.live.thisOverSummary = convertToArray(newState.live.thisOverSummary);
+                if(newState.scorecard?.teamA?.batting) newState.scorecard.teamA.batting = convertToArray(newState.scorecard.teamA.batting);
+                if(newState.scorecard?.teamB?.batting) newState.scorecard.teamB.batting = convertToArray(newState.scorecard.teamB.batting);
+
+                // Render and check events
+                renderCricketScorecard(newState);
+                if (previousState) {
+                    checkForCricketEvents(newState, previousState);
+                }
+
+            } else if (sport === 'football') {
+                // Show Football, Hide Cricket
+                el.cricketContainer.style.display = 'none';
+                el.footballContainer.style.display = 'block';
+
+                // --- Data Processing for Football (if needed, e.g., converting objects to arrays) ---
+                const convertToArray = (obj) => obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.values(obj) : obj;
+                if(newState.live?.teamA?.scorers) newState.live.teamA.scorers = convertToArray(newState.live.teamA.scorers);
+                if(newState.live?.teamB?.scorers) newState.live.teamB.scorers = convertToArray(newState.live.teamB.scorers);
+
+                // Render and check events
+                renderFootballScorecard(newState);
+                if (previousState) {
+                    checkForFootballEvents(newState, previousState);
+                }
+            }
+
+            // --- End of Switch Logic ---
+
+            // Store the state for next comparison
+            try {
+                previousState = JSON.parse(JSON.stringify(newState));
+            } catch (e) {
+                console.error("Error creating deep copy of state:", e);
+                previousState = {...newState}; // Fallback
+            }
+
+        }, (error) => {
+            console.error("Firebase read failed:", error);
+            el.matchStatus.textContent = "Error connecting to live scores.";
+            el.liveBtn.style.display = 'none';
+            previousState = null;
+        });
+    });
+</script>
+
+<script>
+    // --- Share Button Logic (Global) ---
+    async function shareContent() {
+        const shareData = {
+            title: document.title, // Use the page title
+            text: document.getElementById('match-status').textContent, // Share the current status
+            url: window.location.href
+        };
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData);
+            } catch (err) {
+                console.error('Error sharing:', err);
+            }
+        } else {
+            // Fallback
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                alert('Live score link copied to clipboard!');
+            } catch (err) {
+                alert('Sharing is not supported on this browser.');
+            }
+        }
+    }
+</script>
+
+<script>
+    // --- PWA Install Logic (from your file) ---
+    let deferredPrompt = null;
+    const installPromptContainer = document.getElementById('install-prompt');
+    const installButton = document.getElementById('btn-install');
+    const cancelButton = document.getElementById('btn-cancel-install');
+
+    const isInstalled = localStorage.getItem('pwaInstalled') === 'true';
+    const isDismissed = localStorage.getItem('pwaInstallDismissed') === 'true';
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (!isInstalled && !isDismissed && installPromptContainer) {
+            installPromptContainer.classList.add('visible');
+        }
+    });
+
+    if (installButton) {
+        installButton.addEventListener('click', async () => {
+            if (installPromptContainer) installPromptContainer.classList.remove('visible');
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                if (outcome === 'accepted') {
+                    localStorage.setItem('pwaInstalled', 'true');
+                }
+            }
+        });
+    }
+
+    if (cancelButton) {
+        cancelButton.addEventListener('click', () => {
+            if (installPromptContainer) installPromptContainer.classList.remove('visible');
+            localStorage.setItem('pwaInstallDismissed', 'true');
+        });
+    }
+
+    window.addEventListener('appinstalled', () => {
+        if (installPromptContainer) installPromptContainer.classList.remove('visible');
+        localStorage.setItem('pwaInstalled', 'true');
+        deferredPrompt = null;
+    });
+</script>
+
+</body>
+</html>
